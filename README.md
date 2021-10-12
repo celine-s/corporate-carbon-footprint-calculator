@@ -16,3 +16,16 @@ We use a set of tools for a reasonably high code quality.
 <!-- 3. [TypeScript](https://www.typescriptlang.org/) for Static Type Checking (done by Next)
 
 These checks are also run on every merge request, and each of these must pass for the MR to be mergable. -->
+
+## Running locally with Storybook
+
+```sh
+npm ci
+npm run storybook
+```
+
+If new components are added make sure the component gets exported properly through the `index.ts` files in the respective folders. The `index.ts` files can be generated using:
+
+```sh
+npm run generate-index-files
+```
