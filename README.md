@@ -23,9 +23,3 @@ These checks are also run on every merge request, and each of these must pass fo
 npm ci
 npm run storybook
 ```
-
-If new components are added make sure the component gets exported properly through the `index.ts` files in the respective folders. The `index.ts` files can be generated using:
-
-```sh
-npm run generate-index-files
-```
