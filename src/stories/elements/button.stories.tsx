@@ -8,16 +8,14 @@ export default {
   component: Button,
 } as Meta;
 
-const ButtonTemplate: Story<ButtonProps> = (props) => <Button {...props}></Button>;
+const ButtonTemplate: Story<ButtonProps> = (props) => <Button {...props}>Button</Button>;
 
 export const Small = ButtonTemplate.bind({});
 Small.args = {
   size: 'S',
-  label: 'Button',
 };
 
 export const Large = ButtonTemplate.bind({});
 Large.args = {
   size: 'L',
-  label: 'Button',
 };
