@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 export const Page: FC = ({ children }) => {
   return (
-    <div className="bg-gray-100 ">
+    <div className="bg-gray-100">
       <header className="font-sans font-bold text-xs py-4">
         <div className="max-h-[1px] py-[4px] mx-auto">
           <Link href="https://www.smartive.ch">
@@ -15,7 +15,7 @@ export const Page: FC = ({ children }) => {
         </div>
       </header>
 
-      <div className="lg:container lg:mx-auto px-4 p-8">{children}</div>
+      <body className="lg:container lg:mx-auto px-24 py-16">{children}</body>
     </div>
   );
 };
