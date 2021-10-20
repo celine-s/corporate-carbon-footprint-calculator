@@ -15,7 +15,7 @@ export const Page: FC = ({ children }) => {
         </div>
       </header>
 
-      <body className="lg:container lg:mx-auto px-24 py-16">{children}</body>
+      <main className="lg:container lg:mx-auto px-24 py-16">{children}</main>
     </div>
   );
 };
