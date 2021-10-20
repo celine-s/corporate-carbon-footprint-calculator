@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint --dir src",
-    "prettier": "prettier --check src"
+    "prettier": "prettier --check src",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "dependencies": {
     "next": "11.1.2",
@@ -15,16 +17,24 @@
     "react-dom": "17.0.2"
   },
   "devDependencies": {
+    "@babel/core": "^7.15.8",
     "@smartive/eslint-config": "2.0.0",
     "@smartive/prettier-config": "3.0.0",
+    "@storybook/addon-actions": "^6.3.10",
+    "@storybook/addon-essentials": "^6.3.10",
+    "@storybook/addon-links": "^6.3.10",
+    "@storybook/addon-postcss": "^2.0.0",
+    "@storybook/react": "^6.3.10",
+    "@storybook/theming": "^6.2.7",
     "@types/react": "17.0.27",
     "autoprefixer": "^10.3.7",
+    "babel-loader": "^8.2.2",
     "eslint": "^7.32.0",
     "eslint-config-next": "11.1.2",
     "eslint-config-prettier": "^8.3.0",
     "postcss": "^8.3.9",
     "prettier": "2.4.1",
     "tailwindcss": "^2.2.16",
-    "typescript": "4.4.3"
+    "typescript": "^4.4.3"
   }
 }
