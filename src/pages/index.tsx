@@ -1,6 +1,5 @@
 import type { NextPage } from 'next';
 import { Button } from '../elements/button';
-import { Footprint } from '../elements/footprint';
 import { Copy } from '../identity/copy';
 import { Heading1 } from '../identity/heading-1';
 import { Heading2 } from '../identity/heading-2';
@@ -27,7 +26,6 @@ const Home: NextPage = () => {
               </Button>
             </a>
           </Link>
-          <Footprint></Footprint>
         </div>
         <section className="mt-16 text-left">
           <Heading2>Wie entstand ich?</Heading2>
