@@ -2,7 +2,6 @@ import React, { FC } from 'react';
 
 export type ButtonProps = {
   size?: 'S' | 'L';
-  className?: string;
   onClick?: () => void;
 };
 

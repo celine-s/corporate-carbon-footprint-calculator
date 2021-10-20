@@ -1,4 +1,5 @@
 import { NextPage } from 'next';
+import { Heading1 } from '../../identity/heading-1';
 import { Page } from '../../layouts/page';
 
 type Props = {
@@ -8,7 +9,7 @@ type Props = {
 const Rechner: NextPage<Props> = ({ className = '' }) => {
   return (
     <Page>
-      <h1 className={`${className}`}>willkomme zum rechner</h1>
+      <Heading1>willkomme zum rechner</Heading1>
     </Page>
   );
 };

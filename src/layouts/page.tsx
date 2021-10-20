@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import { Logo } from '../identity/logo';
 import Link from 'next/link';
+import { Footer } from '../components/footer';
 
 export const Page: FC = ({ children }) => {
   return (
@@ -15,7 +16,8 @@ export const Page: FC = ({ children }) => {
         </div>
       </header>
 
-      <main className="lg:container lg:mx-auto px-24 py-16">{children}</main>
+      <main className="lg:container lg:mx-auto px-24 py-16 border-b-2">{children}</main>
+      <Footer></Footer>
     </div>
   );
 };
