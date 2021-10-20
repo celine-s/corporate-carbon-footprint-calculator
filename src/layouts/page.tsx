@@ -12,7 +12,7 @@ export const Page: FC = ({ children }) => {
         </LinkElement>
       </header>
 
-      <main className="lg:container lg:mx-auto px-8 lg:px-24 py-16 border-b-2">{children}</main>
+      <main className="lg:container lg:mx-auto px-24 py-16 border-b-2">{children}</main>
       <Footer></Footer>
     </div>
   );
