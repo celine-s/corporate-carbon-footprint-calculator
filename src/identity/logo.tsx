@@ -1,13 +1,11 @@
 import React, { FC } from 'react';
 
 export type LogoProps = {
-  className?: string;
   inverted?: boolean;
 };
 
-export const Logo: FC<LogoProps> = ({ inverted, className = '' }) => (
+export const Logo: FC<LogoProps> = ({ inverted }) => (
   <svg
-    className={className}
     width="360"
     height="14"
     viewBox="0 0 360 63"
