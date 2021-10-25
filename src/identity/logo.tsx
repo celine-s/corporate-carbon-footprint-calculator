@@ -2,16 +2,15 @@ import React, { FC } from 'react';
 
 export type LogoProps = {
   inverted?: boolean;
-  color?: string;
 };
 
-export const Logo: FC<LogoProps> = ({ inverted, color }) => (
+export const Logo: FC<LogoProps> = ({ inverted }) => (
   <svg
     width="360"
     height="14"
     viewBox="0 0 360 63"
     xmlns="http://www.w3.org/2000/svg"
-    fill={color ? color : inverted ? '#ffffff' : '#252525'}
+    fill={inverted ? '#ffffff' : '#252525'}
   >
     <path d="M333.429 20.1962H337.085V30.0561H339.581V20.1962H343.236V18.1145H333.429V20.1962Z" />
     <path d="M344.865 18.1145V30.0561H347.314V22.2545H347.413L350.503 29.9976H352.171L355.261 22.2836H355.36V30.0561H357.809V18.1145H354.696L351.407 26.1379H351.267L347.979 18.1145H344.865Z" />
