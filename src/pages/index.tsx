@@ -1,10 +1,10 @@
 import type { NextPage } from 'next';
 import { Button } from '../elements/button';
+import { LinkElement } from '../elements/link';
 import { Copy } from '../identity/copy';
 import { Heading1 } from '../identity/heading-1';
 import { Heading2 } from '../identity/heading-2';
 import { Page } from '../layouts/page';
-import Link from 'next/link';
 
 const Home: NextPage = () => {
   return (
@@ -19,13 +19,11 @@ const Home: NextPage = () => {
       </header>
       <main>
         <div className="px-4 pt-8 md:mx-auto text-center">
-          <Link href="/rechner">
-            <a>
-              <Button>
-                Zum Fussabdruck <br></br>Quickcheck <br></br>»
-              </Button>
-            </a>
-          </Link>
+          <LinkElement href="/rechner">
+            <Button>
+              Zum Fussabdruck <br></br>Quickcheck <br></br>»
+            </Button>
+          </LinkElement>
         </div>
         <section className="mt-16 text-left">
           <Heading2>Wie entstand ich?</Heading2>

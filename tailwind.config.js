@@ -28,7 +28,6 @@ module.exports = {
         black: {
           DEFAULT: '#252525',
         },
-        gray: colors.warmGray,
         white: {
           200: '#F8F7F5',
           100: '#ffffff',
