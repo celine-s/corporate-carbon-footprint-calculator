@@ -5,6 +5,9 @@ import { Copy } from '../identity/copy';
 import { Heading1 } from '../identity/heading-1';
 import { Heading2 } from '../identity/heading-2';
 import { Page } from '../layouts/page';
+import Link from 'next/link';
+import React from 'react';
+import { ChevronRightIcon } from '../elements/chevron-right';
 
 const Home: NextPage = () => {
   return (
@@ -21,11 +24,16 @@ const Home: NextPage = () => {
         <div className="px-4 pt-8 md:mx-auto text-center">
           <LinkElement href="/rechner">
             <Button>
-              Zum Fussabdruck <br></br>Quickcheck <br></br>»
+              <div className="flex flex-wrap flex-grow">
+                Zum Fussabdruck Quickcheck
+                <div className="flex justify-end items-center">
+                  <ChevronRightIcon> </ChevronRightIcon>
+                </div>
+              </div>
             </Button>
           </LinkElement>
         </div>
-        <section className="mt-16 text-left">
+        <section className="mt-16 text-left mx-6 ">
           <Heading2>Wie entstand ich?</Heading2>
           <Copy>
             Lorem ipsum dolor sit amet consectetur, adipisicing elit. Excepturi maiores, quos quas et sapiente odio
