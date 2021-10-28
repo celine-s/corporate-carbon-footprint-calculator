@@ -1,6 +1,5 @@
 import { NextPage } from 'next';
 import { Page } from '../../layouts/page';
-import { Question } from '../../data/questions';
 import React, { useEffect, useState } from 'react';
 import { InputField } from '../../elements/input-field';
 import { Copy } from '../../identity/copy';
@@ -8,7 +7,6 @@ import { Label } from '../../identity/label';
 
 type Props = {
   xy?: string;
-  questions: Question[];
   previousImpact: string;
   initialAnswer: string;
 };
