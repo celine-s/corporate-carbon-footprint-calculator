@@ -5,7 +5,6 @@ import { Copy } from '../identity/copy';
 import { Heading1 } from '../identity/heading-1';
 import { Heading2 } from '../identity/heading-2';
 import { Page } from '../layouts/page';
-import Link from 'next/link';
 import React from 'react';
 import { ChevronRightIcon } from '../elements/chevron-right';
 
@@ -21,7 +20,7 @@ const Home: NextPage = () => {
         </Copy>
       </header>
       <main>
-        <div className="px-4 pt-8 md:mx-auto text-center">
+        <div className="px-4 pt-8 md:mx-auto text-center flex transition-all duration-300 ease-in-out transform hover:scale-105 justify-center">
           <LinkElement href="/rechner">
             <Button>
               <div className="flex flex-wrap flex-grow">

@@ -5,6 +5,7 @@ export type LinkProps = {
   newTab?: boolean;
   href: string;
 };
+
 export const LinkElement: FC<LinkProps> = ({ newTab, children, href }) => {
   return (
     <Link href={href}>
