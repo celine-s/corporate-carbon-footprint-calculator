@@ -1,11 +1,10 @@
 import { NextPage } from 'next';
 import { Page } from '../../layouts/page';
 import { Question } from '../../data/questions';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { InputField } from '../../elements/input-field';
 import { Copy } from '../../identity/copy';
-// eslint-disable-next-line import/no-unresolved
-import { Label } from '../../identity/Label';
+import { Label } from '../../identity/label';
 
 type Props = {
   xy?: string;
@@ -14,17 +13,22 @@ type Props = {
   initialAnswer: string;
 };
 
+function useLocalStorageState(key: string, defaultValue = '') {
+  const [state, setState] = useState(() =>
+    typeof window !== 'undefined' ? window.localStorage.getItem(key) || defaultValue : ''
+  );
+  useEffect(() => {
+    window.localStorage.setItem(key, state);
+  }, [key, state]);
+  return [state, setState];
+}
+
 const IMPACT_AIRPLANE_HOUR_KG_CO2 = 0.29064;
 
 const Frage: NextPage<Props> = ({ previousImpact = '', initialAnswer = '' }) => {
-  const [impact, setImpact] = useState(previousImpact);
-  const [answer, setAnswer] = useState(initialAnswer);
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  function handleChange(event: any) {
-    setImpact((parseInt(event.target.children ? event.target.value : '') * IMPACT_AIRPLANE_HOUR_KG_CO2).toString()),
-      setAnswer(event.target.children ? event.target.value : '');
-  }
+  const [answer, setAnswer] = useLocalStorageState('answer', initialAnswer);
+  //ich glaub da müssti eigentlich epis anders im local storage denn mache => und de impact ganz am schluss hinzuefüege
+  const [impact, setImpact] = useLocalStorageState('impact', previousImpact);
 
   return (
     <Page>
@@ -42,11 +46,13 @@ const Frage: NextPage<Props> = ({ previousImpact = '', initialAnswer = '' }) => 
         placeholder="0"
         min="0"
         max="100"
-        value={answer}
-        onChange={handleChange}
+        value={answer === null ? '0' : answer}
+        onChange={({ target }) => {
+          setAnswer(target.value), setImpact((parseInt(target.value) * IMPACT_AIRPLANE_HOUR_KG_CO2).toString());
+        }}
       ></InputField>
       <br></br>
-      <Copy>Your impact is {impact}</Copy>
+      {answer ? <Copy>Your impact is {impact === null ? '0' : impact}</Copy> : <Copy>Please answer the question</Copy>}
     </Page>
   );
 };
