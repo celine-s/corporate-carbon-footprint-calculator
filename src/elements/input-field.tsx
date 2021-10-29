@@ -37,7 +37,7 @@ export const InputField: FC<InputFieldProps> = ({
       step={step}
       {...(autoComplete ? autoComplete : undefined)} // not sure how to solve this
       onChange={onChange}
-      className="flex-none bg-gray-200 w-full bg-white p-2 rounded-md"
+      className="flex-none bg-gray-200 w-full bg-white p-2 rounded-md my-4"
       placeholder={placeholder}
       maxLength={maxLength}
     ></input>

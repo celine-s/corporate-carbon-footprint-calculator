@@ -35,19 +35,22 @@ const Frage: NextPage<Props> = ({ previousImpact = '', initialAnswer = '' }) => 
         </div>
         <span className="text-right justify-items-end mb-16">Frage 1 von 1</span>
       </div>
-      <InputField
-        type="number"
-        name="answer"
-        id="number"
-        step="1"
-        placeholder="0"
-        min="0"
-        max="100"
-        value={answer === null ? '0' : answer}
-        onChange={(event: { target: { value: React.SetStateAction<string> } }) => {
-          setAnswer(event.target.value);
-        }}
-      ></InputField>
+      <div className="grid grid-cols-3 gap-2">
+        <InputField
+          type="number"
+          name="answer"
+          id="number"
+          step="1"
+          placeholder="0"
+          min="0"
+          max="100"
+          value={answer === null ? '0' : answer}
+          onChange={(event: { target: { value: React.SetStateAction<string> } }) => {
+            setAnswer(event.target.value);
+          }}
+        ></InputField>
+        <Copy> Flugstunden</Copy>
+      </div>
       <br></br>
       {answer ? <Copy>Your impact is {impact === null ? '0' : impact}</Copy> : <Copy>Please answer the question</Copy>}
     </Page>
