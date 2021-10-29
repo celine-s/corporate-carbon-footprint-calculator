@@ -6,27 +6,26 @@ import { Copy } from '../../identity/copy';
 import { Label } from '../../identity/label';
 
 type Props = {
-  xy?: string;
   previousImpact: string;
   initialAnswer: string;
 };
 
-function useLocalStorageState(key: string, defaultValue = '') {
-  const [state, setState] = useState(() =>
-    typeof window !== 'undefined' ? window.localStorage.getItem(key) || defaultValue : ''
-  );
-  useEffect(() => {
-    window.localStorage.setItem(key, state);
-  }, [key, state]);
-  return [state, setState];
-}
-
 const IMPACT_AIRPLANE_HOUR_KG_CO2 = 0.29064;
 
 const Frage: NextPage<Props> = ({ previousImpact = '', initialAnswer = '' }) => {
-  const [answer, setAnswer] = useLocalStorageState('answer', initialAnswer);
+  const [answer, setAnswer] = useState(
+    typeof window !== 'undefined' ? window.localStorage.getItem('answer') || initialAnswer : ''
+  );
   //ich glaub da müssti eigentlich epis anders im local storage denn mache => und de impact ganz am schluss hinzuefüege
-  const [impact, setImpact] = useLocalStorageState('impact', previousImpact);
+  const [impact, setImpact] = useState(
+    typeof window !== 'undefined' ? window.localStorage.getItem('impact') || previousImpact : ''
+  );
+
+  useEffect(() => {
+    setImpact((parseInt(answer) * IMPACT_AIRPLANE_HOUR_KG_CO2).toString());
+    window.localStorage.setItem('answer', answer);
+    window.localStorage.setItem('impact', impact);
+  }, [answer]);
 
   return (
     <Page>
@@ -45,8 +44,8 @@ const Frage: NextPage<Props> = ({ previousImpact = '', initialAnswer = '' }) => 
         min="0"
         max="100"
         value={answer === null ? '0' : answer}
-        onChange={({ target }) => {
-          setAnswer(target.value), setImpact((parseInt(target.value) * IMPACT_AIRPLANE_HOUR_KG_CO2).toString());
+        onChange={(event: { target: { value: React.SetStateAction<string> } }) => {
+          setAnswer(event.target.value);
         }}
       ></InputField>
       <br></br>

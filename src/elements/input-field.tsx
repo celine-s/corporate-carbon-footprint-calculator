@@ -1,4 +1,4 @@
-import React, { ChangeEventHandler, FC } from 'react';
+import React, { FC } from 'react';
 
 type InputFieldProps = {
   placeholder?: string;
@@ -11,7 +11,8 @@ type InputFieldProps = {
   step?: string | number | undefined;
   id: string;
   autoComplete?: string | undefined;
-  onChange: ChangeEventHandler | undefined;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  onChange: any;
 };
 
 export const InputField: FC<InputFieldProps> = ({
