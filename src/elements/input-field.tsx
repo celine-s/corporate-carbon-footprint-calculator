@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 
-type InputFieldProps = {
+export type InputFieldProps = {
   placeholder?: string;
   maxLength?: number;
   type?: string;
@@ -8,11 +8,11 @@ type InputFieldProps = {
   max?: string;
   name?: string;
   value: string;
-  step?: string | number | undefined;
+  step?: string | number;
   id: string;
-  autoComplete?: string | undefined;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  onChange: any;
+  label?: string;
+  autoComplete?: string;
+  onChange: (value: string) => void;
 };
 
 export const InputField: FC<InputFieldProps> = ({
@@ -23,11 +23,12 @@ export const InputField: FC<InputFieldProps> = ({
   min,
   max,
   value,
+  label,
   step,
   onChange,
   autoComplete = undefined,
-}) => {
-  return (
+}) => (
+  <div className="grid grid-cols-[2fr,1fr] md:grid-cols-3 gap-2 my-4 lg:text-base">
     <input
       id={id}
       value={value}
@@ -35,11 +36,12 @@ export const InputField: FC<InputFieldProps> = ({
       min={min}
       max={max}
       step={step}
-      {...(autoComplete ? autoComplete : undefined)} // not sure how to solve this
-      onChange={onChange}
-      className="flex-none bg-gray-200 w-full bg-white p-2 rounded-md my-4"
+      autoComplete={autoComplete}
+      onChange={(event) => onChange(event.target.value)}
+      className="bg-gray-200 w-full bg-white p-2 rounded-md"
       placeholder={placeholder}
       maxLength={maxLength}
     ></input>
-  );
-};
+    <label className="self-center">{label}</label>
+  </div>
+);

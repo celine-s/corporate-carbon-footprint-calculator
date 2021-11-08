@@ -4,8 +4,8 @@ import { Story, Meta } from '@storybook/react';
 import { Button, ButtonProps } from '../../elements/button';
 
 export default {
-  title: 'Components/Button',
-  component: Button,
+  title: 'Elements/Button',
+  element: Button,
 } as Meta;
 
 const ButtonTemplate: Story<ButtonProps> = (props) => <Button {...props}>Button</Button>;
