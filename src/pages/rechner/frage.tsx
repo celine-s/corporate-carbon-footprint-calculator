@@ -36,11 +36,11 @@ const Frage: NextPage<Props> = ({ previousImpact = '', initialAnswer = '' }) => 
 
   return (
     <Page>
-      <div className="md:grid md:grid-cols-[2fr, 1fr] flex flex-col-reverse">
-        <div className="md:col-start-1 md:col-span-2 flex flex-1">
+      <div className="md:grid md:grid-cols-[3fr,1fr] flex flex-col-reverse">
+        <div className="flex flex-1">
           <Heading2>Flugstunden pro Mitarbeiter*In im Jahr</Heading2>
         </div>
-        <div className="md:grid md:text-right mb-8 md:col-span-1 md:col-start-4">
+        <div className="md:text-right mb-8">
           Frage {1} von {MAX_QUESTION_NUMBER}
         </div>
       </div>
