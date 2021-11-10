@@ -42,6 +42,8 @@ export const InputField: FC<InputFieldProps> = ({
       placeholder={placeholder}
       maxLength={maxLength}
     ></input>
-    <label className="self-center">{label}</label>
+    <label htmlFor={id} className="self-center">
+      {label}
+    </label>
   </div>
 );
