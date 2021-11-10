@@ -9,8 +9,6 @@ import Questions from '../../data/questions.json';
 import { Button, ButtonVariants } from '../../elements/button';
 
 type Props = {
-  initialAnswerProp: string;
-  initialImpact: string;
   questions: Question[];
 };
 
@@ -23,8 +21,10 @@ function useLocalStorageState(key: string, defaultValue = ''): [string, React.Di
   }, [key, state]);
   return [state, setState];
 }
+const initialAnswerProp = '0';
+const initialImpact = '0';
 
-const Frage: NextPage<Props> = ({ initialAnswerProp = '0', initialImpact = '0', questions }) => {
+const Frage: NextPage<Props> = ({ questions }) => {
   const [answer, setAnswer] = useLocalStorageState('answer', initialAnswerProp);
   const [impact, setImpact] = useState(initialImpact);
   const [questionIndex, setQuestionIndex] = useState(0);
@@ -87,7 +87,7 @@ const Frage: NextPage<Props> = ({ initialAnswerProp = '0', initialImpact = '0', 
               setAnswer(value), setImpact((parseFloat(value) * emissionfactor).toString());
             }}
           ></InputField>
-          <br></br>
+          <br />
           {answer ? <Copy>Your impact is {impact === null ? '0' : impact}</Copy> : <Copy>Please answer the question</Copy>}
         </div>
       ))}
@@ -126,7 +126,7 @@ const Frage: NextPage<Props> = ({ initialAnswerProp = '0', initialImpact = '0', 
 
 export const getStaticProps: GetStaticProps<Props> = async () => {
   return {
-    props: { initialAnswerProp: '', initialImpact: '0', questions: Object.values(Questions) },
+    props: { questions: Object.values(Questions) },
   };
 };
 
