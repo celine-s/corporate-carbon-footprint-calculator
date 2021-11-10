@@ -15,11 +15,11 @@ export const Footer: FC = () => {
             </div>
           ))}
         </nav>
-        <div className="mt-12 flex justify-center space-x-6 text-gray-400 hover:text-gray-500">
+        <div className="mt-12 flex justify-center space-x-6 text-gray-400">
           {navigation.social.map((item) => (
             <LinkElement key={item.name} href={item.href} newTab={item.newTab}>
               <span className="sr-only">{item.name}</span>
-              <item.icon className="h-6 w-6" aria-hidden="true" />
+              <item.icon className="h-6 w-6 hover:text-gray-500" aria-hidden="true" />
             </LinkElement>
           ))}
         </div>
