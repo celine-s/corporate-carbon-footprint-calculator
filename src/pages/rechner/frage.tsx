@@ -21,8 +21,8 @@ function useLocalStorageState(key: string, defaultValue = ''): [string, React.Di
   }, [key, state]);
   return [state, setState];
 }
-const initialAnswerProp = '0';
-const initialImpact = '0';
+const initialAnswerProp = '';
+const initialImpact = '';
 
 const Frage: NextPage<Props> = ({ questions }) => {
   const [answer, setAnswer] = useLocalStorageState('answer', initialAnswerProp);
