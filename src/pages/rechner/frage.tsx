@@ -1,6 +1,6 @@
 import { GetStaticProps, NextPage } from 'next';
 import { Page } from '../../layouts/page';
-import React, { useEffect, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { InputField } from '../../elements/input-field';
 import { Copy } from '../../identity/copy';
 import { Heading2 } from '../../identity/heading-2';
@@ -12,27 +12,29 @@ type Props = {
   questions: Question[];
 };
 
-function useLocalStorageState(key: string, defaultValue = ''): [string, React.Dispatch<React.SetStateAction<string>>] {
-  const [state, setState] = useState(() =>
-    typeof window !== 'undefined' ? window.localStorage.getItem(key) || defaultValue : ''
-  );
-  useEffect(() => {
-    window.localStorage.setItem(key, state);
-  }, [key, state]);
-  return [state, setState];
-}
+const theory = {
+  title: 'Some Facts über diese Kategorie',
+  content:
+    'Lorem ipsum dolor sit amet consectetur adipisicing elit. Error neque odio explicabo, necessitatibus eaque numquam tenetur deleniti sequi at facere earum eos, voluptates culpa nam, quae exercitationem recusandae? Aspernatur, aliquam.',
+};
+
 const initialAnswerProp = '';
 const initialImpact = '';
 
 const Frage: NextPage<Props> = ({ questions }) => {
-  const [answer, setAnswer] = useLocalStorageState('answer', initialAnswerProp);
+  const [answer, setAnswer] = useState(initialAnswerProp);
   const [impact, setImpact] = useState(initialImpact);
   const [questionIndex, setQuestionIndex] = useState(0);
-  const sortedQuestions = questions.sort((first, second) => first.category.localeCompare(second.category));
+  const MAX_QUESTION_NUMBER = questions.length;
+
+  const sortedQuestions = useMemo(() => {
+    return questions.sort((first, second) => first.category.localeCompare(second.category));
+  }, [questions]);
 
   const setLocalStorage = (key: string, value: string) => window.localStorage.setItem(key, value);
 
   const getLocalStorage = (key: string) => window.localStorage.getItem(key);
+
   const getImpactAndAnswerFromQuestionBefore = () => {
     setQuestionIndex(questionIndex - 1),
       setLocalStorage(questionIndex.toString(), answer),
@@ -43,22 +45,17 @@ const Frage: NextPage<Props> = ({ questions }) => {
         ? setImpact(getLocalStorage('impact' + (questionIndex - 1).toString()) || initialImpact)
         : '';
   };
-  useEffect(() => {
-    window.localStorage.setItem('answer', answer);
-    window.localStorage.setItem('impact', impact);
-  }, [answer, impact]);
-  const MAX_QUESTION_NUMBER = questions.length;
 
   const saveImpactAndAnswer = () => {
     setQuestionIndex(questionIndex + 1),
       setLocalStorage(questionIndex.toString(), answer),
-      setLocalStorage('impact' + questionIndex.toString(), impact.toString()),
+      setLocalStorage('impact' + questionIndex.toString(), impact),
       getLocalStorage((questionIndex + 1).toString()) !== undefined
         ? setAnswer(getLocalStorage((questionIndex + 1).toString()) || initialAnswerProp)
-        : '',
+        : initialAnswerProp,
       getLocalStorage(('impact' + questionIndex + 1).toString()) !== undefined
         ? setImpact(getLocalStorage('impact' + (questionIndex + 1).toString()) || initialImpact)
-        : '';
+        : initialImpact;
   };
 
   return (
@@ -120,13 +117,19 @@ const Frage: NextPage<Props> = ({ questions }) => {
           )}
         </div>
       </div>
+      <div className="border-2 p-8 mt-16">
+        <Heading2>{theory.title}</Heading2>
+        <Copy>{theory.content}</Copy>
+      </div>
     </Page>
   );
 };
 
 export const getStaticProps: GetStaticProps<Props> = async () => {
+  const questions = Object.values(Questions);
+
   return {
-    props: { questions: Object.values(Questions) },
+    props: { questions },
   };
 };
 
