@@ -3,15 +3,15 @@ import React, { FC } from 'react';
 export type ButtonProps = {
   size?: 'S' | 'L';
   onClick?: () => void;
-  variant?: ButtonVariants;
+  variant?: ButtonVariant;
 };
 
-export enum ButtonVariants {
+export enum ButtonVariant {
   Text = 'Text',
   Default = 'Default',
 }
 
-export const Button: FC<ButtonProps> = ({ children, size = 'S', variant = ButtonVariants.Default, onClick }) => {
+export const Button: FC<ButtonProps> = ({ children, size = 'S', variant = ButtonVariant.Default, onClick }) => {
   const fontSize = size === 'S' ? 'text-xs lg:text-sm' : 'text-base';
   const textStyles = `font-sans font-bold text-white-100 ${fontSize}`;
   const padding = size === 'S' ? 'px-4 py-3' : 'px-8 py-4';
@@ -21,7 +21,7 @@ export const Button: FC<ButtonProps> = ({ children, size = 'S', variant = Button
   return (
     <button
       type="button"
-      className={`${variant === ButtonVariants.Default ? defaultStyle : textVariantStyle}`}
+      className={`${variant === ButtonVariant.Default ? defaultStyle : textVariantStyle}`}
       onClick={onClick}
     >
       {children}

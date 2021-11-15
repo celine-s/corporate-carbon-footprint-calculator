@@ -1,37 +1,37 @@
-{
-  "1": {
+[
+  {
     "title": "Wie viele Stunden Flugzeug ist jede*r Mitarbeiter*in im letzten Jahr ungefähr geflogen?",
     "category": "🛫",
     "label": "Flugstunden",
     "emissionfactor": 2,
     "initialAnswer": 12
   },
-  "2": {
+  {
     "title": "Wie viel Grad ist es im Office ungefähr? Meistens 20/21°Grad",
     "category": "🔥",
     "label": "° Celcius",
     "emissionfactor": 2,
     "initialAnswer": 12
   },
-  "3": {
+  {
     "title": "Wie viele km Auto fährt ein MA pro Woche ungefähr?",
     "category": "🛫",
     "label": "km",
     "emissionfactor": 2,
     "initialAnswer": 12
   },
-  "4": {
+  {
     "title": "Wie viele Autos besitzt die Firma?",
     "category": "🚍",
     "label": "Autos",
     "emissionfactor": 2,
     "initialAnswer": 12
   },
-  "5": {
+  {
     "title": "Hauptpendelungsmittel: Zug, Velo, Bus, Auto?",
     "category": "🚍",
     "label": "",
     "emissionfactor": 2,
     "initialAnswer": 12
   }
-}
+]

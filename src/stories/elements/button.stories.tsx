@@ -1,7 +1,7 @@
 import React from 'react';
 import { Story, Meta } from '@storybook/react';
 
-import { Button, ButtonProps, ButtonVariants } from '../../elements/button';
+import { Button, ButtonProps, ButtonVariant } from '../../elements/button';
 
 export default {
   title: 'Elements/Button',
@@ -22,5 +22,5 @@ Large.args = {
 
 export const Text = ButtonTemplate.bind({});
 Text.args = {
-  variant: ButtonVariants.Text,
+  variant: ButtonVariant.Text,
 };
