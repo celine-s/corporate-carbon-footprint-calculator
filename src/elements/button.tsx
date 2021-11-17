@@ -15,7 +15,7 @@ export const Button: FC<ButtonProps> = ({ children, size = 'S', variant = Button
   const fontSize = size === 'S' ? 'text-xs lg:text-sm' : 'text-base';
   const textStyles = `font-sans font-bold text-white-100 ${fontSize}`;
   const padding = size === 'S' ? 'px-4 py-3' : 'px-8 py-4';
-  const defaultStyle = `border border-transparent rounded-sm bg-apricot-500 hover:bg-apricot-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-apricot-500 ${textStyles} ${padding}`;
+  const defaultStyle = `rounded-sm bg-apricot-500 hover:bg-apricot-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-apricot-500 ${textStyles} ${padding}`;
   const textVariantStyle = 'text-gray-600 border-b-2 hover:text-gray-900 hover:border-black';
 
   return (

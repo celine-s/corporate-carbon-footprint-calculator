@@ -24,9 +24,9 @@ type Props = {
 };
 
 const Frage: NextPage<Props> = ({ questions, MAX_QUESTION_NUMBER }) => {
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answer, setAnswer] = useState(initialAnswerProp);
   const [impact, setImpact] = useState(initialImpact);
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
 
   const sortedQuestions = useMemo(() => {
     return questions.sort((first, second) => first.category.localeCompare(second.category));
@@ -37,20 +37,22 @@ const Frage: NextPage<Props> = ({ questions, MAX_QUESTION_NUMBER }) => {
     setImpact(getLocalStorage('impact' + index.toString()) || initialImpact);
 
   const setQuestion = (index: number) => {
-    return (
-      setCurrentQuestionIndex(index),
-      ifQuestionHasAnswer(index) ? (setAnswerFromLocalStorage(index), setImpactFromLocalStorage(index)) : null
-    );
+    setCurrentQuestionIndex(index);
+    if (ifQuestionHasAnswer(index)) {
+      setAnswerFromLocalStorage(index);
+      setImpactFromLocalStorage(index);
+    }
   };
 
-  const saveCurrentQuestionIntoLocalStorage = useMemo(() => {
-    setLocalStorage(currentQuestionIndex.toString(), answer),
-      setLocalStorage('impact' + currentQuestionIndex.toString(), impact);
-  }, [answer]);
+  const saveCurrentQuestionIntoLocalStorage = () => {
+    setLocalStorage(currentQuestionIndex.toString(), answer);
+    setLocalStorage('impact' + currentQuestionIndex.toString(), impact);
+  };
 
   const setNextQuestion = (index: number) => {
-    if (isInputValid(answer)) {
-      setQuestion(index), saveCurrentQuestionIntoLocalStorage;
+    if (isInputValid(answer.toString())) {
+      setQuestion(index);
+      saveCurrentQuestionIntoLocalStorage();
     }
   };
 
