@@ -1,4 +1,5 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
+import { ExclamationCircleIcon } from '@heroicons/react/solid';
 
 export type InputFieldProps = {
   placeholder?: string;
@@ -14,6 +15,17 @@ export type InputFieldProps = {
   autoComplete?: string;
   onChange: (value: string) => void;
 };
+const errorStyle = 'block border border-red-300 text-red-900 focus:outline-none focus:ring-red-500 focus:border-red-500'; //block pr-10
+const inputStyle = 'bg-gray-200';
+
+const validateInput = (answer: string) => {
+  if (parseFloat(answer) > 9999) {
+    return 'Bitte gib eine kleinere Zahl ein.';
+  } else if (answer.length > 10) {
+    return 'Bitte gib maximal 10 Ziffern ein.';
+  }
+  return null;
+};
 
 export const InputField: FC<InputFieldProps> = ({
   placeholder = 'Schreiben...',
@@ -27,23 +39,48 @@ export const InputField: FC<InputFieldProps> = ({
   step,
   onChange,
   autoComplete = undefined,
-}) => (
-  <div className="grid grid-cols-[2fr,1fr] md:grid-cols-3 gap-2 my-4 lg:text-base">
-    <input
-      id={id}
-      value={value}
-      type={type}
-      min={min}
-      max={max}
-      step={step}
-      autoComplete={autoComplete}
-      onChange={(event) => onChange(event.target.value)}
-      className="bg-gray-200 w-full bg-white p-2 rounded-md"
-      placeholder={placeholder}
-      maxLength={maxLength}
-    ></input>
-    <label htmlFor={id} className="self-center">
-      {label}
-    </label>
-  </div>
-);
+}) => {
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  return (
+    <div>
+      <div className="grid grid-cols-[2fr,1fr] md:grid-cols-3 gap-2 my-4 lg:text-base">
+        <div className="relative">
+          <input
+            id={id}
+            value={value}
+            type={type}
+            min={min}
+            max={max}
+            step={step}
+            autoComplete={autoComplete}
+            onChange={(event) => {
+              const error = validateInput(event.target.value);
+              if (error === null) {
+                onChange(event.target.value);
+              }
+              setErrorMessage(error);
+            }}
+            className={`rounded-md w-full p-2 ${errorMessage === null ? inputStyle : errorStyle}`}
+            placeholder={placeholder}
+            maxLength={maxLength}
+          />
+          {errorMessage ? (
+            <span className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none mr-3">
+              <ExclamationCircleIcon className="h-5 w-5 text-red-500" aria-hidden="true" />
+            </span>
+          ) : null}
+        </div>
+        <label htmlFor={id} className="self-center">
+          {label}
+        </label>
+      </div>
+      {errorMessage ? (
+        <>
+          <p className="mt-2 text-sm text-red-600" id="input-error">
+            {errorMessage}
+          </p>
+        </>
+      ) : null}
+    </div>
+  );
+};

@@ -1,6 +1,6 @@
 import { GetStaticProps, NextPage } from 'next';
 import { Page } from '../../layouts/page';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { InputField } from '../../elements/input-field';
 import { Copy } from '../../identity/copy';
 import { Heading2 } from '../../identity/heading-2';
@@ -8,41 +8,37 @@ import { Question } from '../../data/questions';
 import Questions from '../../data/questions.json';
 import { Button, ButtonVariant } from '../../elements/button';
 import { Heading1 } from '../../identity/heading-1';
-import {
-  getLocalStorage,
-  setLocalStorage,
-  ifQuestionHasAnswer,
-  initialAnswerProp,
-  initialImpact,
-  theory,
-  isInputValid,
-} from '../../utils/helper-functions';
+import { getLocalStorage, setLocalStorage } from '../../utils/local-storage';
 
 type Props = {
   questions: Question[];
   MAX_QUESTION_NUMBER: number;
 };
 
+//later into data file or DB
+const theory = {
+  title: 'Facts/Transparenz über diese Kategorie und oder Frage',
+  content:
+    'Lorem ipsum dolor sit amet consectetur adipisicing elit. Error neque odio explicabo, necessitatibus eaque numquam tenetur deleniti sequi at facere earum eos, voluptates culpa nam, quae exercitationem recusandae? Aspernatur, aliquam.',
+};
+
 const Frage: NextPage<Props> = ({ questions, MAX_QUESTION_NUMBER }) => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [answer, setAnswer] = useState(initialAnswerProp);
-  const [impact, setImpact] = useState(initialImpact);
+  const [answer, setAnswer] = useState(questions[currentQuestionIndex].initialAnswer.toString());
+  const [impact, setImpact] = useState('');
 
   const sortedQuestions = useMemo(() => {
     return questions.sort((first, second) => first.category.localeCompare(second.category));
   }, [questions]);
 
-  const setAnswerFromLocalStorage = (index: number) => setAnswer(getLocalStorage(index.toString()) || initialAnswerProp);
-  const setImpactFromLocalStorage = (index: number) =>
-    setImpact(getLocalStorage('impact' + index.toString()) || initialImpact);
-
-  const setQuestion = (index: number) => {
-    setCurrentQuestionIndex(index);
-    if (ifQuestionHasAnswer(index)) {
-      setAnswerFromLocalStorage(index);
-      setImpactFromLocalStorage(index);
+  useEffect(() => {
+    if (getLocalStorage(currentQuestionIndex.toString()) !== undefined) {
+      setAnswer(
+        getLocalStorage(currentQuestionIndex.toString()) || questions[currentQuestionIndex].initialAnswer.toString()
+      );
+      setImpact(getLocalStorage('impact' + currentQuestionIndex.toString()) || '');
     }
-  };
+  }, [currentQuestionIndex]);
 
   const saveCurrentQuestionIntoLocalStorage = () => {
     setLocalStorage(currentQuestionIndex.toString(), answer);
@@ -50,10 +46,8 @@ const Frage: NextPage<Props> = ({ questions, MAX_QUESTION_NUMBER }) => {
   };
 
   const setNextQuestion = (index: number) => {
-    if (isInputValid(answer.toString())) {
-      setQuestion(index);
-      saveCurrentQuestionIntoLocalStorage();
-    }
+    setCurrentQuestionIndex(index);
+    saveCurrentQuestionIntoLocalStorage();
   };
 
   return (
@@ -75,25 +69,25 @@ const Frage: NextPage<Props> = ({ questions, MAX_QUESTION_NUMBER }) => {
             name="answer"
             id="number"
             step="1"
-            placeholder="0"
+            // placeholder={questions[currentQuestionIndex].initialAnswer.toString()}
             min="0"
             max="100"
             value={answer}
             onChange={(value) => {
-              setAnswer(value), setImpact((parseFloat(value) * emissionfactor).toString());
+              setAnswer(value);
+              setImpact((parseFloat(value) * emissionfactor).toString());
             }}
           ></InputField>
           <br />
           {answer ? <Copy>Your impact is {impact}</Copy> : <Copy>Please answer the question</Copy>}
         </div>
       ))}
-
       <div className="grid grid-cols-2 md:grid-cols-[2fr,1fr] items-center">
         {currentQuestionIndex <= 0 ? (
           <div></div>
         ) : (
           <div className="grid justify-start">
-            <Button variant={ButtonVariant.Text} onClick={() => setQuestion(currentQuestionIndex - 1)}>
+            <Button variant={ButtonVariant.Text} onClick={() => setCurrentQuestionIndex(currentQuestionIndex - 1)}>
               ← Vorherige Frage
             </Button>
           </div>
@@ -103,9 +97,7 @@ const Frage: NextPage<Props> = ({ questions, MAX_QUESTION_NUMBER }) => {
             <Button
               variant={ButtonVariant.Text}
               onClick={() => {
-                if (isInputValid(answer)) {
-                  saveCurrentQuestionIntoLocalStorage;
-                }
+                saveCurrentQuestionIntoLocalStorage();
               }}
             >
               Save
