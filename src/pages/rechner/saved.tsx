@@ -9,7 +9,7 @@ const Saved: NextPage = () => {
   return (
     <Page>
       <Heading2>You successfully saved all data.</Heading2>
-      <div className="flex">
+      <div className="md:flex grid">
         <InputField
           value=""
           onChange={() => console.log('sent email')}

@@ -13,6 +13,7 @@ export type InputFieldProps = {
   id: string;
   label?: string;
   autoComplete?: string;
+  onKeyDown?: (key: string) => void;
   onChange: (value: string) => void;
 };
 const errorStyle = 'block border border-red-300 text-red-900 focus:outline-none focus:ring-red-500 focus:border-red-500'; //block pr-10
@@ -38,6 +39,7 @@ export const InputField: FC<InputFieldProps> = ({
   label,
   step,
   onChange,
+  onKeyDown,
   autoComplete = undefined,
 }) => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -63,6 +65,7 @@ export const InputField: FC<InputFieldProps> = ({
             className={`rounded-md w-full p-2 ${errorMessage === null ? inputStyle : errorStyle}`}
             placeholder={placeholder}
             maxLength={maxLength}
+            onKeyDown={onKeyDown ? (event) => onKeyDown(event.key) : undefined}
           />
           {errorMessage ? (
             <span className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none mr-3">
