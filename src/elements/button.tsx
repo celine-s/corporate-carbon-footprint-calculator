@@ -5,15 +5,14 @@ export type ButtonProps = {
   onClick?: () => void;
 };
 
-export const Button: FC<ButtonProps> = ({ children, size = 'S' }) => {
-  const fontSize = size === 'S' ? 'text-xs lg:text-sm' : 'text-s';
+export const Button: FC<ButtonProps> = ({ children, size = 'S', onClick }) => {
+  const fontSize = size === 'S' ? 'text-xs lg:text-sm' : 'text-base';
   const textStyles = `font-sans font-bold text-white-100 ${fontSize}`;
-  const gap = size === 'S' ? 'gap-2 lg:gap-6' : 'gap-1 lg:gap-2';
+  const padding = size === 'S' ? 'px-4 py-3' : 'px-8 py-4';
+  const defaultStyle = `rounded-sm bg-apricot-500 hover:bg-apricot-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-apricot-500 ${textStyles} ${padding}`;
+
   return (
-    <button
-      type="button"
-      className={`px-8 py-4 border border-transparent text-sans text-base rounded-sm bg-apricot-500 hover:bg-apricot-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-apricot-500 ${textStyles} ${gap}`}
-    >
+    <button type="button" className={`${defaultStyle}`} onClick={onClick}>
       {children}
     </button>
   );

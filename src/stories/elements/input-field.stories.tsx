@@ -31,3 +31,15 @@ InputWithLabel.args = {
   min: '0',
   max: '100',
 };
+
+export const InputValidationError = InputTemplate.bind({});
+InputValidationError.args = {
+  type: 'number',
+  label: 'Flugstunden',
+  id: 'number',
+  name: 'answer',
+  placeholder: '0',
+  step: '1',
+  min: '0',
+  max: '100',
+};

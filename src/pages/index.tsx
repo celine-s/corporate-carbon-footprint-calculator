@@ -12,7 +12,7 @@ const Home: NextPage = () => {
   return (
     <Page>
       <header>
-        <Heading1>Willkommen toller Mensch</Heading1>
+        <Heading1>Howdy</Heading1>
         <Copy>
           Ich hab gehört du interessierst dich für Nachhaltigkeit. schön. du weisst nicht wie du das als Firma angehen
           kannst? Hier findest du einen schnell Check / abschätzung über den Ausstoss deiner Firma. Danach werden dir
