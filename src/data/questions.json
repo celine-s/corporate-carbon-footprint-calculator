@@ -1,5 +1,13 @@
 [
   {
+    "id": "0",
+    "title": "Anzahl Mitarbeiter:innen",
+    "category": "Team",
+    "label": "Mitarbeiter:innen",
+    "emissionfactor": 2,
+    "initialAnswer": 46
+  },
+  {
     "id": "1",
     "title": "Wie viel kWh wurden in dem Jahr verbraucht?",
     "category": "Strom",

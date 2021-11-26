@@ -9,11 +9,13 @@ import { Heading1 } from '../../identity/heading-1';
 import { getLocalStorage, setLocalStorage } from '../../utils/local-storage';
 import { LinkElement } from '../../elements/link';
 import { useRouter } from 'next/dist/client/router';
+// eslint-disable-next-line import/namespace
 import { Sidebar } from '../../layouts/sidebar';
 
 type Props = {
   question: Question;
   MAX_QUESTION_NUMBER: number;
+  allCategoriesAndFirstIndex: { category: string[] };
 };
 
 const LOCALSTORAGE_IMPACT_KEY = 'impact';
@@ -29,6 +31,7 @@ const Frage: NextPage<Props> = ({
   question,
   question: { id, title, label, emissionfactor, initialAnswer, category },
   MAX_QUESTION_NUMBER,
+  allCategoriesAndFirstIndex,
 }) => {
   const [answer, setAnswer] = useState(getLocalStorage(id) || '');
   const [impact, setImpact] = useState(getLocalStorage(LOCALSTORAGE_IMPACT_KEY + id) || '');
@@ -50,7 +53,7 @@ const Frage: NextPage<Props> = ({
     parseInt(id) >= MAX_QUESTION_NUMBER ? '/rechner/saved' : `/rechner/${(parseInt(id) + 1).toString()}`;
 
   return (
-    <Sidebar question={question}>
+    <Sidebar question={question} categoriesWithIndexes={allCategoriesAndFirstIndex}>
       <Heading1>Kategorie {category}</Heading1>
       <div>
         <div className="md:grid md:grid-cols-[3fr,1fr] flex flex-col-reverse">
@@ -118,8 +121,20 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps: GetStaticProps<Props> = async ({ params }) => {
   const questions = Object.values(Questions);
   const currentId = params?.frage || '1';
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const allCategoriesAndFirstIndex = questions.reduce((acc: any, obj: any) => {
+    const key = obj['category'];
+    if (!acc[key]) {
+      acc[key] = [];
+    }
+    acc[key].push(obj.id);
+    return acc;
+  }, {});
+
   return {
     props: {
+      allCategoriesAndFirstIndex,
       question: questions.find(({ id }) => currentId === id) || questions[0],
       MAX_QUESTION_NUMBER: questions.length,
     },
