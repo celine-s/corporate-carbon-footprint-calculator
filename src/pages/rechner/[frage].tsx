@@ -136,7 +136,7 @@ export const getStaticProps: GetStaticProps<Props> = async ({ params }) => {
     props: {
       allCategoriesAndFirstIndex,
       question: questions.find(({ id }) => currentId === id) || questions[0],
-      MAX_QUESTION_NUMBER: questions.length,
+      MAX_QUESTION_NUMBER: questions.length - 1,
     },
   };
 };
