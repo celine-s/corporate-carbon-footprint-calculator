@@ -1,5 +1,4 @@
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
-import { Page } from '../../layouts/page';
 import React, { useEffect, useState } from 'react';
 import { InputField } from '../../elements/input-field';
 import { Copy } from '../../identity/copy';
@@ -10,6 +9,7 @@ import { Heading1 } from '../../identity/heading-1';
 import { getLocalStorage, setLocalStorage } from '../../utils/local-storage';
 import { LinkElement } from '../../elements/link';
 import { useRouter } from 'next/dist/client/router';
+import { Sidebar } from '../../layouts/sidebar';
 
 type Props = {
   question: Question;
@@ -26,6 +26,7 @@ const theory = {
 };
 
 const Frage: NextPage<Props> = ({
+  question,
   question: { id, title, label, emissionfactor, initialAnswer, category },
   MAX_QUESTION_NUMBER,
 }) => {
@@ -49,7 +50,7 @@ const Frage: NextPage<Props> = ({
     parseInt(id) >= MAX_QUESTION_NUMBER ? '/rechner/saved' : `/rechner/${(parseInt(id) + 1).toString()}`;
 
   return (
-    <Page>
+    <Sidebar question={question}>
       <Heading1>Kategorie {category}</Heading1>
       <div>
         <div className="md:grid md:grid-cols-[3fr,1fr] flex flex-col-reverse">
@@ -103,7 +104,7 @@ const Frage: NextPage<Props> = ({
         <Heading2>{theory.title}</Heading2>
         <Copy>{theory.content}</Copy>
       </div>
-    </Page>
+    </Sidebar>
   );
 };
 
