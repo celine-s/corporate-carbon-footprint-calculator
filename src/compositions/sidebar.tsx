@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC } from 'react';
 import { HeatingIcon } from '../icons/fire';
 import { UsersIcon } from '../icons/usersIcon';
 import { Page } from '../layouts/page';
@@ -7,8 +7,8 @@ import { LightningIcon } from '../icons/lightningIcon';
 import { PaperAirplaneIcon } from '../icons/paperAirplaneIcon';
 import { LinkElement } from '../elements/link';
 import { Question } from '../data/questions';
-import { useRouter } from 'next/dist/client/router';
 import { SaveAsIcon } from '@heroicons/react/outline';
+import Link from 'next/link';
 
 const categoryNavigation = [
   { name: 'Team', icon: UsersIcon },
@@ -41,47 +41,33 @@ const SaveDataElement: FC<PropsSaveDataElement> = ({ onClick }) => {
 };
 
 export const CategoriesNavigation: FC<Props> = ({ children, question, categoriesWithIndexes }) => {
-  const [categoryChangedManually, setCategoryChangedManually] = useState('0');
-  const [currentCategory, setCurrentCategorie] = useState(
-    categoryNavigation.find((c) => c.name === question?.category) || categoryNavigation[0]
-  );
-  const router = useRouter();
-  useEffect(() => {
-    setCurrentCategorie(categoryNavigation.find((c) => c.name === question?.category) || categoryNavigation[0]);
-  }, [router]);
-
-  useEffect(() => {
-    router.push(`/rechner/${categoryChangedManually || '1'}`);
-  }, [categoryChangedManually]);
+  const currentCategory = categoryNavigation.find((c) => c.name === question?.category) || categoryNavigation[0];
 
   const Navigation: FC<NavigationProps> = ({ className }) => {
     const gapAndPadding = 'px-2 md:px-4 gap-4 md:gap-0 mb-8 md:mb-0 -ml-3 md:ml-0 md:mt-5 ';
     return (
       <nav className={`bg-white md:space-y-1 items-center md:items-start ${gapAndPadding} ${className}`}>
         {categoryNavigation.map((item) => (
-          <a
-            key={item.name}
-            onClick={() => {
-              setCurrentCategorie(item);
-              setCategoryChangedManually(categoriesWithIndexes?.[item.name][0] || '1');
-            }}
-            className={
-              item === currentCategory
-                ? `bg-gray-100 text-gray-900 ${styleKategories}`
-                : `text-gray-600 hover:bg-gray-50 hover:text-gray-900 ${styleKategories}`
-            }
-          >
-            <item.icon active={item === currentCategory ? true : false} />
-            <span
-              className={`hidden md:flex ${
+          <Link href={`/rechner/${categoriesWithIndexes?.[item.name][0] || '1'}`} key={item.name}>
+            <a
+              className={
                 item === currentCategory
-                  ? 'text-gray-500'
-                  : 'text-gray-400 group-hover:text-gray-500 md:mr-4 flex flex-1 flex-shrink flex-grow'
-              }`}
+                  ? `bg-gray-100 text-gray-900 ${styleKategories}`
+                  : `text-gray-600 hover:bg-gray-50 hover:text-gray-900 ${styleKategories}`
+              }
             >
-              {item.name}
-            </span>
-          </a>
+              <item.icon active={item === currentCategory ? true : false} />
+              <span
+                className={`hidden md:flex ${
+                  item === currentCategory
+                    ? 'text-gray-500'
+                    : 'text-gray-400 group-hover:text-gray-500 md:mr-4 flex flex-1 flex-shrink flex-grow'
+                }`}
+              >
+                {item.name}
+              </span>
+            </a>
+          </Link>
         ))}
         <div className="md:hidden">
           <SaveDataElement></SaveDataElement>

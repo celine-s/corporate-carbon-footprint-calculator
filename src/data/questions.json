@@ -1,6 +1,6 @@
 [
   {
-    "id": "0",
+    "id": "1",
     "title": "Anzahl Mitarbeiter:innen",
     "category": "Team",
     "label": "Mitarbeiter:innen",
@@ -8,7 +8,7 @@
     "initialAnswer": 46
   },
   {
-    "id": "1",
+    "id": "2",
     "title": "Wie viel kWh wurden in dem Jahr verbraucht?",
     "category": "Strom",
     "label": "kWh",
@@ -16,7 +16,7 @@
     "initialAnswer": 8000
   },
   {
-    "id": "2",
+    "id": "3",
     "title": "Wie viel Grad ist es im Office ungefähr?",
     "category": "Heizung",
     "label": "° Celcius",
@@ -24,7 +24,7 @@
     "initialAnswer": 20
   },
   {
-    "id": "3",
+    "id": "4",
     "title": "Wie viele Autos besitzt die Firma?",
     "category": "Transport",
     "label": "Autos",
@@ -32,7 +32,7 @@
     "initialAnswer": 12
   },
   {
-    "id": "4",
+    "id": "5",
     "title": "Hauptpendelungsmittel: Zug (1), Velo (2), Bus (3), Auto (4)?",
     "category": "Transport",
     "label": "",
@@ -40,7 +40,7 @@
     "initialAnswer": 1
   },
   {
-    "id": "5",
+    "id": "6",
     "title": "Wie viele km Auto fährt ein MA pro Woche ungefähr?",
     "category": "Reisen",
     "label": "km",
@@ -48,7 +48,7 @@
     "initialAnswer": 400
   },
   {
-    "id": "6",
+    "id": "7",
     "title": "Wie viele Stunden Flugzeug ist jede*r Mitarbeiter*in im letzten Jahr ungefähr geflogen?",
     "category": "Reisen",
     "label": "Flugstunden",
