@@ -9,13 +9,12 @@ import { Heading1 } from '../../identity/heading-1';
 import { getLocalStorage, setLocalStorage } from '../../utils/local-storage';
 import { LinkElement } from '../../elements/link';
 import { useRouter } from 'next/dist/client/router';
-// eslint-disable-next-line import/namespace
-import { Sidebar } from '../../layouts/sidebar';
+import { CategoriesNavigation } from '../../compositions/sidebar';
 
 type Props = {
   question: Question;
   MAX_QUESTION_NUMBER: number;
-  allCategoriesAndFirstIndex: { category: string[] };
+  allCategoriesWithIndexes: { [key: string]: string[] };
 };
 
 const LOCALSTORAGE_IMPACT_KEY = 'impact';
@@ -31,7 +30,7 @@ const Frage: NextPage<Props> = ({
   question,
   question: { id, title, label, emissionfactor, initialAnswer, category },
   MAX_QUESTION_NUMBER,
-  allCategoriesAndFirstIndex,
+  allCategoriesWithIndexes,
 }) => {
   const [answer, setAnswer] = useState(getLocalStorage(id) || '');
   const [impact, setImpact] = useState(getLocalStorage(LOCALSTORAGE_IMPACT_KEY + id) || '');
@@ -53,7 +52,7 @@ const Frage: NextPage<Props> = ({
     parseInt(id) >= MAX_QUESTION_NUMBER ? '/rechner/saved' : `/rechner/${(parseInt(id) + 1).toString()}`;
 
   return (
-    <Sidebar question={question} categoriesWithIndexes={allCategoriesAndFirstIndex}>
+    <CategoriesNavigation question={question} categoriesWithIndexes={allCategoriesWithIndexes}>
       <Heading1>Kategorie {category}</Heading1>
       <div>
         <div className="md:grid md:grid-cols-[3fr,1fr] flex flex-col-reverse">
@@ -107,7 +106,7 @@ const Frage: NextPage<Props> = ({
         <Heading2>{theory.title}</Heading2>
         <Copy>{theory.content}</Copy>
       </div>
-    </Sidebar>
+    </CategoriesNavigation>
   );
 };
 
@@ -122,19 +121,18 @@ export const getStaticProps: GetStaticProps<Props> = async ({ params }) => {
   const questions = Object.values(Questions);
   const currentId = params?.frage || '1';
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const allCategoriesAndFirstIndex = questions.reduce((acc: any, obj: any) => {
+  const allCategoriesWithIndexes = questions.reduce((acc, obj) => {
     const key = obj['category'];
     if (!acc[key]) {
       acc[key] = [];
     }
     acc[key].push(obj.id);
     return acc;
-  }, {});
+  }, {} as { [key: string]: string[] });
 
   return {
     props: {
-      allCategoriesAndFirstIndex,
+      allCategoriesWithIndexes,
       question: questions.find(({ id }) => currentId === id) || questions[0],
       MAX_QUESTION_NUMBER: questions.length - 1,
     },

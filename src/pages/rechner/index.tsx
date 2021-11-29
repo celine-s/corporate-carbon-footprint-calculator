@@ -1,14 +1,14 @@
 import { NextPage } from 'next';
 import { LinkElement } from '../../elements/link';
-import { Sidebar } from '../../layouts/sidebar';
+import { CategoriesNavigation } from '../../compositions/sidebar';
 
 const Rechner: NextPage = () => {
   return (
-    <Sidebar>
+    <CategoriesNavigation>
       <LinkElement href="/rechner/1" border={true}>
         ersti Frag
       </LinkElement>
-    </Sidebar>
+    </CategoriesNavigation>
   );
 };
 
