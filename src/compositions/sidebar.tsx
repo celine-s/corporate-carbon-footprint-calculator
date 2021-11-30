@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { HeatingIcon } from '../icons/fire';
-import { UsersIcon } from '../icons/usersIcon';
+import { UserProps, UsersIcon } from '../icons/usersIcon';
 import { Page } from '../layouts/page';
 import { Heading2 } from '../identity/heading-2';
 import { LightningIcon } from '../icons/lightningIcon';
@@ -19,10 +19,75 @@ const categoryNavigation = [
 ];
 
 type Props = { question?: Question; categoriesWithIndexes?: { [key: string]: string[] } };
-type NavigationProps = { className?: string };
-type PropsSaveDataElement = { onClick?: () => void };
 
-const styleKategories = 'group flex items-center md:justify-start text-xs px-2 py-2 md:text-sm font-medium rounded-md';
+export const CategoriesNavigation: FC<Props> = ({ children, question, categoriesWithIndexes }) => {
+  const currentCategory = categoryNavigation.find((c) => c.name === question?.category) || categoryNavigation[0];
+
+  return (
+    <div>
+      <div className="hidden md:flex w-64 md:flex-col fixed md:inset-y-0">
+        <div className="flex-1 flex flex-col border-r border-gray-200 bg-white">
+          <div className="flex-1 pt-5 pb-4 overflow-y-auto">
+            <div className="px-4">
+              <Heading2>Kategorien</Heading2>
+            </div>
+            <Navigation currentCategory={currentCategory} categoriesWithIndexes={categoriesWithIndexes} />
+          </div>
+          <SaveDataElement />
+        </div>
+      </div>
+      <div className="md:pl-64">
+        <Page>
+          <div className="md:hidden">
+            <Navigation currentCategory={currentCategory} categoriesWithIndexes={categoriesWithIndexes} />
+          </div>
+          {children}
+        </Page>
+      </div>
+    </div>
+  );
+};
+
+type NavigationProps = {
+  categoriesWithIndexes?: { [key: string]: string[] };
+  currentCategory: { name: string; icon: React.FC<UserProps> };
+};
+const Navigation: FC<NavigationProps> = ({ categoriesWithIndexes, currentCategory }) => {
+  const gapAndPadding = 'px-2 md:px-4 gap-4 md:gap-0 mb-8 md:mb-0 -ml-3 md:ml-0 md:mt-5 ';
+  const styleKategories = 'group flex justify-center md:justify-start text-xs p-2 md:text-sm font-medium rounded-md w-full';
+
+  return (
+    <nav
+      className={`flex flex-row md:flex-col md:flex-1 bg-white md:space-y-1 items-center md:items-start ${gapAndPadding}`}
+    >
+      {categoryNavigation.map((item) => (
+        <Link href={`/rechner/${categoriesWithIndexes?.[item.name][0] || '1'}`} key={item.name}>
+          <a
+            className={
+              item === currentCategory
+                ? `bg-gray-100 text-gray-900  ${styleKategories}`
+                : `text-gray-600 hover:bg-gray-50 hover:text-gray-900 ${styleKategories}`
+            }
+          >
+            <item.icon active={item === currentCategory ? true : false} />
+            <span
+              className={`hidden md:inline md:mr-4 ${
+                item === currentCategory ? 'text-gray-500' : 'text-gray-400 group-hover:text-gray-500'
+              }`}
+            >
+              {item.name}
+            </span>
+          </a>
+        </Link>
+      ))}
+      <div className="md:hidden">
+        <SaveDataElement />
+      </div>
+    </nav>
+  );
+};
+
+type PropsSaveDataElement = { onClick?: () => void };
 
 const SaveDataElement: FC<PropsSaveDataElement> = ({ onClick }) => {
   return (
@@ -36,65 +101,6 @@ const SaveDataElement: FC<PropsSaveDataElement> = ({ onClick }) => {
           </p>
         </div>
       </LinkElement>
-    </div>
-  );
-};
-
-export const CategoriesNavigation: FC<Props> = ({ children, question, categoriesWithIndexes }) => {
-  const currentCategory = categoryNavigation.find((c) => c.name === question?.category) || categoryNavigation[0];
-
-  const Navigation: FC<NavigationProps> = ({ className }) => {
-    const gapAndPadding = 'px-2 md:px-4 gap-4 md:gap-0 mb-8 md:mb-0 -ml-3 md:ml-0 md:mt-5 ';
-    return (
-      <nav className={`bg-white md:space-y-1 items-center md:items-start ${gapAndPadding} ${className}`}>
-        {categoryNavigation.map((item) => (
-          <Link href={`/rechner/${categoriesWithIndexes?.[item.name][0] || '1'}`} key={item.name}>
-            <a
-              className={
-                item === currentCategory
-                  ? `bg-gray-100 text-gray-900 ${styleKategories}`
-                  : `text-gray-600 hover:bg-gray-50 hover:text-gray-900 ${styleKategories}`
-              }
-            >
-              <item.icon active={item === currentCategory ? true : false} />
-              <span
-                className={`hidden md:flex ${
-                  item === currentCategory
-                    ? 'text-gray-500'
-                    : 'text-gray-400 group-hover:text-gray-500 md:mr-4 flex flex-1 flex-shrink flex-grow'
-                }`}
-              >
-                {item.name}
-              </span>
-            </a>
-          </Link>
-        ))}
-        <div className="md:hidden">
-          <SaveDataElement></SaveDataElement>
-        </div>
-      </nav>
-    );
-  };
-
-  return (
-    <div>
-      <div className="hidden md:flex w-64 flex-col fixed md:inset-y-0">
-        <div className="flex-1 flex flex-col min-h-0 border-r border-gray-200 bg-white">
-          <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
-            <div className="flex flex-shrink-0 px-4">
-              <Heading2>Kategorien</Heading2>
-            </div>
-            <Navigation className="flex-1"></Navigation>
-          </div>
-          <SaveDataElement></SaveDataElement>
-        </div>
-      </div>
-      <div className="md:pl-64 flex flex-col flex-1">
-        <Page>
-          <Navigation className="md:hidden -mt-4 flex flex-row"></Navigation>
-          {children}
-        </Page>
-      </div>
     </div>
   );
 };
