@@ -1,14 +1,14 @@
 import { NextPage } from 'next';
 import { LinkElement } from '../../elements/link';
-import { Heading1 } from '../../identity/heading-1';
-import { Page } from '../../layouts/page';
+import { CategoriesNavigation } from '../../compositions/sidebar';
 
 const Rechner: NextPage = () => {
   return (
-    <Page>
-      <Heading1>willkomme zum rechner</Heading1>
-      <LinkElement href="/rechner/frage">zur ersten Frage</LinkElement>
-    </Page>
+    <CategoriesNavigation>
+      <LinkElement href="/rechner/1" border={true}>
+        ersti Frag
+      </LinkElement>
+    </CategoriesNavigation>
   );
 };
 

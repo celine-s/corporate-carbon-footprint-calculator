@@ -1,32 +1,32 @@
 [
   {
     "id": "1",
-    "title": "Wie viele Stunden Flugzeug ist jede*r Mitarbeiter*in im letzten Jahr ungefähr geflogen?",
-    "category": "🛫",
-    "label": "Flugstunden",
+    "title": "Anzahl Mitarbeiter:innen",
+    "category": "Team",
+    "label": "Mitarbeiter:innen",
     "emissionfactor": 2,
-    "initialAnswer": 100
+    "initialAnswer": 46
   },
   {
     "id": "2",
-    "title": "Wie viel Grad ist es im Office ungefähr? Meistens 20/21°Grad",
-    "category": "🔥",
+    "title": "Wie viel kWh wurden in dem Jahr verbraucht?",
+    "category": "Strom",
+    "label": "kWh",
+    "emissionfactor": 2,
+    "initialAnswer": 8000
+  },
+  {
+    "id": "3",
+    "title": "Wie viel Grad ist es im Office ungefähr?",
+    "category": "Heizung",
     "label": "° Celcius",
     "emissionfactor": 2,
     "initialAnswer": 20
   },
   {
-    "id": "3",
-    "title": "Wie viele km Auto fährt ein MA pro Woche ungefähr?",
-    "category": "🛫",
-    "label": "km",
-    "emissionfactor": 2,
-    "initialAnswer": 400
-  },
-  {
     "id": "4",
     "title": "Wie viele Autos besitzt die Firma?",
-    "category": "🚍",
+    "category": "Transport",
     "label": "Autos",
     "emissionfactor": 2,
     "initialAnswer": 12
@@ -34,9 +34,25 @@
   {
     "id": "5",
     "title": "Hauptpendelungsmittel: Zug (1), Velo (2), Bus (3), Auto (4)?",
-    "category": "🚍",
+    "category": "Transport",
     "label": "",
     "emissionfactor": 2,
     "initialAnswer": 1
+  },
+  {
+    "id": "6",
+    "title": "Wie viele km Auto fährt ein MA pro Woche ungefähr?",
+    "category": "Reisen",
+    "label": "km",
+    "emissionfactor": 2,
+    "initialAnswer": 400
+  },
+  {
+    "id": "7",
+    "title": "Wie viele Stunden Flugzeug ist jede*r Mitarbeiter*in im letzten Jahr ungefähr geflogen?",
+    "category": "Reisen",
+    "label": "Flugstunden",
+    "emissionfactor": 2,
+    "initialAnswer": 100
   }
 ]

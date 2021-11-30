@@ -15,7 +15,7 @@ const Saved: NextPage = () => {
           onChange={() => console.log('sent email')}
           id="email"
           label="Send me the report"
-          placeholder="heidi@gmail.com"
+          placeholder="franz@gmail.com"
         ></InputField>
         <div className="my-4 flex items-center">
           <LinkElement href="/rechner/1" border={true}>
