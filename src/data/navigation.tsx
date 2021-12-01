@@ -1,6 +1,6 @@
 import { SVGProps } from 'react';
 
-export const navigation = {
+export const footerNavigation = {
   main: [
     { name: 'Theorie', href: '/theorie', newTab: false },
     { name: 'Abschlussarbeit', href: '/#', newTab: false },

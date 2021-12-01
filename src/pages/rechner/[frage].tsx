@@ -3,16 +3,16 @@ import React, { useEffect, useState } from 'react';
 import { InputField } from '../../elements/input-field';
 import { Copy } from '../../identity/copy';
 import { Heading2 } from '../../identity/heading-2';
-import { Question } from '../../data/questions';
-import Questions from '../../data/questions.json';
 import { Heading1 } from '../../identity/heading-1';
 import { getLocalStorage, setLocalStorage } from '../../utils/local-storage';
 import { LinkElement } from '../../elements/link';
 import { useRouter } from 'next/dist/client/router';
 import { CategoriesNavigation } from '../../compositions/sidebar';
+import { initializeFirestore } from '../../utils/get-firestore';
+import { DocumentData } from '@firebase/firestore/dist/lite';
 
 type Props = {
-  question: Question;
+  question: DocumentData;
   MAX_QUESTION_NUMBER: number;
   allCategoriesWithIndexes: { [key: string]: string[] };
 };
@@ -111,17 +111,18 @@ const Frage: NextPage<Props> = ({
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
+  const questionsDB = await initializeFirestore('questions');
+
   return {
-    paths: Questions.map(({ id }) => ({ params: { frage: id } })),
+    paths: questionsDB.map(({ id }) => ({ params: { frage: id } })),
     fallback: false,
   };
 };
 
 export const getStaticProps: GetStaticProps<Props> = async ({ params }) => {
-  const questions = Object.values(Questions);
   const currentId = params?.frage || '1';
-
-  const allCategoriesWithIndexes = questions.reduce((acc, obj) => {
+  const questionsDB = await initializeFirestore('questions');
+  const allCategoriesWithIndexes = questionsDB.reduce((acc, obj) => {
     const key = obj['category'];
     if (!acc[key]) {
       acc[key] = [];
@@ -133,8 +134,8 @@ export const getStaticProps: GetStaticProps<Props> = async ({ params }) => {
   return {
     props: {
       allCategoriesWithIndexes,
-      question: questions.find(({ id }) => currentId === id) || questions[0],
-      MAX_QUESTION_NUMBER: questions.length,
+      question: questionsDB.find(({ id }) => currentId === id) || questionsDB[0],
+      MAX_QUESTION_NUMBER: questionsDB.length,
     },
   };
 };

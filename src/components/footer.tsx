@@ -1,12 +1,12 @@
 import { FC } from 'react';
-import { navigation } from '../data/navigation';
+import { footerNavigation } from '../data/navigation';
 import { LinkElement } from '../elements/link';
 
 export const Footer: FC = () => {
   return (
     <footer className="py-8">
       <nav className="flex flex-col md:flex-row justify-center items-center" aria-label="Footer">
-        {navigation.main.map((item) => (
+        {footerNavigation.main.map((item) => (
           <div key={item.name} className="p-2">
             <LinkElement href={item.href} newTab={item.newTab}>
               {item.name}
@@ -15,7 +15,7 @@ export const Footer: FC = () => {
         ))}
       </nav>
       <div className="mt-12 flex justify-center space-x-6 text-gray-400">
-        {navigation.social.map((item) => (
+        {footerNavigation.social.map((item) => (
           <LinkElement key={item.name} href={item.href} newTab={item.newTab}>
             <span className="sr-only">{item.name}</span>
             <item.icon className="h-6 w-6 " aria-hidden="true" />

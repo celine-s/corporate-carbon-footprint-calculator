@@ -6,9 +6,9 @@ import { Heading2 } from '../identity/heading-2';
 import { LightningIcon } from '../icons/lightningIcon';
 import { PaperAirplaneIcon } from '../icons/paperAirplaneIcon';
 import { LinkElement } from '../elements/link';
-import { Question } from '../data/questions';
 import { SaveAsIcon } from '@heroicons/react/outline';
 import Link from 'next/link';
+import { DocumentData } from '@firebase/firestore/dist/lite';
 
 const categoryNavigation = [
   { name: 'Team', icon: UsersIcon },
@@ -18,7 +18,7 @@ const categoryNavigation = [
   { name: 'Reisen', icon: PaperAirplaneIcon },
 ];
 
-type Props = { question?: Question; categoriesWithIndexes?: { [key: string]: string[] } };
+type Props = { question?: DocumentData; categoriesWithIndexes?: { [key: string]: string[] } };
 
 export const CategoriesNavigation: FC<Props> = ({ children, question, categoriesWithIndexes }) => {
   const currentCategory = categoryNavigation.find((c) => c.name === question?.category) || categoryNavigation[0];
@@ -61,7 +61,7 @@ const Navigation: FC<NavigationProps> = ({ categoriesWithIndexes, currentCategor
       className={`flex flex-row md:flex-col md:flex-1 bg-white md:space-y-1 items-center md:items-start ${gapAndPadding}`}
     >
       {categoryNavigation.map((item) => (
-        <Link href={`/rechner/${categoriesWithIndexes?.[item.name][0] || '1'}`} key={item.name}>
+        <Link href={`/rechner/${categoriesWithIndexes?.[item.name]?.[0] || '1'}`} key={item.name}>
           <a
             className={
               item === currentCategory
