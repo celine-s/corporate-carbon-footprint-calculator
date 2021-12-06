@@ -3,16 +3,17 @@ import React, { useEffect, useState } from 'react';
 import { InputField } from '../../elements/input-field';
 import { Copy } from '../../identity/copy';
 import { Heading2 } from '../../identity/heading-2';
-import { Heading1 } from '../../identity/heading-1';
 import { getLocalStorage, setLocalStorage } from '../../utils/local-storage';
 import { LinkElement } from '../../elements/link';
 import { useRouter } from 'next/dist/client/router';
-import { CategoriesNavigation } from '../../compositions/sidebar';
+import { CategoriesNavigation } from '../../compositions/categoriesNavigation';
 import { initializeFirestore } from '../../utils/get-firestore';
-import { DocumentData } from '@firebase/firestore/dist/lite';
+import { collection, getDocs, query } from 'firebase/firestore/lite';
+import { Question } from '../../data/question';
+import { Button } from '../../elements/button';
 
 type Props = {
-  question: DocumentData;
+  question: Question;
   MAX_QUESTION_NUMBER: number;
   allCategoriesWithIndexes: { [key: string]: string[] };
 };
@@ -28,7 +29,7 @@ const theory = {
 
 const Frage: NextPage<Props> = ({
   question,
-  question: { id, title, label, emissionfactor, initialAnswer, category },
+  question: { id, title, label, emissionfactor, initialAnswer },
   MAX_QUESTION_NUMBER,
   allCategoriesWithIndexes,
 }) => {
@@ -53,14 +54,14 @@ const Frage: NextPage<Props> = ({
 
   return (
     <CategoriesNavigation question={question} categoriesWithIndexes={allCategoriesWithIndexes}>
-      <Heading1>Kategorie {category}</Heading1>
+      <div className="w-full border-cornflower-500 border-2 my-6"></div>
+      <div className="text-xs py-2">
+        Frage {id}/{MAX_QUESTION_NUMBER}
+      </div>
       <div>
         <div className="md:grid md:grid-cols-[3fr,1fr] flex flex-col-reverse">
           <div className="flex flex-1 h-24">
             <Heading2>{title}</Heading2>
-          </div>
-          <div className="md:text-right mb-8">
-            Frage {id} von {MAX_QUESTION_NUMBER}
           </div>
         </div>
         <InputField
@@ -69,13 +70,13 @@ const Frage: NextPage<Props> = ({
           name="answer"
           id="number"
           step="1"
-          placeholder={initialAnswer.toString()}
+          placeholder={initialAnswer?.toString()}
           min="0"
           max="100"
           value={answer}
           onChange={(value) => {
             setAnswer(value);
-            setImpact((parseFloat(value) * emissionfactor).toString());
+            setImpact((parseFloat(value) * parseFloat(emissionfactor)).toString());
           }}
           onKeyDown={(key) => key === 'Enter' && router.push(hrefNextQuestion)}
         ></InputField>
@@ -89,20 +90,20 @@ const Frage: NextPage<Props> = ({
           <div className="grid justify-start">
             <LinkElement
               href={`/rechner/${(parseInt(id) - 1).toString()}`}
-              border={true}
               onClick={() => saveCurrentQuestionIntoLocalStorage()}
             >
-              ← Vorherige Frage
+              <Button buttonColorGray={true}>← Vorherige Frage</Button>
             </LinkElement>
           </div>
         )}
-        <div className="grid justify-items-end">
-          <LinkElement href={hrefNextQuestion} border={true} onClick={() => saveCurrentQuestionIntoLocalStorage()}>
-            {parseInt(id) >= MAX_QUESTION_NUMBER ? 'Save' : 'Nächste Frage →'}
-          </LinkElement>
-        </div>
+        <LinkElement href={hrefNextQuestion} onClick={() => saveCurrentQuestionIntoLocalStorage()}>
+          <div className="flex justify-end">
+            <Button>{parseInt(id) >= MAX_QUESTION_NUMBER ? 'Save' : 'Nächste Frage →'}</Button>
+          </div>
+        </LinkElement>
       </div>
-      <div className="border-2 p-8 mt-16">
+      <div className="border-2 p-8 mt-24 bg-gray-300">
+        <div className="font-bold py-2">What is happening here?</div>
         <Heading2>{theory.title}</Heading2>
         <Copy>{theory.content}</Copy>
       </div>
@@ -111,18 +112,19 @@ const Frage: NextPage<Props> = ({
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const questionsDB = await initializeFirestore('questions');
+  const questions = await getQuestions();
 
   return {
-    paths: questionsDB.map(({ id }) => ({ params: { frage: id } })),
+    paths: questions.map(({ id }) => ({ params: { frage: id } })),
     fallback: false,
   };
 };
 
 export const getStaticProps: GetStaticProps<Props> = async ({ params }) => {
   const currentId = params?.frage || '1';
-  const questionsDB = await initializeFirestore('questions');
-  const allCategoriesWithIndexes = questionsDB.reduce((acc, obj) => {
+  const questions = await getQuestions();
+
+  const allCategoriesWithIndexes = questions.reduce((acc, obj) => {
     const key = obj['category'];
     if (!acc[key]) {
       acc[key] = [];
@@ -134,10 +136,23 @@ export const getStaticProps: GetStaticProps<Props> = async ({ params }) => {
   return {
     props: {
       allCategoriesWithIndexes,
-      question: questionsDB.find(({ id }) => currentId === id) || questionsDB[0],
-      MAX_QUESTION_NUMBER: questionsDB.length,
+      question: questions.find(({ id }) => currentId === id) || questions[0],
+      MAX_QUESTION_NUMBER: questions.length,
     },
   };
+};
+
+const getQuestions = async () => {
+  const database = await initializeFirestore();
+
+  const q = query(collection(database, 'questions'));
+
+  const querySnapshot = await getDocs(q);
+  const questions: Question[] = [];
+  querySnapshot.forEach((doc) => {
+    questions.push(doc.data() as Question);
+  });
+  return questions;
 };
 
 export default Frage;

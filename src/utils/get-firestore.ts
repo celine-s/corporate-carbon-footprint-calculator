@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { collection, DocumentData, getDocs, getFirestore, query } from 'firebase/firestore/lite';
+import { getFirestore } from 'firebase/firestore/lite';
 
 const firebaseConfig = {
   apiKey: process.env.API_KEY,
@@ -11,17 +11,9 @@ const firebaseConfig = {
   measurementId: process.env.MEASUREMENT_ID,
 };
 
-export const initializeFirestore = async (documentTitle: string) => {
+export const initializeFirestore = async () => {
   const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
+  const database = getFirestore(app);
 
-  const q = query(collection(db, documentTitle));
-
-  const querySnapshot = await getDocs(q);
-  const allDocuments: DocumentData[] = [];
-  querySnapshot.forEach((doc) => {
-    allDocuments.push(doc.data());
-  });
-
-  return allDocuments;
+  return database;
 };
