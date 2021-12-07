@@ -20,7 +20,7 @@ Large.args = {
 };
 
 export const Gray = ButtonTemplate.bind({});
-Large.args = {
+Gray.args = {
   size: 'S',
   buttonColorGray: true,
 };

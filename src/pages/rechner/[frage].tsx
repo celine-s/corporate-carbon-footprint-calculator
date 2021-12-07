@@ -116,7 +116,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
   return {
     paths: questions.map(({ id }) => ({ params: { frage: id } })),
-    fallback: false,
+    fallback: 'blocking',
   };
 };
 
@@ -139,6 +139,7 @@ export const getStaticProps: GetStaticProps<Props> = async ({ params }) => {
       question: questions.find(({ id }) => currentId === id) || questions[0],
       MAX_QUESTION_NUMBER: questions.length,
     },
+    revalidate: 14400,
   };
 };
 
