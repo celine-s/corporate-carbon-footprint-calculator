@@ -1,6 +1,5 @@
 import React from 'react';
 import { Story, Meta } from '@storybook/react';
-
 import { Button, ButtonProps } from '../../elements/button';
 
 export default {
@@ -18,4 +17,10 @@ Small.args = {
 export const Large = ButtonTemplate.bind({});
 Large.args = {
   size: 'L',
+};
+
+export const Gray = ButtonTemplate.bind({});
+Gray.args = {
+  size: 'S',
+  buttonColorGray: true,
 };

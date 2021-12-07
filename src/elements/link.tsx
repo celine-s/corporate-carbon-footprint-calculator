@@ -7,7 +7,6 @@ export type LinkProps = {
   border?: boolean;
   onClick?: () => void;
 };
-
 export const LinkElement: FC<LinkProps> = ({ newTab = false, children, href, border = false, onClick }) => {
   const borderStyle = border ? 'border-b-2 hover:border-black' : '';
   return (

@@ -21,8 +21,8 @@ const Home: NextPage = () => {
       </header>
       <main>
         <div className="px-4 pt-8 md:mx-auto text-center flex transition-all duration-300 ease-in-out transform hover:scale-105 justify-center">
-          <LinkElement href="/rechner">
-            <Button>
+          <LinkElement href="/rechner/1">
+            <Button size="L">
               <div className="flex flex-wrap flex-grow">
                 Zum Fussabdruck Quickcheck
                 <div className="flex justify-end items-center">
