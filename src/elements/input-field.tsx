@@ -16,7 +16,7 @@ export type InputFieldProps = {
   onKeyDown?: (key: string) => void;
   onChange: (value: string) => void;
 };
-const errorStyle = 'block border border-red-300 text-red-900 focus:outline-none focus:ring-red-500 focus:border-red-500'; //block pr-10
+const errorStyle = 'block border border-red-300 text-red-900 focus:outline-none focus:ring-red-500 focus:border-red-500';
 const inputStyle = 'bg-gray-200';
 
 const validateInput = (answer: string) => {

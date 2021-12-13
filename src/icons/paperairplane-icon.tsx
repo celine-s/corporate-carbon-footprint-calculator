@@ -9,8 +9,8 @@ export type PaperAirplaneProps = {
 
 export const PaperAirplaneIcon: FC<PaperAirplaneProps> = ({ active = false }) => {
   if (!active) {
-    return <OutlinePaperAirplane className="h-6 w-6"></OutlinePaperAirplane>;
+    return <OutlinePaperAirplane className="h-6 w-6" />;
   } else {
-    return <SolidPaperAirplane className="h-6 w-6"></SolidPaperAirplane>;
+    return <SolidPaperAirplane className="h-6 w-6" />;
   }
 };

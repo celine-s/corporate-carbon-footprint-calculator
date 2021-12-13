@@ -1,9 +1,9 @@
 import React, { FC } from 'react';
-import { HeatingIcon } from '../icons/fire';
-import { UserProps, UsersIcon } from '../icons/usersIcon';
+import { HeatingIcon } from '../icons/fire-icon';
+import { UserProps, UsersIcon } from '../icons/users-icon';
 import { Page } from '../layouts/page';
-import { LightningIcon } from '../icons/lightningIcon';
-import { PaperAirplaneIcon } from '../icons/paperAirplaneIcon';
+import { LightningIcon } from '../icons/lightning-icon';
+import { PaperAirplaneIcon } from '../icons/paperairplane-icon';
 import Link from 'next/link';
 import { Question } from '../data/question';
 

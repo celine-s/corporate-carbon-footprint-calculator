@@ -9,8 +9,8 @@ export type HeatingProps = {
 
 export const HeatingIcon: FC<HeatingProps> = ({ active = false }) => {
   if (!active) {
-    return <OutlineFire className="h-6 w-6"></OutlineFire>;
+    return <OutlineFire className="h-6 w-6" />;
   } else {
-    return <SolidFire className="h-6 w-6"></SolidFire>;
+    return <SolidFire className="h-6 w-6" />;
   }
 };
