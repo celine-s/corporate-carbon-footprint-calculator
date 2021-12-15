@@ -9,8 +9,8 @@ export type LightningProps = {
 
 export const LightningIcon: FC<LightningProps> = ({ active = false }) => {
   if (!active) {
-    return <OutlineLightning className="h-6 w-6"></OutlineLightning>;
+    return <OutlineLightning className="h-6 w-6" />;
   } else {
-    return <SolidLightning className="h-6 w-6"></SolidLightning>;
+    return <SolidLightning className="h-6 w-6" />;
   }
 };

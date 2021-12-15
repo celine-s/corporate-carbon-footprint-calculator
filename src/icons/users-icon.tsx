@@ -8,8 +8,8 @@ export type UserProps = {
 
 export const UsersIcon: FC<UserProps> = ({ active = false }) => {
   if (!active) {
-    return <UserOutline className="h-6 w-6"></UserOutline>;
+    return <UserOutline className="h-6 w-6" />;
   } else {
-    return <UserSolid className="h-6 w-6"></UserSolid>;
+    return <UserSolid className="h-6 w-6" />;
   }
 };
