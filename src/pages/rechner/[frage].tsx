@@ -49,9 +49,8 @@ const Frage: NextPage<Props> = ({
     setLocalStorage(LOCALSTORAGE_IMPACT_KEY + id, impact);
   };
 
-  const ID = 'w';
   const hrefNextQuestion =
-    parseInt(id) >= MAX_QUESTION_NUMBER ? `/rechner/report/${ID}` : `/rechner/${(parseInt(id) + 1).toString()}`;
+    parseInt(id) >= MAX_QUESTION_NUMBER ? '/rechner/report/' : `/rechner/${(parseInt(id) + 1).toString()}`;
 
   return (
     <CategoriesNavigation
