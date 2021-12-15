@@ -11,11 +11,13 @@ import { Question } from '../../data/question';
 import { Button } from '../../elements/button';
 import { InformationCircleIcon } from '@heroicons/react/solid';
 import { getQuestions } from '../../utils/questions-helper';
+import { v4 as uuidv4 } from 'uuid';
 
 type Props = {
   question: Question;
   MAX_QUESTION_NUMBER: number;
   categoriesWithIndexes?: { [key: string]: string[] };
+  questionIDs: string[];
 };
 
 const LOCALSTORAGE_IMPACT_KEY = 'impact';
@@ -29,9 +31,10 @@ const theory = {
 
 const Frage: NextPage<Props> = ({
   question,
-  question: { id, title, label, emissionfactor, initialAnswer, category },
+  questionIDs,
   MAX_QUESTION_NUMBER,
   categoriesWithIndexes,
+  question: { id, title, label, emissionfactor, initialAnswer, category },
 }) => {
   const [answer, setAnswer] = useState(getLocalStorage(id) || '');
   const [impact, setImpact] = useState(getLocalStorage(LOCALSTORAGE_IMPACT_KEY + id) || '');
@@ -99,7 +102,11 @@ const Frage: NextPage<Props> = ({
           )}
           <LinkElement href={hrefNextQuestion} onClick={saveCurrentQuestionIntoLocalStorage}>
             <div className="flex justify-end">
-              <Button>{parseInt(id) >= MAX_QUESTION_NUMBER ? 'Save' : 'Weiter'}</Button>
+              {parseInt(id) >= MAX_QUESTION_NUMBER ? (
+                <Button onClick={() => submitAnswers(questionIDs)}>Save</Button>
+              ) : (
+                <Button>Weiter</Button>
+              )}
             </div>
           </LinkElement>
         </div>
@@ -114,6 +121,21 @@ const Frage: NextPage<Props> = ({
       </div>
     </CategoriesNavigation>
   );
+};
+
+const submitAnswers = async (questionIDs: string[]) => {
+  const answers = questionIDs?.map((id) => getLocalStorage(id) || '');
+  const id = uuidv4();
+  const response = await fetch('/api/save-response', {
+    method: 'POST',
+    body: JSON.stringify({ id, answers }),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  const data = await response.json();
+  console.log(data);
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
@@ -144,6 +166,7 @@ export const getStaticProps: GetStaticProps<Props> = async ({ params }) => {
       categoriesWithIndexes,
       question,
       MAX_QUESTION_NUMBER: questions.length,
+      questionIDs: questions.map(({ id }) => id),
     },
     revalidate: 14400,
   };

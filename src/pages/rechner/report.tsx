@@ -5,7 +5,7 @@ import { LinkElement } from '../../elements/link';
 import { InputField } from '../../elements/input-field';
 import React from 'react';
 
-const Saved: NextPage = () => {
+const Report: NextPage = () => {
   return (
     <Page>
       <Heading2>You successfully saved all data.</Heading2>
@@ -27,4 +27,4 @@ const Saved: NextPage = () => {
   );
 };
 
-export default Saved;
+export default Report;
