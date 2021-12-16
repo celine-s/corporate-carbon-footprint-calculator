@@ -133,9 +133,11 @@ const submitAnswers = async (questionIDs: string[]) => {
       'Content-Type': 'application/json',
     },
   });
-
-  const data = await response.json();
-  console.log(data);
+  if (response.ok) {
+    localStorage.clear();
+  } else {
+    alert('Technischer fehler beim sichern. Deine Daten sind weiterhin lokal gespeichert.');
+  }
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {

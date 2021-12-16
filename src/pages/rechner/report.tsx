@@ -1,7 +1,6 @@
 import { NextPage } from 'next';
 import { Page } from '../../layouts/page';
 import { Heading2 } from '../../identity/heading-2';
-import { LinkElement } from '../../elements/link';
 import { InputField } from '../../elements/input-field';
 import React from 'react';
 
@@ -17,11 +16,6 @@ const Report: NextPage = () => {
           label="Send me the report"
           placeholder="franz@gmail.com"
         ></InputField>
-        <div className="my-4 flex items-center">
-          <LinkElement href="/rechner/1" border={true}>
-            Back to Calculator
-          </LinkElement>
-        </div>
       </div>
     </Page>
   );
