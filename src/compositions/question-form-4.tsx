@@ -2,6 +2,7 @@ import { FC, useState } from 'react';
 import { InputField } from '../elements/input-field';
 import { useRouter } from 'next/dist/client/router';
 import { RadioGroup } from '@headlessui/react';
+import { classNames } from '../utils/classNames';
 
 type Props = {
   label: string;
@@ -48,9 +49,6 @@ export const Question4: FC<Props> = ({ label, href, answer, callback }) => {
 
 const electricityOptions = ['Ökostrom', 'Nöd Öko', 'Weiss nöd'];
 
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(' ');
-}
 type PropsRadioButton = {
   callback: React.Dispatch<React.SetStateAction<{ [key: string]: string }>>;
   answerQuestion4: { [key: string]: string };

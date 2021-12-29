@@ -22,7 +22,7 @@ const errorStyle = 'block border border-red-300 text-red-900 focus:outline-none 
 const inputStyle = 'bg-gray-200';
 
 export const InputField: FC<InputFieldProps> = ({
-  placeholder = 'Schreiben...',
+  placeholder,
   maxLength,
   type = 'text',
   id,

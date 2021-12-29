@@ -24,7 +24,7 @@ export const Question2: FC<Props> = ({ label, initialAnswer, href, callback, ans
   const [value, setValue] = useState('');
 
   useEffect(() => {
-    callback({ FTE: value });
+    callback({ fte: value });
   }, [value]);
 
   return (
@@ -35,7 +35,7 @@ export const Question2: FC<Props> = ({ label, initialAnswer, href, callback, ans
         name="answer"
         id="number"
         placeholder={initialAnswer}
-        value={answer?.FTE}
+        value={answer?.fte}
         onChange={(value) => {
           setValue(value);
         }}

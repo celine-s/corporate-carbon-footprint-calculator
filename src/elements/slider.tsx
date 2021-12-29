@@ -19,7 +19,6 @@ export const Slider: FC<Props> = ({ answer, callback }) => {
         max="100"
         value={answer?.percentage || initialAnswer?.percentage}
         className="w-full h-8 bg-opacity-70 hover:opacity-100"
-        id="myRange"
         onChange={(e) => {
           callback({ percentage: e.target.value });
         }}

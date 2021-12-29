@@ -11,10 +11,10 @@ type Props = {
 };
 
 const validateInput = (answer: string) => {
-  if (parseFloat(answer) > 100) {
+  if (parseInt(answer) > 100) {
     return '100 prozent ist das max';
   }
-  if (parseFloat(answer) < 0) {
+  if (parseInt(answer) < 0) {
     return 'Die Prozentangabe darf nicht negativ sein.';
   }
   return null;
@@ -31,10 +31,10 @@ export const Question8: FC<Props> = ({ label, href, callback, answer }) => {
       callback(answer);
     }
     setTotalAmount(
-      (parseFloat(answer.Auto) || 0) +
-        (parseFloat(answer.ÖV) || 0) +
-        (parseFloat(answer.Fahrrad) || 0) +
-        (parseFloat(answer.Fuss) || 0)
+      (parseInt(answer.Auto) || 0) +
+        (parseInt(answer.ÖV) || 0) +
+        (parseInt(answer.Fahrrad) || 0) +
+        (parseInt(answer.Fuss) || 0)
     );
   }, [answer]);
 

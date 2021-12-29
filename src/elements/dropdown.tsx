@@ -1,12 +1,8 @@
 import { Menu } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/solid';
 import React, { FC, useEffect } from 'react';
+import { classNames } from '../utils/classNames';
 
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(' ');
-}
-
-//remove initialValue
 type Props = {
   initialValue: { [key: string]: string };
   selection: string[];
@@ -28,7 +24,6 @@ export const DropDown: FC<Props> = ({ initialValue, selection, selected, callbac
         </Menu.Button>
       </div>
 
-      {/* easein and out doesn't work atm */}
       <Menu.Items className="absolute origin-top-right right-0 mt-2 rounded-md shadow-lg bg-white-100 ring-1 ring-black ring-opacity-5 focus:outline-none">
         <div className="py-1">
           {selection.map((option) => (

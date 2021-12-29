@@ -36,9 +36,7 @@ export const Question3: FC<Props> = ({ label, href, answer, callback }) => {
         step="10"
         placeholder="500" // initialAnswer vode Frage?
         value={answer?.squaremeter}
-        onChange={(value) => {
-          setValue(value);
-        }}
+        onChange={setValue}
         onKeyDown={(key) => key === 'Enter' && router.push(href)}
         validateInput={validateInput}
       />

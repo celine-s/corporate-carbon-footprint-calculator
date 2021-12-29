@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { DropDown } from '../elements/dropdown';
 
-const years = ['vor 1980', '1980-1990', '1991-2000', '2001- 2010', '2011-heute', 'Weiss nicht'];
+const years = ['vor 1980', '1980-1990', '1991-2000', '2001-2010', '2011-heute', 'Weiss nicht'];
 
 type Props = {
   selected: { [key: string]: string };
