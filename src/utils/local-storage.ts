@@ -1,13 +1,20 @@
 const ifWindowDefined = () => typeof window !== 'undefined';
 
-export const setLocalStorage = (key: string, value: string) => {
+export const setLocalStorage = (key: string, value: { [key: string]: string }) => {
   if (ifWindowDefined()) {
-    window.localStorage.setItem(key, value);
+    if (value != null) {
+      window.localStorage.setItem(key, JSON.stringify(value));
+    }
+    return undefined;
   }
 };
 
 export const getLocalStorage = (key: string) => {
   if (ifWindowDefined()) {
-    return window.localStorage.getItem(key);
+    const getValue = window.localStorage.getItem(key);
+    if (getValue) {
+      return JSON.parse(getValue);
+    }
+    return undefined;
   }
 };

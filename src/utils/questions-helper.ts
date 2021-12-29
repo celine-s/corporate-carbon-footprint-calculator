@@ -20,8 +20,24 @@ export const setQuestions = async () => {
   const database = await initializeFirestore();
   const questions = Questions;
 
-  questions.map(
-    async ({ id, title, category, label, initialAnswer, emissionfactor }) =>
-      await setDoc(doc(database, 'questions', id), { id, initialAnswer, label, emissionfactor, category, title })
-  );
+  try {
+    for (const idx in questions) {
+      const { id, title, category, label, infobox, initialAnswer, whatText, whatTitle, constraints, emissionfactor } =
+        questions[idx];
+      await setDoc(doc(database, 'questions', id), {
+        id,
+        title,
+        category,
+        label,
+        infobox,
+        initialAnswer,
+        whatText,
+        whatTitle,
+        constraints,
+        emissionfactor,
+      });
+    }
+  } catch (error) {
+    console.log(error);
+  }
 };

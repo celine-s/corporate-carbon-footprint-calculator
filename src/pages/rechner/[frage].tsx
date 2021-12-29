@@ -1,32 +1,32 @@
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import React, { useEffect, useState } from 'react';
-import { InputField } from '../../elements/input-field';
 import { Copy } from '../../identity/copy';
 import { Heading2 } from '../../identity/heading-2';
 import { getLocalStorage, setLocalStorage } from '../../utils/local-storage';
 import { LinkElement } from '../../elements/link';
-import { useRouter } from 'next/dist/client/router';
 import { CategoriesNavigation } from '../../compositions/categories-navigation';
 import { Question } from '../../data/question';
 import { Button } from '../../elements/button';
 import { InformationCircleIcon } from '@heroicons/react/solid';
 import { getQuestions } from '../../utils/questions-helper';
 import { v4 as uuidv4 } from 'uuid';
+import { Question1 } from '../../compositions/question-form-1';
+import { Question2 } from '../../compositions/question-form-2';
+import { Question3 } from '../../compositions/question-form-3';
+import { Question4 } from '../../compositions/question-form-4';
+import { Question5 } from '../../compositions/question-form-5';
+import { Question6 } from '../../compositions/question-form-6';
+import { Question7 } from '../../compositions/question-form-7';
+import { Question8 } from '../../compositions/question-form-8';
+import { Question9 } from '../../compositions/question-form-9';
+import { Question10 } from '../../compositions/question-form-10';
+import { Question11 } from '../../compositions/question-form-11';
 
 type Props = {
   question: Question;
   MAX_QUESTION_NUMBER: number;
-  categoriesWithIndexes?: { [key: string]: string[] };
+  categoriesWithIndexes: { [key: string]: string[] };
   questionIDs: string[];
-};
-
-const LOCALSTORAGE_IMPACT_KEY = 'impact';
-
-//later into data file or DB
-const theory = {
-  title: 'Facts/Transparenz über diese Kategorie und oder Frage',
-  content:
-    'Lorem ipsum dolor sit amet consectetur adipisicing elit. Error neque odio explicabo, necessitatibus eaque numquam tenetur deleniti sequi at facere earum eos, voluptates culpa nam, quae exercitationem recusandae? Aspernatur, aliquam.',
 };
 
 const Frage: NextPage<Props> = ({
@@ -34,26 +34,23 @@ const Frage: NextPage<Props> = ({
   questionIDs,
   MAX_QUESTION_NUMBER,
   categoriesWithIndexes,
-  question: { id, title, label, emissionfactor, initialAnswer, category },
+  question: { id, title, label, initialAnswer, category, infobox, whatTitle, whatText },
 }) => {
-  const [answer, setAnswer] = useState(getLocalStorage(id) || '');
-  const [impact, setImpact] = useState(getLocalStorage(LOCALSTORAGE_IMPACT_KEY + id) || '');
-  const router = useRouter();
+  console.log('hoi', id, getLocalStorage(id));
+  const [answer, setAnswer] = useState(getLocalStorage(id)); // answer => object //setLocalstorage object to String, and visversa
 
   useEffect(() => {
-    if (getLocalStorage(id) !== undefined) {
-      setAnswer(getLocalStorage(id) || '');
-      setImpact(getLocalStorage(LOCALSTORAGE_IMPACT_KEY + id) || '');
+    const localStorageValue = getLocalStorage(id);
+    if (localStorageValue !== undefined) {
+      setAnswer(localStorageValue);
     }
   }, [id]);
 
   const saveCurrentQuestionIntoLocalStorage = () => {
     setLocalStorage(id, answer);
-    setLocalStorage(LOCALSTORAGE_IMPACT_KEY + id, impact);
   };
 
-  const hrefNextQuestion =
-    parseInt(id) >= MAX_QUESTION_NUMBER ? '/rechner/report/' : `/rechner/${(parseInt(id) + 1).toString()}`;
+  const hrefNext = parseInt(id) >= MAX_QUESTION_NUMBER ? '/rechner/report/' : `/rechner/${(parseInt(id) + 1).toString()}`;
 
   return (
     <CategoriesNavigation
@@ -63,48 +60,48 @@ const Frage: NextPage<Props> = ({
     >
       <div className="bg-white-100 p-6 rounded-md">
         <div className="text-xs py-2">
-          Frage {categoriesWithIndexes?.[category].findIndex((element) => element === id) || 0 + 1}/
-          {categoriesWithIndexes?.[category].length}
+          Frage {categoriesWithIndexes[category].findIndex((element) => element === id) + 1}/
+          {categoriesWithIndexes[category].length}
         </div>
         <div>
-          <div className="md:grid md:grid-cols-[3fr,1fr] flex flex-col-reverse">
-            <div className="flex flex-1 h-24">
-              <Heading2>{title}</Heading2>
-            </div>
+          <Heading2>{title}</Heading2>
+          <div className="-mt-8">
+            <Copy>{infobox}</Copy>
+            <br />
           </div>
-          <InputField
-            type="number"
-            label={label}
-            name="answer"
-            id="number"
-            step="1"
-            placeholder={initialAnswer?.toString()}
-            min="0"
-            max="100"
-            value={answer}
-            onChange={(value) => {
-              setAnswer(value);
-              setImpact((parseFloat(value) * parseFloat(emissionfactor)).toString());
-            }}
-            onKeyDown={(key) => key === 'Enter' && router.push(hrefNextQuestion)}
-          />
+          {/* {*Callback setError & setAnswer*} */}
+          {id === '1' && <Question1 answer={answer} callback={setAnswer} />}
+          {id === '2' && (
+            <Question2 label={label} initialAnswer={initialAnswer} href={hrefNext} answer={answer} callback={setAnswer} />
+          )}
+          {id === '3' && (
+            <Question3 label={label} initialAnswer={initialAnswer} href={hrefNext} answer={answer} callback={setAnswer} />
+          )}
+          {id === '4' && <Question4 href={hrefNext} label={label || ''} answer={answer} callback={setAnswer} />}
+          {id === '5' && <Question5 selected={answer} setSelected={setAnswer} />}
+          {id === '6' && <Question6 selected={answer} callback={setAnswer} />}
+          {id === '7' && <Question7 callback={setAnswer} answer={answer} />}
+          {id === '8' && <Question8 href={hrefNext} label={label} callback={setAnswer} />}
+          {id === '9' && <Question9 href={hrefNext} answer={answer} callback={setAnswer} />}
+          {id === '10' && <Question10 href={hrefNext} callback={setAnswer} answer={answer} />}
+          {id === '11' && <Question11 href={hrefNext} callback={setAnswer} answer={answer} />}
+
           <br />
         </div>
         <div className="flex flex-wrap gap-4 items-center">
-          {parseInt(id) <= 1 ? (
-            <div />
-          ) : (
+          {parseInt(id) > 1 && (
             <div className="grid justify-start">
               <LinkElement href={`/rechner/${(parseInt(id) - 1).toString()}`} onClick={saveCurrentQuestionIntoLocalStorage}>
                 <Button buttonColorGray={true}>Zurück</Button>
               </LinkElement>
             </div>
           )}
-          <LinkElement href={hrefNextQuestion} onClick={saveCurrentQuestionIntoLocalStorage}>
+          <LinkElement href={hrefNext} onClick={saveCurrentQuestionIntoLocalStorage}>
             <div className="flex justify-end">
               {parseInt(id) >= MAX_QUESTION_NUMBER ? (
                 <Button onClick={() => submitAnswers(questionIDs)}>Save</Button>
               ) : (
+                //nur enabled wenn validierte Antwort da ist
                 <Button>Weiter</Button>
               )}
             </div>
@@ -116,8 +113,8 @@ const Frage: NextPage<Props> = ({
           <InformationCircleIcon className="h-6 w-6 mr-2" />
           What is happening here?
         </div>
-        <Heading2>{theory.title}</Heading2>
-        <Copy>{theory.content}</Copy>
+        <Heading2>{whatTitle}</Heading2>
+        <Copy>{whatText}</Copy>
       </div>
     </CategoriesNavigation>
   );
@@ -159,6 +156,9 @@ export const getStaticProps: GetStaticProps<Props> = async ({ params }) => {
       acc[key] = [];
     }
     acc[key].push(obj.id);
+    for (const val in acc) {
+      acc[val].sort((a, b) => parseInt(a) - parseInt(b));
+    }
     return acc;
   }, {} as { [key: string]: string[] });
 

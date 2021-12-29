@@ -11,31 +11,25 @@ export type InputFieldProps = {
   value: string;
   step?: string | number;
   id: string;
+  unit?: string;
   label?: string;
   autoComplete?: string;
+  validateInput: (answer: string) => string | null;
   onKeyDown?: (key: string) => void;
   onChange: (value: string) => void;
 };
 const errorStyle = 'block border border-red-300 text-red-900 focus:outline-none focus:ring-red-500 focus:border-red-500';
 const inputStyle = 'bg-gray-200';
 
-const validateInput = (answer: string) => {
-  if (parseFloat(answer) > 9999) {
-    return 'Bitte gib eine kleinere Zahl ein.';
-  } else if (answer.length > 10) {
-    return 'Bitte gib maximal 10 Ziffern ein.';
-  }
-  return null;
-};
-
 export const InputField: FC<InputFieldProps> = ({
   placeholder = 'Schreiben...',
   maxLength,
   type = 'text',
   id,
+  validateInput,
   min,
   max,
-  value,
+  value = '',
   label,
   step,
   onChange,
@@ -78,11 +72,9 @@ export const InputField: FC<InputFieldProps> = ({
         </label>
       </div>
       {errorMessage ? (
-        <>
-          <p className="mt-2 text-sm text-red-600" id="input-error">
-            {errorMessage}
-          </p>
-        </>
+        <p className="mt-2 text-sm text-red-600" id="input-error">
+          {errorMessage}
+        </p>
       ) : null}
     </div>
   );

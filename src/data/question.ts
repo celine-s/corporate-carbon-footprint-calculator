@@ -4,5 +4,9 @@ export type Question = {
   category: string;
   label?: string;
   initialAnswer?: string;
-  emissionfactor: string;
+  emissionfactor?: string;
+  infobox?: string;
+  whatTitle?: string;
+  whatText?: string;
+  constraints?: string;
 };

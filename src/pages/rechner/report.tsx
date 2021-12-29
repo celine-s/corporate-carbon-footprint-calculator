@@ -15,6 +15,9 @@ const Report: NextPage = () => {
           id="email"
           label="Send me the report"
           placeholder="franz@gmail.com"
+          validateInput={function (): string | null {
+            throw new Error('Function not implemented.');
+          }}
         ></InputField>
       </div>
     </Page>
