@@ -36,8 +36,7 @@ const Frage: NextPage<Props> = ({
   categoriesWithIndexes,
   question: { id, title, label, initialAnswer, category, infobox, whatTitle, whatText },
 }) => {
-  console.log('hoi', id, getLocalStorage(id));
-  const [answer, setAnswer] = useState(getLocalStorage(id)); // answer => object //setLocalstorage object to String, and visversa
+  const [answer, setAnswer] = useState(getLocalStorage(id));
 
   useEffect(() => {
     const localStorageValue = getLocalStorage(id);
@@ -81,7 +80,7 @@ const Frage: NextPage<Props> = ({
           {id === '5' && <Question5 selected={answer} setSelected={setAnswer} />}
           {id === '6' && <Question6 selected={answer} callback={setAnswer} />}
           {id === '7' && <Question7 callback={setAnswer} answer={answer} />}
-          {id === '8' && <Question8 href={hrefNext} label={label} callback={setAnswer} />}
+          {id === '8' && <Question8 href={hrefNext} label={label} callback={setAnswer} answer={answer} />}
           {id === '9' && <Question9 href={hrefNext} answer={answer} callback={setAnswer} />}
           {id === '10' && <Question10 href={hrefNext} callback={setAnswer} answer={answer} />}
           {id === '11' && <Question11 href={hrefNext} callback={setAnswer} answer={answer} />}

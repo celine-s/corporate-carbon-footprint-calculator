@@ -15,8 +15,6 @@ const validateInput = (answer: string) => {
     return 'Dieser Fussabdruck schätzer ist für KMUs (max 250 VZÄ) gedacht.';
   } else if (answer.length > 10) {
     return 'Bitte gib maximal 10 Ziffern nach dem Komma ein.';
-  } else if (parseFloat(answer) < 4) {
-    return 'Gib eine Zahl grösser als 4 ein.';
   }
   return null;
 };

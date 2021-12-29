@@ -11,8 +11,8 @@ type Props = {
 };
 
 const validateInput = (answer: string) => {
-  if (parseFloat(answer) > 250) {
-    return 'Lorem Ipsum';
+  if (parseFloat(answer) > 10000) {
+    return 'Bist du sicher? das sind sehr viele km.';
   } else if (answer.length > 10) {
     return 'Bitte gib maximal 10 Ziffern nach dem Komma ein.';
   }
