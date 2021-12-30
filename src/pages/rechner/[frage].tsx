@@ -72,11 +72,11 @@ const Frage: NextPage<Props> = ({
           {id === '2' && <Question2 answer={answer} callback={setAnswer} />}
           {id === '3' && <Question3 answer={answer} callback={setAnswer} />}
           {id === '4' && <Question4 answer={answer} callback={setAnswer} />}
-          {id === '5' && <Question5 selected={answer} callback={setAnswer} />}
-          {id === '6' && <Question6 selected={answer} callback={setAnswer} />}
+          {id === '5' && <Question5 answer={answer} callback={setAnswer} />}
+          {id === '6' && <Question6 answer={answer} callback={setAnswer} />}
           {id === '7' && <Question7 callback={setAnswer} answer={answer} />}
           {id === '8' && <Question8 callback={setAnswer} answer={answer} />}
-          {id === '9' && <Question9 answer={answer} callback={setAnswer} />}
+          {id === '9' && <Question9 callback={setAnswer} answer={answer} />}
           {id === '10' && <Question10 callback={setAnswer} answer={answer} />}
           {id === '11' && <Question11 callback={setAnswer} answer={answer} />}
 
