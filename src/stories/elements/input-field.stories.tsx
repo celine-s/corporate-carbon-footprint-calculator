@@ -12,7 +12,6 @@ const InputTemplate: Story<InputFieldProps> = (props) => <InputField {...props}>
 export const Input = InputTemplate.bind({});
 Input.args = {
   type: 'number',
-  id: 'number',
   name: 'answer',
   step: '1',
   placeholder: '0',
@@ -24,7 +23,6 @@ export const InputWithLabel = InputTemplate.bind({});
 InputWithLabel.args = {
   type: 'number',
   label: 'Flugstunden',
-  id: 'number',
   name: 'answer',
   step: '1',
   placeholder: '0',
@@ -36,7 +34,6 @@ export const InputValidationError = InputTemplate.bind({});
 InputValidationError.args = {
   type: 'number',
   label: 'Flugstunden',
-  id: 'number',
   name: 'answer',
   placeholder: '0',
   step: '1',

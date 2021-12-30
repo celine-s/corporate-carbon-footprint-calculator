@@ -1,9 +1,8 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect } from 'react';
 import { InputField } from '../elements/input-field';
 import { useRouter } from 'next/dist/client/router';
 
 type Props = {
-  label?: string;
   href: string;
   answer: { [key: string]: string };
   callback: React.Dispatch<React.SetStateAction<{ [key: string]: string }>>;
@@ -12,28 +11,27 @@ const validateInput = (answer: string) => {
   if (parseFloat(answer) > 10000) {
     return 'Bist dir sicher? Über 10000 m2 ist bisschen viel für ein Dienstleistungsunternehmen mit weniger als 251 Mitarbeiter.';
   } else if (answer.length > 10) {
-    return 'Bitte gib maximal 10 Ziffern nach dem Komma ein.';
+    return 'Bitte gib maximal 10 Ziffern ein.';
   }
   return null;
 };
 
-export const Question3: FC<Props> = ({ label, href, answer, callback }) => {
+export const Question3: FC<Props> = ({ href, answer, callback }) => {
   const router = useRouter();
-  const [value, setValue] = useState('500');
 
   useEffect(() => {
-    callback({ squaremeter: value });
-  }, [value]);
+    callback({ squaremeter: '500' });
+  }, []);
 
   return (
     <div>
       <InputField
         type="number"
-        label={label}
+        label="m2"
         name="answer"
         step="10"
-        value={answer.squaremeter}
-        onChange={setValue}
+        value={answer?.squaremeter}
+        onChange={(value) => callback({ squaremeter: value })}
         onKeyDown={(key) => key === 'Enter' && router.push(href)}
         validateInput={validateInput}
       />
