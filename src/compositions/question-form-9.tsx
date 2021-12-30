@@ -1,9 +1,7 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { InputField } from '../elements/input-field';
-import { useRouter } from 'next/dist/client/router';
 
 type Props = {
-  href: string;
   answer: { [key: string]: string };
   callback: React.Dispatch<React.SetStateAction<{ [key: string]: string }>>;
 };
@@ -19,23 +17,20 @@ const validateInput = (answer: string) => {
   return null;
 };
 
-export const Question9: FC<Props> = ({ href, answer = { hours: '100' }, callback }) => {
-  const router = useRouter();
+export const Question9: FC<Props> = ({ answer = { hours: '100' }, callback }) => {
+  useEffect(() => {
+    callback({ hours: '100' });
+  }, []);
 
   return (
-    <div>
-      <InputField
-        type="number"
-        label="Flugstunden"
-        name="answer"
-        step="10"
-        value={answer.hours}
-        onChange={(value) => {
-          callback({ hours: value });
-        }}
-        onKeyDown={(key) => key === 'Enter' && router.push(href)}
-        validateInput={validateInput}
-      />
-    </div>
+    <InputField
+      type="number"
+      label="Flugstunden"
+      name="answer"
+      step="1"
+      value={answer.hours}
+      onChange={(value) => callback({ hours: value })}
+      validateInput={validateInput}
+    />
   );
 };

@@ -1,10 +1,8 @@
 import { FC, useEffect, useState } from 'react';
 import { InputField } from '../elements/input-field';
-import { useRouter } from 'next/dist/client/router';
 import { Copy } from '../identity/copy';
 
 type Props = {
-  href: string;
   answer: { [key: string]: string };
   callback: React.Dispatch<React.SetStateAction<{ [key: string]: string }>>;
 };
@@ -19,19 +17,13 @@ const validateInput = (answer: string) => {
   return null;
 };
 export const Question8: FC<Props> = ({
-  href,
   callback,
   answer = { car: '25', publicTransport: '25', bicyclet: '25', byFoot: '25' },
 }) => {
-  const router = useRouter();
   const [totalAmount, setTotalAmount] = useState(0);
 
   useEffect(() => {
-    if (answer === { car: '', publicTransport: '', bicyclet: '', byFoot: '' }) {
-      callback({ car: '25', publicTransport: '25', bicyclet: '25', byFoot: '25' });
-    } else {
-      callback(answer);
-    }
+    callback({ car: '25', publicTransport: '25', bicyclet: '25', byFoot: '25' });
   }, []);
 
   useEffect(() => {
@@ -57,7 +49,6 @@ export const Question8: FC<Props> = ({
             car: value,
           }));
         }}
-        onKeyDown={(key) => key === 'Enter' && router.push(href)}
         validateInput={validateInput}
       />
       <InputField
@@ -74,7 +65,6 @@ export const Question8: FC<Props> = ({
             publicTransport: value,
           }));
         }}
-        onKeyDown={(key) => key === 'Enter' && router.push(href)}
         validateInput={validateInput}
       />
       <InputField
@@ -91,7 +81,6 @@ export const Question8: FC<Props> = ({
             bicyclet: value,
           }));
         }}
-        onKeyDown={(key) => key === 'Enter' && router.push(href)}
         validateInput={validateInput}
       />
       <InputField
@@ -108,7 +97,6 @@ export const Question8: FC<Props> = ({
             byFoot: value,
           }));
         }}
-        onKeyDown={(key) => key === 'Enter' && router.push(href)}
         validateInput={validateInput}
       />
       {totalAmount > 100 ? (

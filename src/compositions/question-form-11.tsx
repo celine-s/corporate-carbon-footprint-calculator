@@ -1,9 +1,7 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { InputField } from '../elements/input-field';
-import { useRouter } from 'next/dist/client/router';
 
 type Props = {
-  href: string;
   answer: { [key: string]: string };
   callback: React.Dispatch<React.SetStateAction<{ [key: string]: string }>>;
 };
@@ -17,8 +15,10 @@ const validateInput = (answer: string) => {
   return null;
 };
 
-export const Question11: FC<Props> = ({ href, answer = { km: '100' }, callback }) => {
-  const router = useRouter();
+export const Question11: FC<Props> = ({ answer = { km: '100' }, callback }) => {
+  useEffect(() => {
+    callback({ km: '100' });
+  }, []);
 
   return (
     <div>
@@ -31,7 +31,6 @@ export const Question11: FC<Props> = ({ href, answer = { km: '100' }, callback }
         onChange={(value) => {
           callback({ km: value });
         }}
-        onKeyDown={(key) => key === 'Enter' && router.push(href)}
         validateInput={validateInput}
       />
     </div>

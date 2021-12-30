@@ -1,12 +1,9 @@
-import { FC, useState } from 'react';
+import { FC, useEffect } from 'react';
 import { InputField } from '../elements/input-field';
-import { useRouter } from 'next/dist/client/router';
 import { RadioGroup } from '@headlessui/react';
 import { classNames } from '../utils/classNames';
 
 type Props = {
-  initialAnswer?: string;
-  href: string;
   answer: { [key: string]: string };
   callback: React.Dispatch<React.SetStateAction<{ [key: string]: string }>>;
 };
@@ -19,10 +16,12 @@ const validateInput = (answer: string) => {
   return null;
 };
 
-export const Question4: FC<Props> = ({ href, answer, callback }) => {
-  const router = useRouter();
+export const Question4: FC<Props> = ({ answer, callback }) => {
   const answerQuestion4 = answer?.kWh === undefined ? { kWh: '5000', electricityType: 'Nöd Öko' } : answer;
 
+  useEffect(() => {
+    callback(answerQuestion4);
+  }, []);
   return (
     <div className="mb-8">
       <InputField
@@ -36,7 +35,6 @@ export const Question4: FC<Props> = ({ href, answer, callback }) => {
         onChange={(value) => {
           callback({ ...answerQuestion4, kWh: value });
         }}
-        onKeyDown={(key) => key === 'Enter' && router.push(href)}
         validateInput={validateInput}
       />
       <RadioButton callback={callback} answerQuestion4={answerQuestion4} />
@@ -51,45 +49,40 @@ type PropsRadioButton = {
   answerQuestion4: { [key: string]: string };
 };
 
-export const RadioButton: FC<PropsRadioButton> = ({ answerQuestion4, callback }) => {
-  const [electricityType, setElectricityType] = useState(answerQuestion4?.electricityType);
-
-  return (
-    <div>
-      <div className="flex items-center justify-between">
-        <h2 className="text-sm font-medium text-gray-900">Wie wird euer Strom produziert?</h2>
-      </div>
-
-      <RadioGroup
-        value={electricityType || answerQuestion4?.electricityType}
-        onChange={(value) => {
-          setElectricityType(value);
-          callback({ ...answerQuestion4, electricityType: value });
-        }}
-        className="mt-2"
-      >
-        <RadioGroup.Label className="sr-only">Wie wird euer Strom produziert?</RadioGroup.Label>
-        <div className="grid grid-cols-3 gap-3 sm:grid-cols-6">
-          {electricityOptions.map((option) => (
-            <RadioGroup.Option
-              key={option}
-              value={option}
-              className={({ active, checked }) =>
-                classNames(
-                  'cursor-pointer focus:outline-none',
-                  active ? 'ring-2 ring-offset-2 ring-cornflower-500' : '',
-                  checked
-                    ? 'bg-cornflower-500 border-transparent text-white-100 hover:bg-cornflower-800'
-                    : 'bg-white-100 border-gray-200 text-gray-900 hover:bg-gray-50',
-                  'border rounded-md py-3 px-3 flex items-center justify-center text-sm font-medium sm:flex-1'
-                )
-              }
-            >
-              <RadioGroup.Label as="p">{option}</RadioGroup.Label>
-            </RadioGroup.Option>
-          ))}
-        </div>
-      </RadioGroup>
+export const RadioButton: FC<PropsRadioButton> = ({ answerQuestion4, callback }) => (
+  <div>
+    <div className="flex items-center justify-between">
+      <h2 className="text-sm font-medium text-gray-900">Wie wird euer Strom produziert?</h2>
     </div>
-  );
-};
+
+    <RadioGroup
+      value={answerQuestion4?.electricityType}
+      onChange={(value) => {
+        callback({ ...answerQuestion4, electricityType: value });
+      }}
+      className="mt-2"
+    >
+      <RadioGroup.Label className="sr-only">Wie wird euer Strom produziert?</RadioGroup.Label>
+      <div className="grid grid-cols-3 gap-3 sm:grid-cols-6">
+        {electricityOptions.map((option) => (
+          <RadioGroup.Option
+            key={option}
+            value={option}
+            className={({ active, checked }) =>
+              classNames(
+                'cursor-pointer focus:outline-none',
+                active ? 'ring-2 ring-offset-2 ring-cornflower-500' : '',
+                checked
+                  ? 'bg-cornflower-500 border-transparent text-white-100 hover:bg-cornflower-800'
+                  : 'bg-white-100 border-gray-200 text-gray-900 hover:bg-gray-50',
+                'border rounded-md py-3 px-3 flex items-center justify-center text-sm font-medium sm:flex-1'
+              )
+            }
+          >
+            <RadioGroup.Label as="p">{option}</RadioGroup.Label>
+          </RadioGroup.Option>
+        ))}
+      </div>
+    </RadioGroup>
+  </div>
+);
