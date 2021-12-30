@@ -34,7 +34,7 @@ const Frage: NextPage<Props> = ({
   questionIDs,
   MAX_QUESTION_NUMBER,
   categoriesWithIndexes,
-  question: { id, title, label, initialAnswer, category, infobox, whatTitle, whatText },
+  question: { id, title, category, infobox, whatTitle, whatText },
 }) => {
   const [answer, setAnswer] = useState(getLocalStorage(id));
 
@@ -68,19 +68,14 @@ const Frage: NextPage<Props> = ({
             <Copy>{infobox}</Copy>
             <br />
           </div>
-          {/* {*Callback setError & setAnswer*} */}
           {id === '1' && <Question1 answer={answer} callback={setAnswer} />}
-          {id === '2' && (
-            <Question2 label={label} initialAnswer={initialAnswer} href={hrefNext} answer={answer} callback={setAnswer} />
-          )}
-          {id === '3' && (
-            <Question3 label={label} initialAnswer={initialAnswer} href={hrefNext} answer={answer} callback={setAnswer} />
-          )}
-          {id === '4' && <Question4 href={hrefNext} label={label || ''} answer={answer} callback={setAnswer} />}
+          {id === '2' && <Question2 href={hrefNext} answer={answer} callback={setAnswer} />}
+          {id === '3' && <Question3 href={hrefNext} answer={answer} callback={setAnswer} />}
+          {id === '4' && <Question4 href={hrefNext} answer={answer} callback={setAnswer} />}
           {id === '5' && <Question5 selected={answer} setSelected={setAnswer} />}
           {id === '6' && <Question6 selected={answer} callback={setAnswer} />}
           {id === '7' && <Question7 callback={setAnswer} answer={answer} />}
-          {id === '8' && <Question8 href={hrefNext} label={label} callback={setAnswer} answer={answer} />}
+          {id === '8' && <Question8 href={hrefNext} callback={setAnswer} answer={answer} />}
           {id === '9' && <Question9 href={hrefNext} answer={answer} callback={setAnswer} />}
           {id === '10' && <Question10 href={hrefNext} callback={setAnswer} answer={answer} />}
           {id === '11' && <Question11 href={hrefNext} callback={setAnswer} answer={answer} />}
@@ -110,7 +105,7 @@ const Frage: NextPage<Props> = ({
       <div className="mt-24">
         <div className="font-bold py-2 flex flex-row">
           <InformationCircleIcon className="h-6 w-6 mr-2" />
-          What is happening here?
+          Was passiert hier?
         </div>
         <Heading2>{whatTitle}</Heading2>
         <Copy>{whatText}</Copy>

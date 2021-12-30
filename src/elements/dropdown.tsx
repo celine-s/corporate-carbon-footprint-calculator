@@ -4,22 +4,21 @@ import React, { FC, useEffect } from 'react';
 import { classNames } from '../utils/classNames';
 
 type Props = {
-  initialValue: { [key: string]: string };
   selection: string[];
   selected: { [key: string]: string };
   optionKey: string;
   callback: React.Dispatch<React.SetStateAction<{ [key: string]: string }>>;
 };
-export const DropDown: FC<Props> = ({ initialValue, selection, selected, callback, optionKey }) => {
+export const DropDown: FC<Props> = ({ selection, selected, callback, optionKey }) => {
   useEffect(() => {
-    callback(initialValue);
+    callback(selected);
   }, []);
 
   return (
     <Menu as="div" className="relative inline-block text-left mb-8">
       <div>
         <Menu.Button className="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-cornflower-500">
-          {selected?.[optionKey] || initialValue?.[optionKey]}
+          {selected?.[optionKey]}
           <ChevronDownIcon className="-mr-1 ml-2 mt-1 h-5 w-5" aria-hidden="true" />
         </Menu.Button>
       </div>

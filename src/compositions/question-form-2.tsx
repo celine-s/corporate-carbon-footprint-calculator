@@ -4,7 +4,6 @@ import { useRouter } from 'next/dist/client/router';
 
 type Props = {
   label?: string;
-  initialAnswer?: string;
   href: string;
   answer: { [key: string]: string };
   callback: React.Dispatch<React.SetStateAction<{ [key: string]: string }>>;
@@ -19,9 +18,9 @@ const validateInput = (answer: string) => {
   return null;
 };
 
-export const Question2: FC<Props> = ({ label, initialAnswer, href, callback, answer }) => {
+export const Question2: FC<Props> = ({ label, href, callback, answer }) => {
   const router = useRouter();
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState('50');
 
   useEffect(() => {
     callback({ fte: value });
@@ -33,8 +32,6 @@ export const Question2: FC<Props> = ({ label, initialAnswer, href, callback, ans
         type="number"
         label={label}
         name="answer"
-        id="number"
-        placeholder={initialAnswer}
         value={answer?.fte}
         onChange={(value) => {
           setValue(value);

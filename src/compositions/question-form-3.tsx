@@ -4,7 +4,6 @@ import { useRouter } from 'next/dist/client/router';
 
 type Props = {
   label?: string;
-  initialAnswer?: string;
   href: string;
   answer: { [key: string]: string };
   callback: React.Dispatch<React.SetStateAction<{ [key: string]: string }>>;
@@ -20,7 +19,7 @@ const validateInput = (answer: string) => {
 
 export const Question3: FC<Props> = ({ label, href, answer, callback }) => {
   const router = useRouter();
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState('500');
 
   useEffect(() => {
     callback({ squaremeter: value });
@@ -32,10 +31,8 @@ export const Question3: FC<Props> = ({ label, href, answer, callback }) => {
         type="number"
         label={label}
         name="answer"
-        id="number"
         step="10"
-        placeholder="500" // initialAnswer vode Frage?
-        value={answer?.squaremeter}
+        value={answer.squaremeter}
         onChange={setValue}
         onKeyDown={(key) => key === 'Enter' && router.push(href)}
         validateInput={validateInput}

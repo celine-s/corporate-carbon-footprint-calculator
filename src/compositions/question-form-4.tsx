@@ -5,7 +5,6 @@ import { RadioGroup } from '@headlessui/react';
 import { classNames } from '../utils/classNames';
 
 type Props = {
-  label: string;
   initialAnswer?: string;
   href: string;
   answer: { [key: string]: string };
@@ -20,22 +19,20 @@ const validateInput = (answer: string) => {
   return null;
 };
 
-export const Question4: FC<Props> = ({ label, href, answer, callback }) => {
+export const Question4: FC<Props> = ({ href, answer, callback }) => {
   const router = useRouter();
-  const answerQuestion4 = answer?.kWh === undefined ? { kWh: '', electricityType: '' } : answer;
+  const answerQuestion4 = answer?.kWh === undefined ? { kWh: '5000', electricityType: 'Nöd Öko' } : answer;
 
   return (
     <div className="mb-8">
       <InputField
         type="number"
-        label={label}
+        label="kWh"
         name="answer"
-        id="number"
         step="1"
-        placeholder="5000"
         min="0"
         max="250"
-        value={answerQuestion4?.kWh || ''}
+        value={answerQuestion4.kWh}
         onChange={(value) => {
           callback({ ...answerQuestion4, kWh: value });
         }}

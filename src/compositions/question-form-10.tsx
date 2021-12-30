@@ -1,10 +1,8 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { InputField } from '../elements/input-field';
 import { useRouter } from 'next/dist/client/router';
 
 type Props = {
-  label?: string;
-  initialAnswer?: string;
   href: string;
   answer: { [key: string]: string };
   callback: React.Dispatch<React.SetStateAction<{ [key: string]: string }>>;
@@ -19,19 +17,21 @@ const validateInput = (answer: string) => {
   return null;
 };
 
-export const Question10: FC<Props> = ({ label, initialAnswer, href, answer, callback }) => {
+export const Question10: FC<Props> = ({ href, answer = { autokm: '100' }, callback }) => {
   const router = useRouter();
+
+  useEffect(() => {
+    callback(answer);
+  }, []);
 
   return (
     <div>
       <InputField
         type="number"
-        label={label || 'km'}
+        label="km"
         name="answer"
-        id="number"
         step="10"
-        placeholder={initialAnswer || '100'}
-        value={answer?.autokm}
+        value={answer.autokm}
         onChange={(value) => {
           callback({ autokm: value });
         }}

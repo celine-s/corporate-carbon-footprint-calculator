@@ -10,9 +10,8 @@ type Props = {
 
 export const Question6: FC<Props> = ({ selected, callback }) => (
   <DropDown
-    initialValue={{ constructionPeriod: '2011-heute' }}
     selection={years}
-    selected={selected}
+    selected={selected || { constructionPeriod: '2011-heute' }}
     callback={callback}
     optionKey="constructionPeriod"
   />

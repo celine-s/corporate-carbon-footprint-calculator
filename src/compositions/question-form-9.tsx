@@ -3,8 +3,6 @@ import { InputField } from '../elements/input-field';
 import { useRouter } from 'next/dist/client/router';
 
 type Props = {
-  label?: string;
-  initialAnswer?: string;
   href: string;
   answer: { [key: string]: string };
   callback: React.Dispatch<React.SetStateAction<{ [key: string]: string }>>;
@@ -21,21 +19,19 @@ const validateInput = (answer: string) => {
   return null;
 };
 
-export const Question9: FC<Props> = ({ label, initialAnswer, href, answer, callback }) => {
+export const Question9: FC<Props> = ({ href, answer = { hours: '100' }, callback }) => {
   const router = useRouter();
 
   return (
     <div>
       <InputField
         type="number"
-        label={label || 'Flugstunden'}
+        label="Flugstunden"
         name="answer"
-        id="number"
         step="10"
-        placeholder={initialAnswer || '100'}
-        value={answer?.Flugstunden}
+        value={answer.hours}
         onChange={(value) => {
-          callback({ Flugstunden: value });
+          callback({ hours: value });
         }}
         onKeyDown={(key) => key === 'Enter' && router.push(href)}
         validateInput={validateInput}

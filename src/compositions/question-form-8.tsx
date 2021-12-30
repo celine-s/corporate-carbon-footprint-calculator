@@ -4,7 +4,6 @@ import { useRouter } from 'next/dist/client/router';
 import { Copy } from '../identity/copy';
 
 type Props = {
-  label?: string;
   href: string;
   answer: { [key: string]: string };
   callback: React.Dispatch<React.SetStateAction<{ [key: string]: string }>>;
@@ -19,22 +18,28 @@ const validateInput = (answer: string) => {
   }
   return null;
 };
-export const Question8: FC<Props> = ({ label, href, callback, answer }) => {
-  const initialAnswer = '25%';
+export const Question8: FC<Props> = ({
+  href,
+  callback,
+  answer = { car: '25', publicTransport: '25', bicyclet: '25', byFoot: '25' },
+}) => {
   const router = useRouter();
   const [totalAmount, setTotalAmount] = useState(0);
 
   useEffect(() => {
-    if (answer === { Auto: '', ÖV: '', Fahrrad: '', Fuss: '' }) {
-      callback({ Auto: '25', ÖV: '25', Fahrrad: '25', Fuss: '25' });
+    if (answer === { car: '', publicTransport: '', bicyclet: '', byFoot: '' }) {
+      callback({ car: '25', publicTransport: '25', bicyclet: '25', byFoot: '25' });
     } else {
       callback(answer);
     }
+  }, []);
+
+  useEffect(() => {
     setTotalAmount(
-      (parseInt(answer.Auto) || 0) +
-        (parseInt(answer.ÖV) || 0) +
-        (parseInt(answer.Fahrrad) || 0) +
-        (parseInt(answer.Fuss) || 0)
+      (parseInt(answer.car) || 0) +
+        (parseInt(answer.publicTransport) || 0) +
+        (parseInt(answer.bicyclet) || 0) +
+        (parseInt(answer.byFoot) || 0)
     );
   }, [answer]);
 
@@ -42,16 +47,14 @@ export const Question8: FC<Props> = ({ label, href, callback, answer }) => {
     <div className="w-80">
       <InputField
         type="number"
-        label={`%${label?.[0]}`}
+        label="%Auto"
         name="answer"
-        id="number"
         step="5"
-        placeholder={initialAnswer}
-        value={answer?.Auto}
+        value={answer.car}
         onChange={(value) => {
           callback((prevState) => ({
             ...prevState,
-            ['Auto']: value,
+            car: value,
           }));
         }}
         onKeyDown={(key) => key === 'Enter' && router.push(href)}
@@ -59,18 +62,16 @@ export const Question8: FC<Props> = ({ label, href, callback, answer }) => {
       />
       <InputField
         type="number"
-        label={`%${label?.[1]}`}
+        label="%ÖV"
         name="answer"
-        id="number"
         step="5"
-        placeholder={initialAnswer}
         min="0"
         max="100"
-        value={answer?.ÖV}
+        value={answer?.publicTransport}
         onChange={(value) => {
           callback((prevState) => ({
             ...prevState,
-            ['ÖV']: value,
+            publicTransport: value,
           }));
         }}
         onKeyDown={(key) => key === 'Enter' && router.push(href)}
@@ -78,18 +79,16 @@ export const Question8: FC<Props> = ({ label, href, callback, answer }) => {
       />
       <InputField
         type="number"
-        label={`%${label?.[2]}`}
+        label="%Fahrrad"
         name="answer"
-        id="number"
         step="5"
-        placeholder={initialAnswer}
         min="0"
         max="100"
-        value={answer?.Fahrrad}
+        value={answer?.bicyclet}
         onChange={(value) => {
           callback((prevState) => ({
             ...prevState,
-            ['Fahrrad']: value,
+            bicyclet: value,
           }));
         }}
         onKeyDown={(key) => key === 'Enter' && router.push(href)}
@@ -97,18 +96,16 @@ export const Question8: FC<Props> = ({ label, href, callback, answer }) => {
       />
       <InputField
         type="number"
-        label={`%${label?.[3]}`}
+        label="%zu Fuss"
         name="answer"
-        id="number"
         step="5"
-        placeholder={initialAnswer}
         min="0"
         max="100"
-        value={answer?.Fuss}
+        value={answer?.byFoot}
         onChange={(value) => {
           callback((prevState) => ({
             ...prevState,
-            ['Fuss']: value,
+            byFoot: value,
           }));
         }}
         onKeyDown={(key) => key === 'Enter' && router.push(href)}

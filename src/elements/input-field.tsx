@@ -2,7 +2,6 @@ import React, { FC, useState } from 'react';
 import { ExclamationCircleIcon } from '@heroicons/react/solid';
 
 export type InputFieldProps = {
-  placeholder?: string;
   maxLength?: number;
   type?: string;
   min?: string;
@@ -10,7 +9,6 @@ export type InputFieldProps = {
   name?: string;
   value: string;
   step?: string | number;
-  id: string;
   unit?: string;
   label?: string;
   autoComplete?: string;
@@ -22,10 +20,8 @@ const errorStyle = 'block border border-red-300 text-red-900 focus:outline-none 
 const inputStyle = 'bg-gray-200';
 
 export const InputField: FC<InputFieldProps> = ({
-  placeholder,
   maxLength,
   type = 'text',
-  id,
   validateInput,
   min,
   max,
@@ -42,7 +38,6 @@ export const InputField: FC<InputFieldProps> = ({
       <div className="grid grid-cols-[2fr,1fr] md:grid-cols-3 gap-2 my-4 lg:text-base">
         <div className="relative">
           <input
-            id={id}
             value={value}
             type={type}
             min={min}
@@ -57,7 +52,6 @@ export const InputField: FC<InputFieldProps> = ({
               setErrorMessage(error);
             }}
             className={`rounded-md w-full p-2 ${errorMessage === null ? inputStyle : errorStyle}`}
-            placeholder={placeholder}
             maxLength={maxLength}
             onKeyDown={onKeyDown ? (event) => onKeyDown(event.key) : undefined}
           />
@@ -67,15 +61,9 @@ export const InputField: FC<InputFieldProps> = ({
             </span>
           ) : null}
         </div>
-        <label htmlFor={id} className="self-center">
-          {label}
-        </label>
+        <label className="self-center">{label}</label>
       </div>
-      {errorMessage ? (
-        <p className="mt-2 text-sm text-red-600" id="input-error">
-          {errorMessage}
-        </p>
-      ) : null}
+      {errorMessage && <p className="mt-2 text-sm text-red-600">{errorMessage}</p>}
     </div>
   );
 };
