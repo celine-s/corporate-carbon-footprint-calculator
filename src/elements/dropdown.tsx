@@ -1,19 +1,15 @@
 import { Menu } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/solid';
-import React, { FC, useEffect } from 'react';
+import React, { FC } from 'react';
 import { classNames } from '../utils/classNames';
 
 type Props = {
   options: { label: string; value: string }[];
   selected: { [key: string]: string };
   optionKey: string;
-  callback: React.Dispatch<React.SetStateAction<{ [key: string]: string }>>;
+  callback: (value: { [key: string]: string }) => void;
 };
 export const DropDown: FC<Props> = ({ options: options, selected, callback, optionKey }) => {
-  useEffect(() => {
-    callback(selected);
-  }, []);
-
   return (
     <Menu as="div" className="relative inline-block text-left mb-8">
       <div>

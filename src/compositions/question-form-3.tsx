@@ -3,7 +3,7 @@ import { InputField } from '../elements/input-field';
 
 type Props = {
   answer: { [key: string]: string };
-  callback: React.Dispatch<React.SetStateAction<{ [key: string]: string }>>;
+  callback: (value: { [key: string]: string }) => void;
 };
 const validateInput = (answer: string) => {
   if (parseFloat(answer) > 10000) {

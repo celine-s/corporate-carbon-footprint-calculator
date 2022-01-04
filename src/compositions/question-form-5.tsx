@@ -11,11 +11,10 @@ const heatingTypes = [
   { label: 'Solarenergie', value: 'solarEnergie' },
   { label: 'Weiss nicht', value: 'unavailable' },
 ];
-//const label: "deutsche begriff", key: "engl."
 
 type Props = {
   answer: { [key: string]: string };
-  callback: React.Dispatch<React.SetStateAction<{ [key: string]: string }>>;
+  callback: (value: { [key: string]: string }) => void;
 };
 
 export const Question5: FC<Props> = ({ answer, callback }) => {

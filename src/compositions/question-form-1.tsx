@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import { DropDown } from '../elements/dropdown';
 
 const years = [
@@ -10,9 +10,12 @@ const years = [
 
 type Props = {
   answer: { [key: string]: string };
-  callback: React.Dispatch<React.SetStateAction<{ [key: string]: string }>>;
+  callback: (value: { [key: string]: string }) => void;
 };
 
 export const Question1: FC<Props> = ({ answer, callback }) => {
-  return <DropDown options={years} selected={answer || { year: '2021' }} callback={callback} optionKey={'year'} />;
+  useEffect(() => {
+    callback({ year: '2021' });
+  }, []);
+  return <DropDown options={years} selected={answer} callback={callback} optionKey={'year'} />;
 };

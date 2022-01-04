@@ -8,7 +8,7 @@ export type InputFieldProps = {
   max?: string;
   name?: string;
   placeholder?: string;
-  value: string;
+  value?: string;
   step?: string | number;
   unit?: string;
   label?: string;

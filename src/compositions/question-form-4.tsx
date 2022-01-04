@@ -5,7 +5,7 @@ import { classNames } from '../utils/classNames';
 
 type Props = {
   answer: { [key: string]: string };
-  callback: React.Dispatch<React.SetStateAction<{ [key: string]: string }>>;
+  callback: (value: { [key: string]: string }) => void;
 };
 const validateInput = (answer: string) => {
   if (parseFloat(answer) > 10000) {
@@ -49,7 +49,7 @@ const electricityOptions = [
 ];
 
 type PropsRadioButton = {
-  callback: React.Dispatch<React.SetStateAction<{ [key: string]: string }>>;
+  callback: (value: { [key: string]: string }) => void;
   answerQuestion4: { [key: string]: string };
 };
 

@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect } from 'react';
 import { InputField } from '../elements/input-field';
 import { Copy } from '../identity/copy';
 
@@ -20,20 +20,15 @@ export const Question8: FC<Props> = ({
   callback,
   answer = { car: '25', publicTransport: '25', bicycle: '25', byFoot: '25' },
 }) => {
-  const [totalAmount, setTotalAmount] = useState(0);
-
   useEffect(() => {
     callback({ car: '25', publicTransport: '25', bicycle: '25', byFoot: '25' });
   }, []);
 
-  useEffect(() => {
-    setTotalAmount(
-      (parseInt(answer.car) || 0) +
-        (parseInt(answer.publicTransport) || 0) +
-        (parseInt(answer.bicycle) || 0) +
-        (parseInt(answer.byFoot) || 0)
-    );
-  }, [answer]);
+  const totalAmount =
+    (parseInt(answer.car) || 0) +
+    (parseInt(answer.publicTransport) || 0) +
+    (parseInt(answer.bicycle) || 0) +
+    (parseInt(answer.byFoot) || 0);
 
   return (
     <div className="w-80">

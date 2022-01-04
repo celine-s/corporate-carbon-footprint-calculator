@@ -21,6 +21,7 @@ import { Question8 } from '../../compositions/question-form-8';
 import { Question9 } from '../../compositions/question-form-9';
 import { Question10 } from '../../compositions/question-form-10';
 import { Question11 } from '../../compositions/question-form-11';
+import { useRouter } from 'next/dist/client/router';
 
 type Props = {
   question: Question;
@@ -37,6 +38,7 @@ const Frage: NextPage<Props> = ({
   question: { id, title, category, infobox, whatTitle, whatText },
 }) => {
   const [answer, setAnswer] = useState(getLocalStorage(id));
+  const router = useRouter();
 
   useEffect(() => {
     const localStorageValue = getLocalStorage(id);
@@ -49,7 +51,24 @@ const Frage: NextPage<Props> = ({
     setLocalStorage(id, answer);
   };
 
-  const hrefNext = parseInt(id) >= MAX_QUESTION_NUMBER ? '/rechner/report/' : `/rechner/${(parseInt(id) + 1).toString()}`;
+  const submitAnswers = async () => {
+    let answers = questionIDs?.map((id) => getLocalStorage(id));
+    answers = Object.assign({}, answers);
+    const uniqueId = uuidv4();
+    const response = await fetch('/api/save-response', {
+      method: 'POST',
+      body: JSON.stringify({ uniqueId, answers }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    if (response.ok) {
+      router.push(`/rechner/report/${uniqueId}`);
+      localStorage.clear();
+    } else {
+      alert('Technischer fehler beim sichern. Deine Daten sind weiterhin lokal gespeichert.');
+    }
+  };
 
   return (
     <CategoriesNavigation
@@ -90,16 +109,23 @@ const Frage: NextPage<Props> = ({
               </LinkElement>
             </div>
           )}
-          <LinkElement href={hrefNext} onClick={saveCurrentQuestionIntoLocalStorage}>
-            <div className="flex justify-end">
-              {parseInt(id) >= MAX_QUESTION_NUMBER ? (
-                <Button onClick={() => submitAnswers(questionIDs)}>Save</Button>
-              ) : (
-                //nur enabled wenn validierte Antwort da ist
+          <div className="flex justify-end">
+            {parseInt(id) >= MAX_QUESTION_NUMBER ? (
+              <Button
+                onClick={() => {
+                  saveCurrentQuestionIntoLocalStorage;
+                  submitAnswers(questionIDs);
+                }}
+              >
+                Save
+              </Button>
+            ) : (
+              //nur enabled wenn validierte Antwort da ist
+              <LinkElement href={`/rechner/${(parseInt(id) + 1).toString()}`} onClick={saveCurrentQuestionIntoLocalStorage}>
                 <Button>Weiter</Button>
-              )}
-            </div>
-          </LinkElement>
+              </LinkElement>
+            )}
+          </div>
         </div>
       </div>
       <div className="mt-24">
@@ -112,23 +138,6 @@ const Frage: NextPage<Props> = ({
       </div>
     </CategoriesNavigation>
   );
-};
-
-const submitAnswers = async (questionIDs: string[]) => {
-  const answers = questionIDs?.map((id) => getLocalStorage(id) || '');
-  const id = uuidv4();
-  const response = await fetch('/api/save-response', {
-    method: 'POST',
-    body: JSON.stringify({ id, answers }),
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
-  if (response.ok) {
-    localStorage.clear();
-  } else {
-    alert('Technischer fehler beim sichern. Deine Daten sind weiterhin lokal gespeichert.');
-  }
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {

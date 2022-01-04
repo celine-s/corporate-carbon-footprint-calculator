@@ -12,13 +12,12 @@ const years = [
 
 type Props = {
   answer: { [key: string]: string };
-  callback: React.Dispatch<React.SetStateAction<{ [key: string]: string }>>;
+  callback: (value: { [key: string]: string }) => void;
 };
 
 export const Question6: FC<Props> = ({ answer, callback }) => {
-  const initialAnswer = { constructionPeriod: 'today' };
   useEffect(() => {
-    callback(initialAnswer);
+    callback({ constructionPeriod: 'today' });
   }, []);
-  return <DropDown options={years} selected={answer || initialAnswer} callback={callback} optionKey="constructionPeriod" />;
+  return <DropDown options={years} selected={answer} callback={callback} optionKey="constructionPeriod" />;
 };
