@@ -17,7 +17,7 @@ const validateInput = (answer: string) => {
 };
 
 export const Question4: FC<Props> = ({ answer, callback }) => {
-  const answerQuestion4 = answer?.kWh === undefined ? { kWh: '5000', electricityType: 'Nöd Öko' } : answer;
+  const answerQuestion4 = answer?.kWh === undefined ? { kWh: '5000', electricityType: 'notEcoElectricity' } : answer;
 
   useEffect(() => {
     callback(answerQuestion4);
@@ -42,7 +42,11 @@ export const Question4: FC<Props> = ({ answer, callback }) => {
   );
 };
 
-const electricityOptions = ['Ökostrom', 'Nöd Öko', 'Weiss nöd'];
+const electricityOptions = [
+  { value: 'ecoElectricity', label: 'Ökostrom' },
+  { value: 'notEcoElectricity', label: 'Nöd Öko' },
+  { value: 'unavailable', label: 'Weiss nöd' },
+];
 
 type PropsRadioButton = {
   callback: React.Dispatch<React.SetStateAction<{ [key: string]: string }>>;
@@ -64,10 +68,10 @@ export const RadioButton: FC<PropsRadioButton> = ({ answerQuestion4, callback })
     >
       <RadioGroup.Label className="sr-only">Wie wird euer Strom produziert?</RadioGroup.Label>
       <div className="grid grid-cols-3 gap-3 sm:grid-cols-6">
-        {electricityOptions.map((option) => (
+        {electricityOptions.map(({ label, value }) => (
           <RadioGroup.Option
-            key={option}
-            value={option}
+            key={value}
+            value={value}
             className={({ active, checked }) =>
               classNames(
                 'cursor-pointer focus:outline-none',
@@ -79,7 +83,7 @@ export const RadioButton: FC<PropsRadioButton> = ({ answerQuestion4, callback })
               )
             }
           >
-            <RadioGroup.Label as="p">{option}</RadioGroup.Label>
+            <RadioGroup.Label as="p">{label}</RadioGroup.Label>
           </RadioGroup.Option>
         ))}
       </div>

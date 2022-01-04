@@ -1,7 +1,17 @@
 import { FC, useEffect } from 'react';
 import { DropDown } from '../elements/dropdown';
 
-const heatingTypes = ['Heizöl', 'Erdgas', 'Strom', 'Holz', 'Wärmepumpe', 'Fernwärme', 'Solarenergie', 'Weiss nicht'];
+const heatingTypes = [
+  { label: 'Heizöl', value: 'oil' },
+  { label: 'Erdgas', value: 'gas' },
+  { label: 'Strom', value: 'electricity' },
+  { label: 'Holz', value: 'wood' },
+  { label: 'Wärmepumpe', value: 'heatPump' },
+  { label: 'Fernwärme', value: 'districtHeat' },
+  { label: 'Solarenergie', value: 'solarEnergie' },
+  { label: 'Weiss nicht', value: 'unavailable' },
+];
+//const label: "deutsche begriff", key: "engl."
 
 type Props = {
   answer: { [key: string]: string };
@@ -9,11 +19,11 @@ type Props = {
 };
 
 export const Question5: FC<Props> = ({ answer, callback }) => {
-  const initialAnswer = { heatingType: 'Heizöl' };
+  const initialAnswer = { heatingType: 'oil' };
   useEffect(() => {
     callback(initialAnswer);
   }, []);
   return (
-    <DropDown selection={heatingTypes} selected={answer || initialAnswer} callback={callback} optionKey={'heatingType'} />
+    <DropDown options={heatingTypes} selected={answer || initialAnswer} callback={callback} optionKey={'heatingType'} />
   );
 };

@@ -155,14 +155,14 @@ export const getStaticProps: GetStaticProps<Props> = async ({ params }) => {
     }
     return acc;
   }, {} as { [key: string]: string[] });
-
+  const allIds = questions.map(({ id }) => id);
   return {
     props: {
       questions,
       categoriesWithIndexes,
       question,
       MAX_QUESTION_NUMBER: questions.length,
-      questionIDs: questions.map(({ id }) => id),
+      questionIDs: allIds.sort((firstEl, secondEl) => parseInt(firstEl) - parseInt(secondEl)),
     },
     revalidate: 14400,
   };

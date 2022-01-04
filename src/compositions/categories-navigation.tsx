@@ -7,7 +7,7 @@ import Link from 'next/link';
 import { Question } from '../data/question';
 import { TrainIcon } from '../icons/train-icon';
 
-const categoryNavigation = [
+export const categoryNavigation = [
   { name: 'Team', icon: UsersIcon },
   { name: 'Energie', icon: HeatingIcon },
   { name: 'Pendeln', icon: TrainIcon },

@@ -18,19 +18,19 @@ const validateInput = (answer: string) => {
 };
 export const Question8: FC<Props> = ({
   callback,
-  answer = { car: '25', publicTransport: '25', bicyclet: '25', byFoot: '25' },
+  answer = { car: '25', publicTransport: '25', bicycle: '25', byFoot: '25' },
 }) => {
   const [totalAmount, setTotalAmount] = useState(0);
 
   useEffect(() => {
-    callback({ car: '25', publicTransport: '25', bicyclet: '25', byFoot: '25' });
+    callback({ car: '25', publicTransport: '25', bicycle: '25', byFoot: '25' });
   }, []);
 
   useEffect(() => {
     setTotalAmount(
       (parseInt(answer.car) || 0) +
         (parseInt(answer.publicTransport) || 0) +
-        (parseInt(answer.bicyclet) || 0) +
+        (parseInt(answer.bicycle) || 0) +
         (parseInt(answer.byFoot) || 0)
     );
   }, [answer]);
@@ -74,11 +74,11 @@ export const Question8: FC<Props> = ({
         step="5"
         min="0"
         max="100"
-        value={answer?.bicyclet}
+        value={answer?.bicycle}
         onChange={(value) => {
           callback((prevState) => ({
             ...prevState,
-            bicyclet: value,
+            bicycle: value,
           }));
         }}
         validateInput={validateInput}
