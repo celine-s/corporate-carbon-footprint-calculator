@@ -114,13 +114,12 @@ const Frage: NextPage<Props> = ({
               <Button
                 onClick={() => {
                   saveCurrentQuestionIntoLocalStorage;
-                  submitAnswers(questionIDs);
+                  submitAnswers();
                 }}
               >
                 Save
               </Button>
             ) : (
-              //nur enabled wenn validierte Antwort da ist
               <LinkElement href={`/rechner/${(parseInt(id) + 1).toString()}`} onClick={saveCurrentQuestionIntoLocalStorage}>
                 <Button>Weiter</Button>
               </LinkElement>
