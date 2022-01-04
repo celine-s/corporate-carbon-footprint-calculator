@@ -12,9 +12,11 @@ const Report: NextPage = () => {
         <InputField
           value=""
           onChange={() => console.log('sent email')}
-          id="email"
           label="Send me the report"
           placeholder="franz@gmail.com"
+          validateInput={function (): string | null {
+            throw new Error('Function not implemented.');
+          }}
         ></InputField>
       </div>
     </Page>

@@ -11,8 +11,11 @@ export default async function saveResponses(req: NextApiRequest, res: NextApiRes
   const db = await initializeFirestore();
   if (req.method === 'POST') {
     try {
-      await setDoc(doc(db, 'responses', '/' + req.body.id + '/'), { id: req.body.id, answers: req.body.answers });
-      return res.status(200).send({ id: req.body.id, answers: req.body.answers });
+      await setDoc(doc(db, 'responses', `/${req.body.uniqueId}/`), {
+        id: req.body.uniqueId,
+        answers: req.body.answers,
+      });
+      return res.status(200).send({ id: req.body.uniqueId, answers: req.body.answers });
     } catch (error) {
       return res.status(500).send(error as Error);
     }
