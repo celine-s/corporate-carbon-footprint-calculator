@@ -43,20 +43,6 @@ const Report: NextPage<Props> = ({ impactInTons, fte }) => (
         })}
       </div>
     </div>
-    <div>
-      <Heading1>Was bedeutet das?</Heading1>
-    </div>
-    <div className="md:flex grid">
-      <InputField
-        value=""
-        onChange={() => console.log('sent email')}
-        label="Send me the report"
-        placeholder="franz@gmail.com"
-        validateInput={function (): string | null {
-          throw new Error('Function not implemented.');
-        }}
-      ></InputField>
-    </div>
   </Page>
 );
 
