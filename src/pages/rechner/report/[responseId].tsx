@@ -10,19 +10,11 @@ import { categoryNavigation } from '../../../compositions/categories-navigation'
 
 type Props = {
   impactInTons: { name: string; impact: number }[];
-  totalImpact: number;
   fte: number;
   year: string;
 };
-const COMPARISONS = [
-  { name: 'Nach New York und Zurück', emissionFactor: 2, unit: '🗽' },
-  { name: 'Euer Emissionsverbrauch entspricht ', emissionFactor: 14, unit: 'Schweizer:innen' },
-  { name: 'Kilogramm schweizer Rindfleisch', emissionFactor: 12.5, unit: '' },
-  { name: 'Liter Milch', emissionFactor: 0.0016, unit: '' },
-  { name: 'mal um die Erde', emissionFactor: 11.6, unit: '' },
-];
 
-const Report: NextPage<Props> = ({ impactInTons, fte, year, totalImpact }) => (
+const Report: NextPage<Props> = ({ impactInTons, fte, year }) => (
   <Page>
     <div className="pb-16">
       <Heading1>Eure Emissionen im {year}:</Heading1>
@@ -49,20 +41,6 @@ const Report: NextPage<Props> = ({ impactInTons, fte, year, totalImpact }) => (
             </div>
           );
         })}
-      </div>
-      <br /> <br /> <br />
-      <Heading1>Was bedeutet das?</Heading1>
-      <Copy>Deine Emissionen entsprechen ...</Copy>
-      <div className="grid md:grid-cols-2">
-        {COMPARISONS.map(({ name, emissionFactor }) => (
-          <div key={name}>
-            <Heading2>{name}</Heading2>
-            <Copy>
-              {`${Math.round((totalImpact / emissionFactor) * 100) / 100}
-             ${name}`}
-            </Copy>
-          </div>
-        ))}
       </div>
     </div>
   </Page>
@@ -157,13 +135,11 @@ export const getStaticProps: GetStaticProps<Props> = async ({ params }) => {
     { name: 'Pendeln', impact: Math.round((homeOfficeImpact + commute) / 1000) },
     { name: 'Reisen', impact: Math.round((byCar + byPublicTransport + byPlane) / 1000) },
   ];
-  const totalImpact = impactInTons.reduce((prev, curr) => prev + curr.impact, 0);
 
   return {
     props: {
       year,
       response,
-      totalImpact,
       impactInTons,
       fte,
     },
