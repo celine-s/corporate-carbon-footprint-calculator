@@ -1,7 +1,6 @@
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import { Page } from '../../../layouts/page';
 import { Heading2 } from '../../../identity/heading-2';
-import { InputField } from '../../../elements/input-field';
 import React from 'react';
 import { getResponses, getResponseWithId } from '../../../utils/responses-firestore';
 import { Heading1 } from '../../../identity/heading-1';
@@ -11,13 +10,22 @@ import { categoryNavigation } from '../../../compositions/categories-navigation'
 
 type Props = {
   impactInTons: { name: string; impact: number }[];
+  totalImpact: number;
   fte: number;
+  year: string;
 };
+const COMPARISONS = [
+  { name: 'Nach New York und Zurück', emissionFactor: 2, unit: '🗽' },
+  { name: 'Euer Emissionsverbrauch entspricht ', emissionFactor: 14, unit: 'Schweizer:innen' },
+  { name: 'Kilogramm schweizer Rindfleisch', emissionFactor: 12.5, unit: '' },
+  { name: 'Liter Milch', emissionFactor: 0.0016, unit: '' },
+  { name: 'mal um die Erde', emissionFactor: 11.6, unit: '' },
+];
 
-const Report: NextPage<Props> = ({ impactInTons, fte }) => (
+const Report: NextPage<Props> = ({ impactInTons, fte, year, totalImpact }) => (
   <Page>
     <div className="pb-16">
-      <Heading1>Eure Emissionen pro Kategorie:</Heading1>
+      <Heading1>Eure Emissionen im {year}:</Heading1>
       <div className="grid grid-row md:grid-cols-3 gap-4">
         {impactInTons.map((category) => {
           const categoryIcon = categoryNavigation.find(({ name }) => name === category.name) || categoryNavigation[1];
@@ -41,6 +49,20 @@ const Report: NextPage<Props> = ({ impactInTons, fte }) => (
             </div>
           );
         })}
+      </div>
+      <br /> <br /> <br />
+      <Heading1>Was bedeutet das?</Heading1>
+      <Copy>Deine Emissionen entsprechen ...</Copy>
+      <div className="grid md:grid-cols-2">
+        {COMPARISONS.map(({ name, emissionFactor }) => (
+          <div key={name}>
+            <Heading2>{name}</Heading2>
+            <Copy>
+              {`${Math.round((totalImpact / emissionFactor) * 100) / 100}
+             ${name}`}
+            </Copy>
+          </div>
+        ))}
       </div>
     </div>
   </Page>
@@ -93,6 +115,7 @@ export const getStaticProps: GetStaticProps<Props> = async ({ params }) => {
   const answers = response?.answers;
 
   //office
+  const year = answers?.[0].year;
   const fte = parseInt(answers?.[1].fte);
   const squaremeter = parseInt(answers?.[2].squaremeter);
 
@@ -134,10 +157,13 @@ export const getStaticProps: GetStaticProps<Props> = async ({ params }) => {
     { name: 'Pendeln', impact: Math.round((homeOfficeImpact + commute) / 1000) },
     { name: 'Reisen', impact: Math.round((byCar + byPublicTransport + byPlane) / 1000) },
   ];
+  const totalImpact = impactInTons.reduce((prev, curr) => prev + curr.impact, 0);
 
   return {
     props: {
+      year,
       response,
+      totalImpact,
       impactInTons,
       fte,
     },
