@@ -5,8 +5,9 @@ import React from 'react';
 import { getResponses, getResponseWithId } from '../../../utils/responses-firestore';
 import { Heading1 } from '../../../identity/heading-1';
 import { Copy } from '../../../identity/copy';
-
-import { categoryNavigation } from '../../../compositions/categories-navigation';
+import { HeatingIcon, IconProps } from '../../../icons/fire-icon';
+import { TrainIcon } from '../../../icons/train-icon';
+import { PaperAirplaneIcon } from '../../../icons/paperairplane-icon';
 
 type Props = {
   impactInTons: { name: string; impact: number }[];
