@@ -14,21 +14,24 @@ type Props = {
   year: string;
 };
 
+const ICONS: { [key: string]: React.FC<IconProps> } = {
+  Pendeln: TrainIcon,
+  Energie: HeatingIcon,
+  Reisen: PaperAirplaneIcon,
+};
+
 const Report: NextPage<Props> = ({ impactInTons, fte, year }) => (
   <Page>
     <div className="pb-16">
       <Heading1>Eure Emissionen im {year}:</Heading1>
       <div className="grid grid-row md:grid-cols-3 gap-4">
-        {impactInTons.map((category) => {
-          const categoryIcon = categoryNavigation.find(({ name }) => name === category.name) || categoryNavigation[1];
+        {impactInTons.map(({ name, impact }) => {
           return (
-            <div key={category.name} className="bg-white-100 rounded-lg">
+            <div key={name} className="bg-white-100 rounded-lg">
               <div className="text-cornflower-500 flex flex-col items-center border-b-2 px-8 pt-8 ">
-                <div>
-                  <categoryIcon.icon active={true} />
-                </div>
+                <div>{ICONS[name]({ active: true })}</div>
                 <Copy>
-                  {category.impact} t CO<sub>2</sub>
+                  {impact} t CO<sub>2</sub>
                 </Copy>
               </div>
               <div className="p-6">
@@ -62,7 +65,11 @@ const PUBLIC_TRANSPORT_EMISSION = 0.025;
 const PLANE_EMISSION = 0.237;
 const AVG_COMMUTE_DIST_KM = 29;
 const HOME_OFFICE_EMISSION = 0.264;
-const ELECTRICITY_EMISSION = { notEcoElectricity: 0.128, ecoElectricity: 0.016, unavailable: 0.072 };
+const ELECTRICITY_EMISSION: { [key: string]: number } = {
+  notEcoElectricity: 0.128,
+  ecoElectricity: 0.016,
+  unavailable: 0.072,
+};
 
 const HEATING_TYPE_EMISSION: { [key: string]: { emissionFactor: number; perUnit: string } } = {
   oil: { emissionFactor: 3.1, perUnit: 'l' },
@@ -100,6 +107,7 @@ export const getStaticProps: GetStaticProps<Props> = async ({ params }) => {
   //commuting
   const homeOfficePercentage = parseInt(answers?.[6].percentage) / 100;
   const homeOfficeImpact = HOME_OFFICE_EMISSION * WORKDAYS_PER_YEAR * fte * homeOfficePercentage;
+
   const carPercentage = parseInt(answers?.[7].car) / 100;
   const publicTransportPercentage = parseInt(answers?.[7].publicTransport) / 100;
   const bicyclePercentage = parseInt(answers?.[7].bicycle) / 100;
@@ -127,7 +135,7 @@ export const getStaticProps: GetStaticProps<Props> = async ({ params }) => {
     emissionHeating.perUnit === 'l'
       ? heatingUsage.l * emissionHeating.emissionFactor * squaremeter
       : heatingUsage.kWh * emissionHeating.emissionFactor * squaremeter;
-  const electricityType = 'unavailable';
+  const electricityType = answers?.[3].electricityType;
   const electricity = answers?.[3].kWh * ELECTRICITY_EMISSION?.[electricityType];
 
   const impactInTons = [
@@ -143,7 +151,6 @@ export const getStaticProps: GetStaticProps<Props> = async ({ params }) => {
       impactInTons,
       fte,
     },
-    revalidate: 14400,
   };
 };
 
