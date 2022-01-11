@@ -11,8 +11,9 @@ export const Slider: FC<Props> = ({ answer, callback }) => {
     <div className="flex flex-row">
       <input
         type="range"
-        min="1"
+        min="0"
         max="100"
+        step="10"
         value={answer?.percentage}
         className="w-full h-8 bg-opacity-70 hover:opacity-100"
         onChange={(e) => {

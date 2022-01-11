@@ -1,7 +1,7 @@
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import { Page } from '../../../layouts/page';
 import { Heading2 } from '../../../identity/heading-2';
-import React from 'react';
+import React, { FC } from 'react';
 import { getResponses, getResponseWithId } from '../../../utils/responses-firestore';
 import { Heading1 } from '../../../identity/heading-1';
 import { Copy } from '../../../identity/copy';
@@ -13,6 +13,7 @@ type Props = {
   impactInTons: { name: string; impact: number }[];
   fte: number;
   year: string;
+  totalImpact: number;
 };
 
 const ICONS: { [key: string]: React.FC<IconProps> } = {
@@ -21,7 +22,32 @@ const ICONS: { [key: string]: React.FC<IconProps> } = {
   Reisen: PaperAirplaneIcon,
 };
 
-const Report: NextPage<Props> = ({ impactInTons, fte, year }) => (
+const COMPARISONS = [
+  {
+    content: 'Eure Gesamtemissionen entsprechen dieser Anzahl an Flügen nach New York und zurück für eine Person.',
+    emissionFactor: 2,
+    unit: 'x 🗽',
+    name: 'Nach New York & zurück',
+  },
+  {
+    content:
+      'Eure Gesamtemissionen entsprechen den Emissionen, die XY Schweizer:innen pro Jahr ausstossen (inkl. internationale Güter).',
+    emissionFactor: 14,
+    unit: 'x 👩‍🌾👨‍🌾',
+    name: 'Schweizer:innen',
+  },
+  {
+    content: 'wird für die schweizer Rindfleisch',
+    emissionFactor: 12.5,
+    unit: 'kg 🐂',
+    name: 'Kilogramm schweizer Rindfleisch',
+  },
+  { content: '', emissionFactor: 11.6, unit: 'x ✈️🌍', name: 'Mal um die Erde' },
+  { content: '', emissionFactor: 0.0016, unit: 'l 🥛', name: 'Liter schweizer Vollmilch' },
+  { content: '', emissionFactor: 0.0016, unit: 'l 🥛', name: 'Liter schweizer Hafermilch' },
+];
+
+const Report: NextPage<Props> = ({ impactInTons, fte, year, totalImpact }) => (
   <Page>
     <div className="pb-16">
       <Heading1>Eure Emissionen im {year}:</Heading1>
@@ -46,9 +72,33 @@ const Report: NextPage<Props> = ({ impactInTons, fte, year }) => (
           );
         })}
       </div>
+      <br /> <br /> <br /> <br /> <br />
+      <Heading1>Das enspricht...</Heading1>
+      <div className="grid md:grid-cols-3 gap-12 pt-8">
+        {COMPARISONS.map(({ name, emissionFactor, unit, content }) => {
+          const impact = Math.round((totalImpact / emissionFactor) * 100) / 100;
+          return <Comparison key={name} impact={impact} name={name} unit={unit} content={content}></Comparison>;
+        })}
+      </div>
     </div>
   </Page>
 );
+
+type ComparisonProps = { impact: number; name: string; content: string; unit: string };
+
+export const Comparison: FC<ComparisonProps> = ({ unit, impact, name, content }) => {
+  return (
+    <div>
+      <div>
+        <div className="text-xxl font-bold">{`${impact} ${unit}`}</div>
+        <div className="-mb-4">
+          <Heading2>{name}</Heading2>
+        </div>
+        <span className="text-xs">{content}</span>
+      </div>
+    </div>
+  );
+};
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const responses = await getResponses();
@@ -75,11 +125,11 @@ const ELECTRICITY_EMISSION: { [key: string]: number } = {
 const HEATING_TYPE_EMISSION: { [key: string]: { emissionFactor: number; perUnit: string } } = {
   oil: { emissionFactor: 3.1, perUnit: 'l' },
   gas: { emissionFactor: 0.23, perUnit: 'kWh' },
-  wood: { emissionFactor: 0.03, perUnit: 'kWh' }, // anpassen
-  electricity: { emissionFactor: 0.03, perUnit: 'kWh' }, // anpassen
+  wood: { emissionFactor: 0.015, perUnit: 'kWh' },
+  electricity: { emissionFactor: 0.072, perUnit: 'kWh' },
   heatPump: { emissionFactor: 0.03, perUnit: 'kWh' }, // anpassen
-  districtHeat: { emissionFactor: 0.03, perUnit: 'kWh' }, // anpassen
-  solarEnergy: { emissionFactor: 0.03, perUnit: 'kWh' }, // anpassen
+  districtHeat: { emissionFactor: 0.161, perUnit: 'kWh' },
+  solarEnergy: { emissionFactor: 0, perUnit: 'kWh' },
   unavailable: { emissionFactor: 0.03, perUnit: 'kWh' }, // anpassen
 };
 const USAGE_PER_CONSTRUCTION_YEAR: { [key: string]: { l: number; kWh: number } } = {
@@ -144,12 +194,14 @@ export const getStaticProps: GetStaticProps<Props> = async ({ params }) => {
     { name: 'Pendeln', impact: Math.round((homeOfficeImpact + commute) / 1000) },
     { name: 'Reisen', impact: Math.round((byCar + byPublicTransport + byPlane) / 1000) },
   ];
+  const totalImpact = impactInTons.reduce((prev, curr) => prev + curr.impact, 0);
 
   return {
     props: {
       year,
       response,
       impactInTons,
+      totalImpact,
       fte,
     },
   };
