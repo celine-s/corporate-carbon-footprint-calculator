@@ -37,9 +37,9 @@ const Report: NextPage<Props> = ({ impactInTons, fte, year }) => (
               </div>
               <div className="p-6">
                 <span className="text-xxs">
-                  Pro Vollzeitmitarbeiter: {(((category.impact / fte) * 100) / 100).toFixed(2)} t CO<sub>2</sub>
+                  Pro Vollzeitmitarbeiter: {Math.round(((impact / fte) * 100) / 100)} t CO<sub>2</sub>
                 </span>
-                <Heading2>{category.name}</Heading2>
+                <Heading2>{name}</Heading2>
                 <span>Was passiert hier?</span>
               </div>
             </div>
