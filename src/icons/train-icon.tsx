@@ -1,10 +1,7 @@
 import React, { FC } from 'react';
+import { IconProps } from './fire-icon';
 
-export type TrainProps = {
-  active?: boolean;
-};
-
-export const TrainIcon: FC<TrainProps> = ({ active = false }) => {
+export const TrainIcon: FC<IconProps> = ({ active = false }) => {
   if (!active) {
     return (
       <div>

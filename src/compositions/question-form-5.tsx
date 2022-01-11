@@ -8,7 +8,7 @@ const heatingTypes = [
   { label: 'Holz', value: 'wood' },
   { label: 'Wärmepumpe', value: 'heatPump' },
   { label: 'Fernwärme', value: 'districtHeat' },
-  { label: 'Solarenergie', value: 'solarEnergie' },
+  { label: 'Solarenergie', value: 'solarEnergy' },
   { label: 'Weiss nicht', value: 'unavailable' },
 ];
 

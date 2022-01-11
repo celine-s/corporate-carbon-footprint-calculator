@@ -1,13 +1,13 @@
 import React, { FC } from 'react';
-import { HeatingIcon } from '../icons/fire-icon';
-import { UserProps, UsersIcon } from '../icons/users-icon';
+import { IconProps, HeatingIcon } from '../icons/fire-icon';
+import { UsersIcon } from '../icons/users-icon';
 import { Page } from '../layouts/page';
 import { PaperAirplaneIcon } from '../icons/paperairplane-icon';
 import Link from 'next/link';
 import { Question } from '../data/question';
 import { TrainIcon } from '../icons/train-icon';
 
-export const categoryNavigation = [
+const categoryNavigation = [
   { name: 'Team', icon: UsersIcon },
   { name: 'Energie', icon: HeatingIcon },
   { name: 'Pendeln', icon: TrainIcon },
@@ -47,7 +47,7 @@ export const CategoriesNavigation: FC<Props> = ({ children, question, questionsL
 
 type NavigationProps = {
   categoriesWithIndexes?: { [key: string]: string[] };
-  currentCategory: { name: string; icon: React.FC<UserProps> };
+  currentCategory: { name: string; icon: React.FC<IconProps> };
 };
 const Navigation: FC<NavigationProps> = ({ categoriesWithIndexes, currentCategory }) => {
   const gapAndPadding = 'gap-1';

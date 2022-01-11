@@ -3,11 +3,11 @@ import { FireIcon as OutlineFire } from '@heroicons/react/outline';
 
 import React, { FC } from 'react';
 
-export type HeatingProps = {
+export type IconProps = {
   active?: boolean;
 };
 
-export const HeatingIcon: FC<HeatingProps> = ({ active = false }) => {
+export const HeatingIcon: FC<IconProps> = ({ active = false }) => {
   if (!active) {
     return <OutlineFire className="h-6 w-6" />;
   } else {

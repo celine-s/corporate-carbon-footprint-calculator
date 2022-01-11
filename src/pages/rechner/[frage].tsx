@@ -113,7 +113,7 @@ const Frage: NextPage<Props> = ({
             {parseInt(id) >= MAX_QUESTION_NUMBER ? (
               <Button
                 onClick={() => {
-                  saveCurrentQuestionIntoLocalStorage;
+                  saveCurrentQuestionIntoLocalStorage();
                   submitAnswers();
                 }}
               >
