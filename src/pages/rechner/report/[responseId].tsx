@@ -29,6 +29,15 @@ const COMPARISONS = [
     unit: 'x 🗽',
     name: 'Nach New York & zurück',
   },
+  { content: '', emissionFactor: 11.6, unit: 'x ✈️🌍', name: 'Mal um die Erde' },
+  { content: '', emissionFactor: 0.0016, unit: 'l 🥛', name: 'Liter schweizer Vollmilch' },
+  {
+    content: 'wird für die schweizer Rindfleisch',
+    emissionFactor: 0.0125,
+    unit: 'g 🐂',
+    name: 'Kilogramm schweizer Rindfleisch',
+  },
+  { content: '', emissionFactor: 0.00076, unit: 'l 🥛', name: 'Liter schweizer Hafermilch' },
   {
     content:
       'Eure Gesamtemissionen entsprechen den Emissionen, die XY Schweizer:innen pro Jahr ausstossen (inkl. internationale Güter).',
@@ -36,21 +45,14 @@ const COMPARISONS = [
     unit: 'x 👩‍🌾👨‍🌾',
     name: 'Schweizer:innen',
   },
-  {
-    content: 'wird für die schweizer Rindfleisch',
-    emissionFactor: 12.5,
-    unit: 'kg 🐂',
-    name: 'Kilogramm schweizer Rindfleisch',
-  },
-  { content: '', emissionFactor: 11.6, unit: 'x ✈️🌍', name: 'Mal um die Erde' },
-  { content: '', emissionFactor: 0.0016, unit: 'l 🥛', name: 'Liter schweizer Vollmilch' },
-  { content: '', emissionFactor: 0.0016, unit: 'l 🥛', name: 'Liter schweizer Hafermilch' },
 ];
 
 const Report: NextPage<Props> = ({ impactInTons, fte, year, totalImpact }) => (
   <Page>
     <div className="pb-16">
-      <Heading1>Eure Emissionen im {year}:</Heading1>
+      <Heading1>
+        Eure Emissionen im {year} entsprechen ca. {totalImpact} t CO<sub>2</sub>
+      </Heading1>
       <div className="grid grid-row md:grid-cols-3 gap-4">
         {impactInTons.map(({ name, impact }) => {
           return (
@@ -63,10 +65,9 @@ const Report: NextPage<Props> = ({ impactInTons, fte, year, totalImpact }) => (
               </div>
               <div className="p-6">
                 <span className="text-xxs">
-                  Pro Vollzeitmitarbeiter: {Math.round(((impact / fte) * 100) / 100)} t CO<sub>2</sub>
+                  Pro Vollzeitmitarbeiter ca.: {Math.round(((impact / fte) * 1000) / 1000)} t CO<sub>2</sub>
                 </span>
                 <Heading2>{name}</Heading2>
-                <span>Was passiert hier?</span>
               </div>
             </div>
           );
@@ -74,7 +75,7 @@ const Report: NextPage<Props> = ({ impactInTons, fte, year, totalImpact }) => (
       </div>
       <br /> <br /> <br /> <br /> <br />
       <Heading1>Das enspricht...</Heading1>
-      <div className="grid md:grid-cols-3 gap-12 pt-8">
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-12 pt-8">
         {COMPARISONS.map(({ name, emissionFactor, unit, content }) => {
           const impact = Math.round((totalImpact / emissionFactor) * 100) / 100;
           return <Comparison key={name} impact={impact} name={name} unit={unit} content={content}></Comparison>;
@@ -110,6 +111,8 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 const WORKDAYS_PER_YEAR = 240;
+const WEEKS_PER_YEAR = 53;
+const MONTHS_PER_YEAR = 12;
 const CAR_EMISSION = 0.209;
 const BICYCLE_EMISSION = 0.008;
 const PUBLIC_TRANSPORT_EMISSION = 0.025;
@@ -173,9 +176,9 @@ export const getStaticProps: GetStaticProps<Props> = async ({ params }) => {
       bicyclePercentage * BICYCLE_EMISSION);
 
   //travelling
-  const byCar = parseInt(answers?.[9].autokm) * fte * CAR_EMISSION;
-  const byPublicTransport = parseInt(answers?.[10].km) * fte * PUBLIC_TRANSPORT_EMISSION;
-  const byPlane = parseInt(answers?.[8].hours) * fte * PLANE_EMISSION;
+  const byCar = parseInt(answers?.[9].autokm) * fte * CAR_EMISSION * WEEKS_PER_YEAR;
+  const byPublicTransport = parseInt(answers?.[10].km) * fte * PUBLIC_TRANSPORT_EMISSION * WEEKS_PER_YEAR;
+  const byPlane = parseInt(answers?.[8].hours) * fte * PLANE_EMISSION * MONTHS_PER_YEAR;
 
   //energy
   const constructionPeriod = answers?.[5].constructionPeriod;
