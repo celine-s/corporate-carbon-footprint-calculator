@@ -24,7 +24,7 @@ export const Question2: FC<Props> = ({ callback, answer }) => {
     <div>
       <InputField
         type="number"
-        label="VZÄ"
+        label="Vollzeitäquivalent"
         name="answer"
         value={answer?.fte}
         onChange={(value) => callback({ fte: value })}

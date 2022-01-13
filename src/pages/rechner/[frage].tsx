@@ -81,11 +81,10 @@ const Frage: NextPage<Props> = ({
           Frage {categoriesWithIndexes[category].findIndex((element) => element === id) + 1}/
           {categoriesWithIndexes[category].length}
         </div>
-        <div>
+        <div className="mb-8">
           <Heading2>{title}</Heading2>
-          <div className="-mt-8">
+          <div className="-mt-8 mb-16">
             <Copy>{infobox}</Copy>
-            <br />
           </div>
           {id === '1' && <Question1 answer={answer} callback={setAnswer} />}
           {id === '2' && <Question2 answer={answer} callback={setAnswer} />}
@@ -98,8 +97,6 @@ const Frage: NextPage<Props> = ({
           {id === '9' && <Question9 callback={setAnswer} answer={answer} />}
           {id === '10' && <Question10 callback={setAnswer} answer={answer} />}
           {id === '11' && <Question11 callback={setAnswer} answer={answer} />}
-
-          <br />
         </div>
         <div className="flex flex-wrap gap-4 items-center">
           {parseInt(id) > 1 && (

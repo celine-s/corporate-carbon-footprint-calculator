@@ -53,7 +53,7 @@ const Report: NextPage<Props> = ({ impactInTons, fte, year, totalImpact }) => (
       <Heading1>
         Eure Emissionen im {year} entsprechen ca. {totalImpact} t CO<sub>2</sub>
       </Heading1>
-      <div className="grid grid-row md:grid-cols-3 gap-4">
+      <div className="grid grid-row md:grid-cols-3 gap-4 mb-32">
         {impactInTons.map(({ name, impact }) => {
           return (
             <div key={name} className="bg-white-100 rounded-lg">
@@ -73,7 +73,6 @@ const Report: NextPage<Props> = ({ impactInTons, fte, year, totalImpact }) => (
           );
         })}
       </div>
-      <br /> <br /> <br /> <br /> <br />
       <Heading1>Das enspricht...</Heading1>
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-12 pt-8">
         {COMPARISONS.map(({ name, emissionFactor, unit, content }) => {
@@ -87,7 +86,7 @@ const Report: NextPage<Props> = ({ impactInTons, fte, year, totalImpact }) => (
 
 type ComparisonProps = { impact: number; name: string; content: string; unit: string };
 
-export const Comparison: FC<ComparisonProps> = ({ unit, impact, name, content }) => {
+const Comparison: FC<ComparisonProps> = ({ unit, impact, name, content }) => {
   return (
     <div>
       <div>
@@ -116,7 +115,7 @@ const MONTHS_PER_YEAR = 12;
 const CAR_EMISSION = 0.209;
 const BICYCLE_EMISSION = 0.008;
 const PUBLIC_TRANSPORT_EMISSION = 0.025;
-const PLANE_EMISSION = 0.237;
+const PLANE_EMISSION = 0.14;
 const AVG_COMMUTE_DIST_KM = 29;
 const HOME_OFFICE_EMISSION = 0.264;
 const ELECTRICITY_EMISSION: { [key: string]: number } = {
