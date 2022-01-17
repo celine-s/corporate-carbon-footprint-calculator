@@ -8,8 +8,8 @@ type Props = {
   callback: (value: { [key: string]: string }) => void;
 };
 const validateInput = (answer: string) => {
-  if (parseFloat(answer) > 10000) {
-    return 'Bist dir sicher? Über 10000 m2 für weniger als 251 Mitarbeiter scheint mir nach zu viel Büro.';
+  if (parseFloat(answer) > 10000000000) {
+    return 'You sure?';
   } else if (answer.length > 10) {
     return 'Bitte gib maximal 10 Ziffern nach dem Komma ein.';
   }

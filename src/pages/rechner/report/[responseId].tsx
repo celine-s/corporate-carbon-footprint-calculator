@@ -1,7 +1,7 @@
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import { Page } from '../../../layouts/page';
 import { Heading2 } from '../../../identity/heading-2';
-import React from 'react';
+import React, { FC } from 'react';
 import { getResponses, getResponseWithId } from '../../../utils/responses-firestore';
 import { Heading1 } from '../../../identity/heading-1';
 import { Copy } from '../../../identity/copy';
@@ -13,6 +13,7 @@ type Props = {
   impactInTons: { name: string; impact: number }[];
   fte: number;
   year: string;
+  totalImpact: number;
 };
 
 const ICONS: { [key: string]: React.FC<IconProps> } = {
@@ -21,11 +22,29 @@ const ICONS: { [key: string]: React.FC<IconProps> } = {
   Reisen: PaperAirplaneIcon,
 };
 
-const Report: NextPage<Props> = ({ impactInTons, fte, year }) => (
+const COMPARISONS = [
+  {
+    content: 'Eure Gesamtemissionen entsprechen dieser Anzahl an Flügen nach New York und zurück für eine Person.',
+    emissionFactor: 2,
+    unit: 'x 🗽',
+    name: 'Nach New York & zurück',
+  },
+  { content: '', emissionFactor: 0.0016, unit: 'l 🥛', name: 'Liter Schweizer Vollmilch' },
+  {
+    content: 'wird für schweizer Rindfleisch',
+    emissionFactor: 12.5,
+    unit: 'kg 🐂',
+    name: 'Kilogramm schweizer Rindfleisch',
+  },
+];
+
+const Report: NextPage<Props> = ({ impactInTons, fte, year, totalImpact }) => (
   <Page>
     <div className="pb-16">
-      <Heading1>Eure Emissionen im {year}:</Heading1>
-      <div className="grid grid-row md:grid-cols-3 gap-4">
+      <Heading1>
+        Eure Emissionen im {year} entsprechen ca. {totalImpact} t CO<sub>2</sub>
+      </Heading1>
+      <div className="grid grid-row md:grid-cols-3 gap-4 mb-32">
         {impactInTons.map(({ name, impact }) => {
           return (
             <div key={name} className="bg-white-100 rounded-lg">
@@ -37,18 +56,40 @@ const Report: NextPage<Props> = ({ impactInTons, fte, year }) => (
               </div>
               <div className="p-6">
                 <span className="text-xxs">
-                  Pro Vollzeitmitarbeiter: {Math.round(((impact / fte) * 100) / 100)} t CO<sub>2</sub>
+                  Pro Vollzeitmitarbeiter ca.: {Math.round(((impact / fte) * 1000) / 1000)} t CO<sub>2</sub>
                 </span>
                 <Heading2>{name}</Heading2>
-                <span>Was passiert hier?</span>
               </div>
             </div>
           );
         })}
       </div>
+      <Heading1>Das entspricht...</Heading1>
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-12 pt-8">
+        {COMPARISONS.map(({ name, emissionFactor, unit, content }) => {
+          const impact = Math.round((totalImpact / emissionFactor) * 100) / 100;
+          return <Comparison key={name} impact={impact} name={name} unit={unit} content={content}></Comparison>;
+        })}
+      </div>
     </div>
   </Page>
 );
+
+type ComparisonProps = { impact: number; name: string; content: string; unit: string };
+
+const Comparison: FC<ComparisonProps> = ({ unit, impact, name, content }) => {
+  return (
+    <div>
+      <div>
+        <div className="text-xxl font-bold">{`${impact} ${unit}`}</div>
+        <div className="-mb-4">
+          <Heading2>{name}</Heading2>
+        </div>
+        <span className="text-xs">{content}</span>
+      </div>
+    </div>
+  );
+};
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const responses = await getResponses();
@@ -60,35 +101,37 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 const WORKDAYS_PER_YEAR = 240;
+const WEEKS_PER_YEAR = 53;
+const MONTHS_PER_YEAR = 12;
 const CAR_EMISSION = 0.209;
 const BICYCLE_EMISSION = 0.008;
 const PUBLIC_TRANSPORT_EMISSION = 0.025;
-const PLANE_EMISSION = 0.237;
+const PLANE_EMISSION = 0.26;
 const AVG_COMMUTE_DIST_KM = 29;
 const HOME_OFFICE_EMISSION = 0.264;
 const ELECTRICITY_EMISSION: { [key: string]: number } = {
   notEcoElectricity: 0.128,
   ecoElectricity: 0.016,
-  unavailable: 0.072,
+  unavailable: 0.042,
 };
 
-const HEATING_TYPE_EMISSION: { [key: string]: { emissionFactor: number; perUnit: string } } = {
-  oil: { emissionFactor: 3.1, perUnit: 'l' },
-  gas: { emissionFactor: 0.23, perUnit: 'kWh' },
-  wood: { emissionFactor: 0.03, perUnit: 'kWh' }, // anpassen
-  electricity: { emissionFactor: 0.03, perUnit: 'kWh' }, // anpassen
-  heatPump: { emissionFactor: 0.03, perUnit: 'kWh' }, // anpassen
-  districtHeat: { emissionFactor: 0.03, perUnit: 'kWh' }, // anpassen
-  solarEnergy: { emissionFactor: 0.03, perUnit: 'kWh' }, // anpassen
-  unavailable: { emissionFactor: 0.03, perUnit: 'kWh' }, // anpassen
+const HEATING_TYPE_EMISSION: { [key: string]: number } = {
+  oil: 0.31,
+  gas: 0.23,
+  wood: 0.025,
+  electricity: 0.042,
+  heatPump: 0.03, //anpassen
+  districtHeat: 0.161,
+  solarEnergy: 0,
+  unavailable: 0.19, //anpassen
 };
-const USAGE_PER_CONSTRUCTION_YEAR: { [key: string]: { l: number; kWh: number } } = {
-  before1980: { l: 21, kWh: 220 },
-  '1981-90': { l: 17, kWh: 168 },
-  '1991-00': { l: 13, kWh: 135 },
-  '2001-10': { l: 10, kWh: 104 },
-  today: { l: 5, kWh: 52 },
-  unavailable: { l: 13, kWh: 135 },
+const USAGE_PER_CONSTRUCTION_YEAR: { [key: string]: number } = {
+  before1980: 220,
+  '1981-90': 168,
+  '1991-00': 135,
+  '2001-10': 104,
+  today: 52,
+  unavailable: 135,
 };
 
 export const getStaticProps: GetStaticProps<Props> = async ({ params }) => {
@@ -123,19 +166,15 @@ export const getStaticProps: GetStaticProps<Props> = async ({ params }) => {
       bicyclePercentage * BICYCLE_EMISSION);
 
   //travelling
-  const byCar = parseInt(answers?.[9].autokm) * fte * CAR_EMISSION;
-  const byPublicTransport = parseInt(answers?.[10].km) * fte * PUBLIC_TRANSPORT_EMISSION;
-  const byPlane = parseInt(answers?.[8].hours) * fte * PLANE_EMISSION;
+  const byCar = parseInt(answers?.[9].autokm) * fte * CAR_EMISSION * WEEKS_PER_YEAR;
+  const byPublicTransport = parseInt(answers?.[10].km) * fte * PUBLIC_TRANSPORT_EMISSION * WEEKS_PER_YEAR;
+  const byPlane = parseInt(answers?.[8].hours) * fte * PLANE_EMISSION * MONTHS_PER_YEAR;
 
   //energy
   const constructionPeriod = answers?.[5].constructionPeriod;
-  const heatingUsage = USAGE_PER_CONSTRUCTION_YEAR?.[constructionPeriod];
   const heatingType = answers?.[4].heatingType;
-  const emissionHeating = HEATING_TYPE_EMISSION?.[heatingType];
   const impactHeating =
-    emissionHeating.perUnit === 'l'
-      ? heatingUsage.l * emissionHeating.emissionFactor * squaremeter
-      : heatingUsage.kWh * emissionHeating.emissionFactor * squaremeter;
+    USAGE_PER_CONSTRUCTION_YEAR?.[constructionPeriod] * HEATING_TYPE_EMISSION?.[heatingType] * squaremeter;
   const electricityType = answers?.[3].electricityType;
   const electricity = answers?.[3].kWh * ELECTRICITY_EMISSION?.[electricityType];
 
@@ -144,12 +183,14 @@ export const getStaticProps: GetStaticProps<Props> = async ({ params }) => {
     { name: 'Pendeln', impact: Math.round((homeOfficeImpact + commute) / 1000) },
     { name: 'Reisen', impact: Math.round((byCar + byPublicTransport + byPlane) / 1000) },
   ];
+  const totalImpact = impactInTons.reduce((prev, curr) => prev + curr.impact, 0);
 
   return {
     props: {
       year,
       response,
       impactInTons,
+      totalImpact,
       fte,
     },
   };

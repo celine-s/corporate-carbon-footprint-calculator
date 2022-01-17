@@ -20,22 +20,12 @@ type Props = {
   categoriesWithIndexes?: { [key: string]: string[] };
 };
 
-export const CategoriesNavigation: FC<Props> = ({ children, question, questionsLength, categoriesWithIndexes }) => {
+export const CategoriesNavigation: FC<Props> = ({ children, question, categoriesWithIndexes }) => {
   const currentCategory = categoryNavigation.find((c) => c.name === question?.category) || categoryNavigation[0];
 
   return (
     <div>
       <Page>
-        <div className={`w-full flex flex-wrap`}>
-          <div
-            style={{ width: `${(100 / questionsLength) * parseInt(question.id) - 1.1}%` }}
-            className="border-cornflower-500 border-4 my-6"
-          />
-          <div
-            style={{ width: `${100 - (100 / questionsLength) * parseInt(question.id)}%` }}
-            className="border-gray-200 border-4 my-6"
-          />
-        </div>
         <div className="flex flex-row">
           <Navigation currentCategory={currentCategory} categoriesWithIndexes={categoriesWithIndexes} />
         </div>
