@@ -29,21 +29,12 @@ const COMPARISONS = [
     unit: 'x 🗽',
     name: 'Nach New York & zurück',
   },
-  { content: '', emissionFactor: 11.6, unit: 'x ✈️🌍', name: 'Mal um die Erde' },
-  { content: '', emissionFactor: 0.0016, unit: 'l 🥛', name: 'Liter schweizer Vollmilch' },
+  { content: '', emissionFactor: 0.0016, unit: 'l 🥛', name: 'Liter Schweizer Vollmilch' },
   {
-    content: 'wird für die schweizer Rindfleisch',
-    emissionFactor: 0.0125,
-    unit: 'g 🐂',
+    content: 'wird für schweizer Rindfleisch',
+    emissionFactor: 12.5,
+    unit: 'kg 🐂',
     name: 'Kilogramm schweizer Rindfleisch',
-  },
-  { content: '', emissionFactor: 0.00076, unit: 'l 🥛', name: 'Liter schweizer Hafermilch' },
-  {
-    content:
-      'Eure Gesamtemissionen entsprechen den Emissionen, die XY Schweizer:innen pro Jahr ausstossen (inkl. internationale Güter).',
-    emissionFactor: 14,
-    unit: 'x 👩‍🌾👨‍🌾',
-    name: 'Schweizer:innen',
   },
 ];
 
@@ -73,7 +64,7 @@ const Report: NextPage<Props> = ({ impactInTons, fte, year, totalImpact }) => (
           );
         })}
       </div>
-      <Heading1>Das enspricht...</Heading1>
+      <Heading1>Das entspricht...</Heading1>
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-12 pt-8">
         {COMPARISONS.map(({ name, emissionFactor, unit, content }) => {
           const impact = Math.round((totalImpact / emissionFactor) * 100) / 100;
@@ -115,32 +106,32 @@ const MONTHS_PER_YEAR = 12;
 const CAR_EMISSION = 0.209;
 const BICYCLE_EMISSION = 0.008;
 const PUBLIC_TRANSPORT_EMISSION = 0.025;
-const PLANE_EMISSION = 0.14;
+const PLANE_EMISSION = 0.26;
 const AVG_COMMUTE_DIST_KM = 29;
 const HOME_OFFICE_EMISSION = 0.264;
 const ELECTRICITY_EMISSION: { [key: string]: number } = {
   notEcoElectricity: 0.128,
   ecoElectricity: 0.016,
-  unavailable: 0.072,
+  unavailable: 0.042,
 };
 
-const HEATING_TYPE_EMISSION: { [key: string]: { emissionFactor: number; perUnit: string } } = {
-  oil: { emissionFactor: 3.1, perUnit: 'l' },
-  gas: { emissionFactor: 0.23, perUnit: 'kWh' },
-  wood: { emissionFactor: 0.015, perUnit: 'kWh' },
-  electricity: { emissionFactor: 0.072, perUnit: 'kWh' },
-  heatPump: { emissionFactor: 0.03, perUnit: 'kWh' }, // anpassen
-  districtHeat: { emissionFactor: 0.161, perUnit: 'kWh' },
-  solarEnergy: { emissionFactor: 0, perUnit: 'kWh' },
-  unavailable: { emissionFactor: 0.03, perUnit: 'kWh' }, // anpassen
+const HEATING_TYPE_EMISSION: { [key: string]: number } = {
+  oil: 0.31,
+  gas: 0.23,
+  wood: 0.025,
+  electricity: 0.042,
+  heatPump: 0.03, //anpassen
+  districtHeat: 0.161,
+  solarEnergy: 0,
+  unavailable: 0.19, //anpassen
 };
-const USAGE_PER_CONSTRUCTION_YEAR: { [key: string]: { l: number; kWh: number } } = {
-  before1980: { l: 21, kWh: 220 },
-  '1981-90': { l: 17, kWh: 168 },
-  '1991-00': { l: 13, kWh: 135 },
-  '2001-10': { l: 10, kWh: 104 },
-  today: { l: 5, kWh: 52 },
-  unavailable: { l: 13, kWh: 135 },
+const USAGE_PER_CONSTRUCTION_YEAR: { [key: string]: number } = {
+  before1980: 220,
+  '1981-90': 168,
+  '1991-00': 135,
+  '2001-10': 104,
+  today: 52,
+  unavailable: 135,
 };
 
 export const getStaticProps: GetStaticProps<Props> = async ({ params }) => {
@@ -181,13 +172,9 @@ export const getStaticProps: GetStaticProps<Props> = async ({ params }) => {
 
   //energy
   const constructionPeriod = answers?.[5].constructionPeriod;
-  const heatingUsage = USAGE_PER_CONSTRUCTION_YEAR?.[constructionPeriod];
   const heatingType = answers?.[4].heatingType;
-  const emissionHeating = HEATING_TYPE_EMISSION?.[heatingType];
   const impactHeating =
-    emissionHeating.perUnit === 'l'
-      ? heatingUsage.l * emissionHeating.emissionFactor * squaremeter
-      : heatingUsage.kWh * emissionHeating.emissionFactor * squaremeter;
+    USAGE_PER_CONSTRUCTION_YEAR?.[constructionPeriod] * HEATING_TYPE_EMISSION?.[heatingType] * squaremeter;
   const electricityType = answers?.[3].electricityType;
   const electricity = answers?.[3].kWh * ELECTRICITY_EMISSION?.[electricityType];
 
