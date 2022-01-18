@@ -8,20 +8,20 @@ type Props = {
 
 export const Slider: FC<Props> = ({ answer, callback }) => {
   return (
-    <div className="flex flex-row">
+    <div className="flex flex-col">
       <input
         type="range"
         min="0"
         max="100"
         step="10"
         value={answer?.percentage}
-        className="w-full h-8 bg-opacity-70 hover:opacity-100"
+        className="slider h-3 rounded-md bg-opacity-70 hover:opacity-100"
         onChange={(e) => {
           callback({ percentage: e.target.value });
         }}
       />
-      <div className="ml-4 -mt-3">
-        <Copy>{answer?.percentage}%</Copy>
+      <div>
+        <Copy>Prozentanteil im Homeoffice: {answer?.percentage}%</Copy>
       </div>
     </div>
   );

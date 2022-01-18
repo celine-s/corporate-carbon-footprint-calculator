@@ -9,7 +9,7 @@ type Props = {
 
 const validateInput = (answer: string) => {
   if (parseInt(answer) > 100) {
-    return '100 prozent ist das max';
+    return 'Die einzelnen Verkehrsmittel dürfen nicht mehr als 100% sein.';
   }
   if (parseInt(answer) < 0) {
     return 'Die Prozentangabe darf nicht negativ sein.';
@@ -94,13 +94,19 @@ export const Question8: FC<Props> = ({
         }}
         validateInput={validateInput}
       />
-      {totalAmount > 100 ? (
-        <div className="mt-2 text-sm text-red-600" id="input-error">
-          <Copy>Die Summe aller darf nicht grösser als 100% sein.</Copy>
-        </div>
-      ) : (
-        <Copy>Bis jetzt hast du {totalAmount} von 100%</Copy>
-      )}
+      <div className="flex flex-row gap-1">
+        <Copy>Bis jetzt hast du</Copy>
+        {totalAmount > 100 || totalAmount < 100 ? (
+          <div className="text-red-600" id="input-error">
+            <Copy> {totalAmount} </Copy>
+          </div>
+        ) : (
+          <div className="text-green-600">
+            <Copy> {totalAmount} </Copy>
+          </div>
+        )}
+        <Copy> von 100%</Copy>
+      </div>
     </div>
   );
 };

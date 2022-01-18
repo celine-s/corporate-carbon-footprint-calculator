@@ -7,7 +7,6 @@ import { LinkElement } from '../../elements/link';
 import { CategoriesNavigation } from '../../compositions/categories-navigation';
 import { Question } from '../../data/question';
 import { Button } from '../../elements/button';
-import { InformationCircleIcon } from '@heroicons/react/solid';
 import { getQuestions } from '../../utils/questions-helper';
 import { v4 as uuidv4 } from 'uuid';
 import { Question1 } from '../../compositions/question-form-1';
@@ -22,6 +21,7 @@ import { Question9 } from '../../compositions/question-form-9';
 import { Question10 } from '../../compositions/question-form-10';
 import { Question11 } from '../../compositions/question-form-11';
 import { useRouter } from 'next/dist/client/router';
+import { WhatIsHappening } from '../../components/info-box';
 
 type Props = {
   question: Question;
@@ -114,7 +114,7 @@ const Frage: NextPage<Props> = ({
                   submitAnswers();
                 }}
               >
-                Save
+                Ende
               </Button>
             ) : (
               <LinkElement href={`/rechner/${(parseInt(id) + 1).toString()}`} onClick={saveCurrentQuestionIntoLocalStorage}>
@@ -124,14 +124,7 @@ const Frage: NextPage<Props> = ({
           </div>
         </div>
       </div>
-      <div className="mt-24">
-        <div className="font-bold py-2 flex flex-row">
-          <InformationCircleIcon className="h-6 w-6 mr-2" />
-          Was passiert hier?
-        </div>
-        <Heading2>{whatTitle}</Heading2>
-        <Copy>{whatText}</Copy>
-      </div>
+      <WhatIsHappening title={whatTitle} content={whatText} />
     </CategoriesNavigation>
   );
 };

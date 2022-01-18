@@ -1,11 +1,8 @@
 import React, { FC } from 'react';
-import { IconProps, HeatingIcon } from '../icons/fire-icon';
-import { UsersIcon } from '../icons/users-icon';
+import { HeatingIcon, UsersIcon, PaperAirplaneIcon, TrainIcon } from '../elements/icons';
 import { Page } from '../layouts/page';
-import { PaperAirplaneIcon } from '../icons/paperairplane-icon';
 import Link from 'next/link';
 import { Question } from '../data/question';
-import { TrainIcon } from '../icons/train-icon';
 
 const categoryNavigation = [
   { name: 'Team', icon: UsersIcon },
@@ -37,11 +34,11 @@ export const CategoriesNavigation: FC<Props> = ({ children, question, categories
 
 type NavigationProps = {
   categoriesWithIndexes?: { [key: string]: string[] };
-  currentCategory: { name: string; icon: React.FC<IconProps> };
+  currentCategory: { name: string; icon: React.FC };
 };
 const Navigation: FC<NavigationProps> = ({ categoriesWithIndexes, currentCategory }) => {
   const gapAndPadding = 'gap-1';
-  const styleKategories = 'group flex justify-center text-xs py-2 px-4 md:text-sm font-medium w-full';
+  const styleKategories = 'group flex justify-center text-xs py-2 px-4 md:text-sm font-medium w-full py-4';
 
   return (
     <nav className={`flex flex-row items-center md:items-start w-full -mb-1 ${gapAndPadding}`}>
@@ -54,7 +51,7 @@ const Navigation: FC<NavigationProps> = ({ categoriesWithIndexes, currentCategor
                 : `text-gray-600 bg-gray-00 hover:bg-white-50 hover:text-cornflower-500 rounded-t-lg ${styleKategories}`
             }
           >
-            <item.icon active={item === currentCategory ? true : false} />
+            <item.icon />
             <span
               className={`hidden md:inline md:mr-4 ml-1 ${
                 item === currentCategory ? 'text-gray-500' : 'text-gray-400 group-hover:text-gray-500'

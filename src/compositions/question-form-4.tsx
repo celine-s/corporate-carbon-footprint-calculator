@@ -1,51 +1,63 @@
 import { FC, useEffect } from 'react';
 import { InputField } from '../elements/input-field';
-import { RadioGroup } from '@headlessui/react';
-import { classNames } from '../utils/classNames';
+import { Copy } from '../identity/copy';
+import { getLocalStorage } from '../utils/local-storage';
 
 type Props = {
   answer: { [key: string]: string };
   callback: (value: { [key: string]: string }) => void;
 };
 const validateInput = (answer: string) => {
-  if (parseFloat(answer) > 10000000000) {
-    return 'You sure?';
-  } else if (answer.length > 10) {
-    return 'Bitte gib maximal 10 Ziffern nach dem Komma ein.';
+  if (parseFloat(answer) > 1000000000000000000000000000) {
+    return 'Bist du am Übertreiben? Bitte gib eine kleinere Zahl ein.';
+  } else if (answer.length > 100) {
+    return 'Bist du am Übertreiben? Bitte gib eine kleinere Zahl ein.';
   }
   return null;
 };
-
+const AVG_KWH_PER_SQM = 55;
 export const Question4: FC<Props> = ({ answer, callback }) => {
-  const answerQuestion4 = answer?.kWh === undefined ? { kWh: '5000', electricityType: 'notEcoElectricity' } : answer;
+  const answerQuestion4 =
+    answer?.kWh === undefined && answer?.electricityType === undefined
+      ? { kWh: '20000', electricityType: 'notEcoElectricity' }
+      : answer;
 
   useEffect(() => {
     callback(answerQuestion4);
   }, []);
+  const squaremeter = getLocalStorage('3');
+
   return (
-    <div className="mb-8">
-      <InputField
-        type="number"
-        label="kWh"
-        name="answer"
-        step="1"
-        min="0"
-        max="250"
-        value={answerQuestion4.kWh}
-        onChange={(value) => {
-          callback({ ...answerQuestion4, kWh: value });
-        }}
-        validateInput={validateInput}
-      />
+    <div className="mb-8 grid md:grid-cols-[45%,55%] grid-row gap-4">
+      <div className="">
+        <InputField
+          type="number"
+          label="kWh"
+          name="answer"
+          step="100"
+          min="0"
+          max="100000"
+          value={answerQuestion4.kWh}
+          onChange={(value) => {
+            callback({ ...answerQuestion4, kWh: value });
+          }}
+          validateInput={validateInput}
+        />
+        {squaremeter && (
+          <Copy>
+            Anhand euer Quadratmeteranzahl wären das ungefähr {squaremeter.squaremeter * AVG_KWH_PER_SQM} Kilowattstunden.
+          </Copy>
+        )}
+      </div>
       <RadioButton callback={callback} answerQuestion4={answerQuestion4} />
     </div>
   );
 };
 
 const electricityOptions = [
-  { value: 'ecoElectricity', label: 'Ökostrom' },
-  { value: 'notEcoElectricity', label: 'Nöd Öko' },
-  { value: 'unavailable', label: 'Weiss nöd' },
+  { value: 'ecoElectricity', label: 'Erneuerbar' },
+  { value: 'notEcoElectricity', label: 'Nicht erneuerbar' },
+  { value: 'unavailable', label: 'Unbekannt' },
 ];
 
 type PropsRadioButton = {
@@ -53,40 +65,33 @@ type PropsRadioButton = {
   answerQuestion4: { [key: string]: string };
 };
 
-export const RadioButton: FC<PropsRadioButton> = ({ answerQuestion4, callback }) => (
-  <div>
-    <div className="flex items-center justify-between">
-      <h2 className="text-sm font-medium text-gray-900">Wie wird euer Strom produziert?</h2>
+const RadioButton: FC<PropsRadioButton> = ({ answerQuestion4, callback }) => (
+  <div className="md:pl-8 md:border-l-2">
+    <div className="flex items-center justify-between -mb-8 -mt-8">
+      <Copy>Wie wird euer Strom produziert?</Copy>
     </div>
-
-    <RadioGroup
-      value={answerQuestion4?.electricityType}
-      onChange={(value) => {
-        callback({ ...answerQuestion4, electricityType: value });
-      }}
-      className="mt-2"
-    >
-      <RadioGroup.Label className="sr-only">Wie wird euer Strom produziert?</RadioGroup.Label>
-      <div className="grid grid-cols-3 gap-3 sm:grid-cols-6">
-        {electricityOptions.map(({ label, value }) => (
-          <RadioGroup.Option
-            key={value}
-            value={value}
-            className={({ active, checked }) =>
-              classNames(
-                'cursor-pointer focus:outline-none',
-                active ? 'ring-2 ring-offset-2 ring-cornflower-500' : '',
-                checked
-                  ? 'bg-cornflower-500 border-transparent text-white-100 hover:bg-cornflower-800'
-                  : 'bg-white-100 border-gray-200 text-gray-900 hover:bg-gray-50',
-                'border rounded-md py-3 px-3 flex items-center justify-center text-sm font-medium sm:flex-1'
-              )
-            }
-          >
-            <RadioGroup.Label as="p">{label}</RadioGroup.Label>
-          </RadioGroup.Option>
-        ))}
-      </div>
-    </RadioGroup>
+    <div>
+      <fieldset className="mt-4">
+        <div className="sm:flex sm:items-center sm:space-x-4">
+          {electricityOptions.map(({ label, value }) => (
+            <div key={value} className="flex items-center">
+              <input
+                id={value}
+                name="electricity-type"
+                type="radio"
+                onChange={() => {
+                  callback({ ...answerQuestion4, electricityType: value });
+                }}
+                checked={value === answerQuestion4.electricityType}
+                className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300"
+              />
+              <label htmlFor={value} className="ml-3">
+                <Copy>{label}</Copy>
+              </label>
+            </div>
+          ))}
+        </div>
+      </fieldset>
+    </div>
   </div>
 );

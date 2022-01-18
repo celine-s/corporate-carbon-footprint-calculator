@@ -5,3 +5,25 @@
 body {
   background: #f8f7f5;
 }
+
+.slider {
+  width: 75%;
+  -webkit-appearance: none;
+  background: #e5e7eb;
+}
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 80%;
+  background: #6986e8;
+  cursor: pointer;
+}
+.slider::-moz-range-thumb {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background: #6986e8;
+  cursor: pointer;
+}
