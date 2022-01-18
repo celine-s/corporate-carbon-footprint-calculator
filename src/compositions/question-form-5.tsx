@@ -9,7 +9,7 @@ const heatingTypes = [
   { label: 'Wärmepumpe', value: 'heatPump' },
   { label: 'Fernwärme', value: 'districtHeat' },
   { label: 'Solarenergie', value: 'solarEnergy' },
-  { label: 'Weiss nicht', value: 'unavailable' },
+  { label: 'Unbekannt', value: 'unavailable' },
 ];
 
 type Props = {

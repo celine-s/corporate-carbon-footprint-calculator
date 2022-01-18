@@ -3,19 +3,19 @@ import { Button } from '../elements/button';
 import { LinkElement } from '../elements/link';
 import { Copy } from '../identity/copy';
 import { Heading1 } from '../identity/heading-1';
-import { Heading2 } from '../identity/heading-2';
 import { Page } from '../layouts/page';
 import React from 'react';
 import { ChevronRightIcon } from '../elements/chevron-right';
 import { CheckIcon } from '@heroicons/react/solid';
+import { WhatIsHappening } from '../components/info-box';
 
 const allFeaturesOfThePage = [
-  'Kostenlose Abschätzung',
-  'in weniger als 10min',
-  '10 Fragen',
-  'Für CH DienstleistungsUN',
-  'fully transparent',
+  'kostenlos',
+  'dauert weniger als10min',
+  'kein langes Daten sammeln',
   'know each step you take',
+  'kein Spendenaufruf',
+  'für KMUs (< 250 MA)',
 ];
 
 const Home: NextPage = () => {
@@ -23,12 +23,8 @@ const Home: NextPage = () => {
     <div className="bg-cornflower-500">
       <Page>
         <header>
-          <Heading1>Howdy</Heading1>
-          <Copy>
-            Ich hab gehört du interessierst dich für Nachhaltigkeit. schön. du weisst nicht wie du das als Firma angehen
-            kannst? Hier findest du einen schnell Check / abschätzung über den Ausstoss deiner Firma. Danach werden dir
-            Möglichkeiten zur Verbesserung dieses Fussabrucks geliefert.
-          </Copy>
+          <Heading1>Fussabdruck Rechner für Schweizer Dienstleistungsunternehmen</Heading1>
+          <Copy>Was erwartet dich?</Copy>
           <ul className="text-white-200 grid grid-cols-3">
             {allFeaturesOfThePage.map((feature) => (
               <li className="text-white-200 flex flex-wrap -mb-8" key={feature}>
@@ -51,15 +47,8 @@ const Home: NextPage = () => {
               </Button>
             </LinkElement>
           </div>
-          <section className="mt-16 text-left mx-6 ">
-            <Heading2>Wie entstand ich?</Heading2>
-            <Copy>
-              Lorem ipsum dolor sit amet consectetur, adipisicing elit. Excepturi maiores, quos quas et sapiente odio
-              consequuntur. Fugit labore voluptates asperiores iusto dicta voluptatibus ad dolore, repudiandae maxime
-              reiciendis voluptas repellat!
-            </Copy>
-          </section>
         </main>
+        <WhatIsHappening title="Berechnungen" content="Erklärung" />
       </Page>
     </div>
   );

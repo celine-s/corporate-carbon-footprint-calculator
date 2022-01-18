@@ -41,7 +41,7 @@ type NavigationProps = {
 };
 const Navigation: FC<NavigationProps> = ({ categoriesWithIndexes, currentCategory }) => {
   const gapAndPadding = 'gap-1';
-  const styleKategories = 'group flex justify-center text-xs py-2 px-4 md:text-sm font-medium w-full';
+  const styleKategories = 'group flex justify-center text-xs py-2 px-4 md:text-sm font-medium w-full py-4';
 
   return (
     <nav className={`flex flex-row items-center md:items-start w-full -mb-1 ${gapAndPadding}`}>
