@@ -4,8 +4,7 @@ import { Heading2 } from '../../../identity/heading-2';
 import React, { FC } from 'react';
 import { getResponses, getResponseWithId } from '../../../utils/responses-firestore';
 import { Heading1 } from '../../../identity/heading-1';
-import { Copy } from '../../../identity/copy';
-import { HeatingIcon, TrainIcon, PaperAirplaneIcon } from '../../../elements/icons';
+import { HeatingIcon } from '../../../elements/icons';
 
 type Props = {
   impactInTons: { name: string; impact: number; content: string }[];
@@ -14,11 +13,11 @@ type Props = {
   totalImpact: number;
 };
 
-const ICONS: { [key: string]: React.FC } = {
-  Pendeln: TrainIcon,
-  Energie: HeatingIcon,
-  Reisen: PaperAirplaneIcon,
-};
+// const ICONS: { [key: string]: React.FC<IconProps> } = {
+//   Pendeln: TrainIcon,
+//   Energie: HeatingIcon,
+//   Reisen: PaperAirplaneIcon,
+// };
 
 const COMPARISONS = [
   {
@@ -27,11 +26,11 @@ const COMPARISONS = [
     unit: 'x 🗽',
     name: 'Nach New York & zurück',
   },
-  { content: '', emissionFactor: 0.0016, unit: 'l 🥛', name: 'Liter Schweizer Vollmilch' },
+  { content: '', emissionFactor: 0.0016, unit: '🥛', name: 'Liter Schweizer Vollmilch' },
   {
     content: 'wird für schweizer Rindfleisch',
     emissionFactor: 12.5,
-    unit: 'kg 🐂',
+    unit: '🐂',
     name: 'Kilogramm schweizer Rindfleisch',
   },
 ];
@@ -45,19 +44,28 @@ const Report: NextPage<Props> = ({ impactInTons, fte, year, totalImpact }) => (
       <div className="grid grid-row md:grid-cols-3 gap-4 mb-32">
         {impactInTons.map(({ name, impact, content }) => {
           return (
-            <div key={name} className="bg-white-100 rounded-lg">
-              <div className="flex flex-col items-center border-b-2 px-8 pt-16">
-                <Heading1>
-                  {impact} t CO<sub>2</sub>
-                </Heading1>
-                <div className="text-cornflower-500 mb-8">{ICONS[name]}</div>
-              </div>
-              <div className="p-6">
-                <span className="text-xxs">
-                  Pro Vollzeitmitarbeiter ca.: {Math.round((impact / fte) * 100) / 100} t CO<sub>2</sub>
-                </span>
-                <Heading2>{name}</Heading2>
-                <Copy>{content}</Copy>
+            <div key={name}>
+              <div className="rounded-lg">
+                <div className="flex flex-col items-center rounded-t-lg p-8 bg-cornflower-500 h-52 justify-center">
+                  <div className="text-white-200">
+                    <HeatingIcon size="50" />
+                    {/* {ICONS.[name]('64')} */}
+                  </div>
+                  <span className="text-lg">{name}</span>
+                  <span className="text-xs font-semibold flex text-center mb-4">{content}</span>
+                </div>
+                <div className="p-8 bg-white-100 rounded-b-lg text-center">
+                  <div className="text-xxl">
+                    {impact}
+                    <span className="text-sm">
+                      {` t CO`}
+                      <sub>2</sub>
+                    </span>
+                  </div>
+                  <span className="text-xs">
+                    entspricht ca.: {Math.round((impact / fte) * 100) / 100} t CO<sub>2</sub> pro Vollzeitmitarbeiter:in
+                  </span>
+                </div>
               </div>
             </div>
           );
