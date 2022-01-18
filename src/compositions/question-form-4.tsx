@@ -67,7 +67,7 @@ type PropsRadioButton = {
 
 const RadioButton: FC<PropsRadioButton> = ({ answerQuestion4, callback }) => (
   <div className="md:pl-8 md:border-l-2">
-    <div className="flex items-center justify-between -mb-16 -mt-8">
+    <div className="flex items-center justify-between -mb-8 -mt-8">
       <Copy>Wie wird euer Strom produziert?</Copy>
     </div>
     <div>

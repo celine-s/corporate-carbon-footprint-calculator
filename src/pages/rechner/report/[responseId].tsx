@@ -5,9 +5,7 @@ import React, { FC } from 'react';
 import { getResponses, getResponseWithId } from '../../../utils/responses-firestore';
 import { Heading1 } from '../../../identity/heading-1';
 import { Copy } from '../../../identity/copy';
-import { HeatingIcon, IconProps } from '../../../icons/fire-icon';
-import { TrainIcon } from '../../../icons/train-icon';
-import { PaperAirplaneIcon } from '../../../icons/paperairplane-icon';
+import { HeatingIcon, TrainIcon, PaperAirplaneIcon } from '../../../elements/icons';
 
 type Props = {
   impactInTons: { name: string; impact: number; content: string }[];
@@ -16,7 +14,7 @@ type Props = {
   totalImpact: number;
 };
 
-const ICONS: { [key: string]: React.FC<IconProps> } = {
+const ICONS: { [key: string]: React.FC } = {
   Pendeln: TrainIcon,
   Energie: HeatingIcon,
   Reisen: PaperAirplaneIcon,
@@ -52,7 +50,7 @@ const Report: NextPage<Props> = ({ impactInTons, fte, year, totalImpact }) => (
                 <Heading1>
                   {impact} t CO<sub>2</sub>
                 </Heading1>
-                <div className="text-cornflower-500 mb-8">{ICONS[name]({ active: true })}</div>
+                <div className="text-cornflower-500 mb-8">{ICONS[name]}</div>
               </div>
               <div className="p-6">
                 <span className="text-xxs">
@@ -78,19 +76,17 @@ const Report: NextPage<Props> = ({ impactInTons, fte, year, totalImpact }) => (
 
 type ComparisonProps = { impact: number; name: string; content: string; unit: string };
 
-const Comparison: FC<ComparisonProps> = ({ unit, impact, name, content }) => {
-  return (
+const Comparison: FC<ComparisonProps> = ({ unit, impact, name, content }) => (
+  <div>
     <div>
-      <div>
-        <div className="text-xxl font-bold">{`${impact} ${unit}`}</div>
-        <div className="-mb-4">
-          <Heading2>{name}</Heading2>
-        </div>
-        <span className="text-xs">{content}</span>
+      <div className="text-xxl font-bold">{`${impact} ${unit}`}</div>
+      <div className="-mb-4">
+        <Heading2>{name}</Heading2>
       </div>
+      <span className="text-xs">{content}</span>
     </div>
-  );
-};
+  </div>
+);
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const responses = await getResponses();
