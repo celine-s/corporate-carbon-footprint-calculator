@@ -2,9 +2,9 @@ import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import { Page } from '../../../layouts/page';
 import { Heading2 } from '../../../identity/heading-2';
 import React, { FC } from 'react';
-import { getResponses, getResponseWithId } from '../../../utils/responses-firestore';
+import { getResponseWithId } from '../../../utils/responses-firestore';
 import { Heading1 } from '../../../identity/heading-1';
-import { HeatingIcon } from '../../../elements/icons';
+import { HeatingIcon, IconProps, PaperAirplaneIcon, TrainIcon } from '../../../elements/icons';
 
 type Props = {
   impactInTons: { name: string; impact: number; content: string }[];
@@ -13,11 +13,11 @@ type Props = {
   totalImpact: number;
 };
 
-// const ICONS: { [key: string]: React.FC<IconProps> } = {
-//   Pendeln: TrainIcon,
-//   Energie: HeatingIcon,
-//   Reisen: PaperAirplaneIcon,
-// };
+const ICONS: { [key: string]: React.FC<IconProps> } = {
+  Pendeln: TrainIcon,
+  Energie: HeatingIcon,
+  Reisen: PaperAirplaneIcon,
+};
 
 const COMPARISONS = [
   {
@@ -47,10 +47,7 @@ const Report: NextPage<Props> = ({ impactInTons, fte, year, totalImpact }) => (
             <div key={name}>
               <div className="rounded-lg">
                 <div className="flex flex-col items-center rounded-t-lg p-8 bg-cornflower-500 h-52 justify-center">
-                  <div className="text-white-200">
-                    <HeatingIcon size="50" />
-                    {/* {ICONS.[name]('64')} */}
-                  </div>
+                  <div className="text-white-200">{ICONS[name]({ size: '50' })}</div>
                   <span className="text-lg">{name}</span>
                   <span className="text-xs font-semibold flex text-center mb-4">{content}</span>
                 </div>
@@ -97,10 +94,8 @@ const Comparison: FC<ComparisonProps> = ({ unit, impact, name, content }) => (
 );
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const responses = await getResponses();
-
   return {
-    paths: responses.map(({ id }) => ({ params: { responseId: id } })),
+    paths: [],
     fallback: 'blocking',
   };
 };
