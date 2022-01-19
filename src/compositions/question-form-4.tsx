@@ -12,6 +12,8 @@ const validateInput = (answer: string) => {
     return 'Bist du am Übertreiben? Bitte gib eine kleinere Zahl ein.';
   } else if (answer.length > 100) {
     return 'Bist du am Übertreiben? Bitte gib eine kleinere Zahl ein.';
+  } else if (parseInt(answer) < 0) {
+    return 'Die Kilowattstunden können nicht kleiner als 0 sein.';
   }
   return null;
 };
