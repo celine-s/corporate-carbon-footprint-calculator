@@ -25,7 +25,7 @@ export const Question3: FC<Props> = ({ answer, callback }) => {
     <div>
       <InputField
         type="number"
-        label="Quadratmeter"
+        label="m²"
         name="answer"
         min="0"
         step="10"

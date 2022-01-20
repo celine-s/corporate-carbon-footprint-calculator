@@ -47,7 +47,8 @@ export const Question4: FC<Props> = ({ answer, callback }) => {
         />
         {squaremeter && (
           <Copy>
-            Anhand euer Quadratmeteranzahl wären das ungefähr {squaremeter.squaremeter * AVG_KWH_PER_SQM} Kilowattstunden.
+            Der Schätzwert für euer Büro liegt bei ca.
+            {` ${squaremeter.squaremeter * AVG_KWH_PER_SQM} kWh.`}
           </Copy>
         )}
       </div>
