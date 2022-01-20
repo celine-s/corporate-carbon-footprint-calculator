@@ -94,21 +94,17 @@ export const Question8: FC<Props> = ({
         }}
         validateInput={validateInput}
       />
-      <div className="flex">
-        <Copy>Bis jetzt hast du</Copy>
+      <Copy>
+        {`Bis jetzt hast Du `}
         {totalAmount > 100 || totalAmount < 100 ? (
-          <div className="text-red-600" id="input-error">
-            <span className="pl-4">
-              <Copy>{totalAmount}</Copy>
-            </span>
-          </div>
+          <span className="text-red-600" id="input-error">
+            {totalAmount}
+          </span>
         ) : (
-          <div className="text-green-600">
-            <Copy> {totalAmount} </Copy>
-          </div>
+          <span className="text-green-600">{totalAmount}</span>
         )}
-        <Copy> von 100%</Copy>
-      </div>
+        {` von 100%.`}
+      </Copy>
     </div>
   );
 };
