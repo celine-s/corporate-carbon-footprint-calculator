@@ -7,7 +7,7 @@ type Props = {
 };
 
 const validateInput = (answer: string) => {
-  if (parseFloat(answer) > 10000000) {
+  if (parseFloat(answer) > 1000000) {
     return 'Bitte gib eine kleinere Zahl ein.';
   } else if (answer.length > 10) {
     return 'Bitte gib maximal 10 Ziffern nach dem Komma ein.';

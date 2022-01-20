@@ -7,12 +7,12 @@ type Props = {
 };
 
 const validateInput = (answer: string) => {
-  if (parseFloat(answer) > 250) {
-    return 'Dieser Fussabdruck schätzer ist für KMUs (max 250 VZÄ) gedacht.';
+  if (parseFloat(answer) > 249) {
+    return 'Dieser Fussabdruck-Rechner ist für KMUs gedacht (max 249 Mitarbeitenden). Gib eine Zahl unter 250 ein.';
   } else if (answer.length > 10) {
     return 'Bitte gib maximal 10 Ziffern nach dem Komma ein.';
-  } else if (parseInt(answer) < 0) {
-    return 'Die Mitareiter:innen Anzahl kann nicht kleiner als 0 sein.';
+  } else if (parseInt(answer) < 1) {
+    return 'Die Anzahl Mitarbeitenden kann nicht kleiner als 1 sein.';
   }
   return null;
 };
@@ -26,7 +26,7 @@ export const Question2: FC<Props> = ({ callback, answer }) => {
     <div>
       <InputField
         type="number"
-        label="Mitarbeiter:innen"
+        label="Mitarbeitenden"
         name="answer"
         value={answer?.fte}
         onChange={(value) => callback({ fte: value })}

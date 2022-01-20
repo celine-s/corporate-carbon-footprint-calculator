@@ -8,7 +8,7 @@ export type ButtonProps = {
 
 export const Button: FC<ButtonProps> = ({ children, size = 'S', onClick, buttonColorGray }) => {
   const fontSize = size === 'S' ? 'text-xs lg:text-sm' : 'text-base';
-  const padding = size === 'S' ? 'px-16 py-3' : 'px-24 py-4';
+  const padding = size === 'S' ? 'md:px-16 px-8 py-3' : 'px-24 py-4';
   const buttonColor = buttonColorGray
     ? 'bg-gray-400 hover:bg-gray-800 focus:ring-gray-400'
     : 'bg-cornflower-500 hover:bg-cornflower-800 focus:ring-cornflower-500';

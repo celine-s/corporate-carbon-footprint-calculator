@@ -6,8 +6,8 @@ type Props = {
   callback: (value: { [key: string]: string }) => void;
 };
 const validateInput = (answer: string) => {
-  if (parseFloat(answer) > 10000000000) {
-    return 'Das scheint nach einem sehr grossem Büro für weniger als 251 Mitarbeiter. Bitte gib eine kleinere Anzahl ein.';
+  if (parseFloat(answer) > 1000000) {
+    return 'Uups – ist Dir ein Fehler unterlaufen? Bitte gib eine realistische Grösse für Euer Büro an.';
   } else if (answer.length > 10) {
     return 'Bitte gib maximal 10 Ziffern ein.';
   } else if (parseInt(answer) < 0) {

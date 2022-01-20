@@ -34,7 +34,7 @@ export const InputField: FC<InputFieldProps> = ({
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   return (
     <div>
-      <div className="grid grid-cols md:grid-cols-3 gap-2 my-4 lg:text-base">
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-2 my-4 lg:text-base">
         <div className="relative">
           <input
             value={value}

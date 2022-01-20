@@ -8,7 +8,7 @@ type Props = {
   callback: (value: { [key: string]: string }) => void;
 };
 const validateInput = (answer: string) => {
-  if (parseFloat(answer) > 1000000000000000000000000000) {
+  if (parseFloat(answer) > 1000000) {
     return 'Bist du am Übertreiben? Bitte gib eine kleinere Zahl ein.';
   } else if (answer.length > 100) {
     return 'Bist du am Übertreiben? Bitte gib eine kleinere Zahl ein.';

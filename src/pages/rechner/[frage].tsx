@@ -40,7 +40,7 @@ const Frage: NextPage<Props> = ({
   question: { id, title, category, infobox, whatTitle, whatText },
 }) => {
   const [answer, setAnswer] = useState(getLocalStorage(id));
-  const [showError, setShowError] = useState(false);
+  const [errorMessages, setErrorMessages] = useState<string[]>([]);
   const [showSuccess, setShowSuccess] = useState(false);
   const router = useRouter();
 
@@ -115,10 +115,9 @@ const Frage: NextPage<Props> = ({
             {parseInt(id) >= MAX_QUESTION_NUMBER ? (
               <Button
                 onClick={() => {
-                  const errorMessage = errorMsg(questionIDs);
-                  const inputValide = errorMessage.length === 0 ? true : false;
                   saveCurrentQuestionIntoLocalStorage();
-                  inputValide ? submitAnswers() : setShowError(true);
+                  const errorMessage = errorMsg(questionIDs);
+                  errorMessage.length === 0 ? submitAnswers() : setErrorMessages(errorMessage);
                 }}
               >
                 Ende
@@ -128,7 +127,9 @@ const Frage: NextPage<Props> = ({
                 <Button>Weiter</Button>
               </LinkElement>
             )}
-            {showError && <ErrorModal errorMessages={errorMsg(questionIDs)} setOpen={setShowError} open={showError} />}
+            {errorMessages.length !== 0 && (
+              <ErrorModal errorMessages={errorMsg(questionIDs)} onClose={() => setErrorMessages([])} open={true} />
+            )}
             {showSuccess && <SuccessModal setOpen={setShowSuccess} open={showSuccess} />}
           </div>
         </div>
@@ -192,13 +193,13 @@ const SuccessModal: FC<SuccessModalProps> = ({ setOpen, open }) => {
   );
 };
 
-type ErrorModalProps = { errorMessages: string[]; setOpen: (open: boolean) => void; open: boolean };
-const ErrorModal: FC<ErrorModalProps> = ({ errorMessages, setOpen, open }) => {
+type ErrorModalProps = { errorMessages: string[]; onClose: () => void; open: boolean };
+const ErrorModal: FC<ErrorModalProps> = ({ errorMessages, onClose, open }) => {
   const cancelButtonRef = useRef(null);
 
   return (
     <Transition.Root show={open} as={Fragment}>
-      <Dialog as="div" className="fixed z-10 inset-0 overflow-y-auto" initialFocus={cancelButtonRef} onClose={setOpen}>
+      <Dialog as="div" className="fixed z-10 inset-0 overflow-y-auto" initialFocus={cancelButtonRef} onClose={onClose}>
         <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
           <Transition.Child
             as={Fragment}
@@ -212,7 +213,6 @@ const ErrorModal: FC<ErrorModalProps> = ({ errorMessages, setOpen, open }) => {
             <Dialog.Overlay className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
           </Transition.Child>
 
-          {/* This element is to trick the browser into centering the modal contents. */}
           <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">
             &#8203;
           </span>
@@ -250,7 +250,7 @@ const ErrorModal: FC<ErrorModalProps> = ({ errorMessages, setOpen, open }) => {
                 <button
                   type="button"
                   className="inline-flex justify-center w-full rounded-md shadow-sm px-4 py-2 border border-gray-300  bg-white-200 text-base font-medium text-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cornflower-500 sm:w-auto sm:text-sm"
-                  onClick={() => setOpen(false)}
+                  onClick={onClose}
                   ref={cancelButtonRef}
                 >
                   Zurück
@@ -270,46 +270,46 @@ const errorMsg = (questionIDs: string[]) => {
   answers = Object.assign({}, answers);
   const errorMsg = [];
   if (!answers?.[0]?.year) {
-    errorMsg.push('... das Jahr in der Kategorie Team.');
+    errorMsg.push('Kategorie Team, Frage 1/3.');
   }
   if (!answers?.[1]?.fte) {
-    errorMsg.push('... die Anzahl Mitarbeiter:innen in der Kategorie Team.');
+    errorMsg.push('Kategorie Team, Frage 2/3.');
   }
   if (!answers?.[2]?.squaremeter) {
-    errorMsg.push('... die Anzahl Quadratmeteranzahl in der Kategorie Team.');
+    errorMsg.push('Kategorie Team, Frage 3/3.');
   }
   if (!answers?.[3]?.kWh) {
-    errorMsg.push('... die Anzahl Kilowattstunden in der Kategorie Energie.');
+    errorMsg.push('Kategorie Energie, Frage 1/3.');
   }
   if (!answers?.[3]?.electricityType) {
-    errorMsg.push('... die Stromart in der Kategorie Energie.');
+    errorMsg.push('Kategorie Energie, Frage 1/3.');
   }
   if (!answers?.[4]?.heatingType) {
-    errorMsg.push('... der Heizungstyp in der Kategorie Energie.');
+    errorMsg.push('Kategorie Energie, Frage 2/3.');
   }
   if (!answers?.[5]?.constructionPeriod) {
-    errorMsg.push('... die Bauzeit des Gebäudes in der Kategorie Energie.');
+    errorMsg.push('Kategorie Energie, Frage 3/3.');
   }
   if (!answers?.[6]?.percentage) {
-    errorMsg.push('... die Anzahl Quadratmeteranzahl in der Kategorie Pendeln.');
+    errorMsg.push('Kategorie Pendeln, Frage 1/2.');
   }
   if (!answers?.[7]?.car) {
-    errorMsg.push('... die Prozentzahl mit dem Auto in der Kategorie Pendeln.');
+    errorMsg.push('Kategorie Pendeln, Frage 2/2.');
   }
   if (!answers?.[7]?.publicTransport) {
-    errorMsg.push('... die Prozentzahl mit den öffentlichen Verkehrsmitteln in der Kategorie Pendeln.');
+    errorMsg.push('Kategorie Pendeln, Frage 2/2.');
   }
   if (!answers?.[7]?.bicycle) {
-    errorMsg.push('... die Prozentzahl mit dem Fahrrad in der Kategorie Pendeln.');
+    errorMsg.push('Kategorie Pendeln, Frage 2/2.');
   }
   if (!answers?.[8]?.hours) {
-    errorMsg.push('... die Flugstunden in der Kategorie Reisen.');
+    errorMsg.push('Kategorie Reisen, Frage 1/3.');
   }
   if (!answers?.[9]?.autokm) {
-    errorMsg.push('... die Autokilometer in der Kategorie Reisen.');
+    errorMsg.push('Kategorie Reisen, Frage 2/3.');
   }
   if (!answers?.[10]?.km) {
-    errorMsg.push('... die Anzahl Kilometer mit Zug und Bus in der Kategorie Reisen.');
+    errorMsg.push('Kategorie Reisen, Frage 3/3.');
   }
   return errorMsg;
 };
