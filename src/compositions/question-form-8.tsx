@@ -95,7 +95,7 @@ export const Question8: FC<Props> = ({
         validateInput={validateInput}
       />
       <Copy>
-        {`Bis jetzt hast Du `}
+        {`Bis jetzt sind `}
         {totalAmount > 100 || totalAmount < 100 ? (
           <span className="text-red-600" id="input-error">
             {totalAmount}
@@ -103,7 +103,7 @@ export const Question8: FC<Props> = ({
         ) : (
           <span className="text-green-600">{totalAmount}</span>
         )}
-        {` von 100%.`}
+        {` von 100% erreicht.`}
       </Copy>
     </div>
   );
