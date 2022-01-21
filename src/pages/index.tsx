@@ -30,7 +30,7 @@ const Home: NextPage = () => {
               {allFeaturesOfThePage.map((feature) => (
                 <li className="text-black grid grid-cols-[1fr,3fr]" key={feature}>
                   <div className="flex justify-end">
-                    <CheckIcon className="h-5 h-8" />
+                    <CheckIcon className="h-8" />
                   </div>
                   <div className="font-sans text-xxs sm:text-base md:text-sm text-left">{feature}</div>
                 </li>
