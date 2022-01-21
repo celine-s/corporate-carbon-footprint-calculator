@@ -1,54 +1,52 @@
 import type { NextPage } from 'next';
-import { Button } from '../elements/button';
 import { LinkElement } from '../elements/link';
-import { Copy } from '../identity/copy';
 import { Heading1 } from '../identity/heading-1';
 import { Page } from '../layouts/page';
 import React from 'react';
-import { ChevronRightIcon } from '../elements/chevron-right';
 import { CheckIcon } from '@heroicons/react/solid';
-import { WhatIsHappening } from '../components/info-box';
+import { Heading2 } from '../identity/heading-2';
 
 const allFeaturesOfThePage = [
-  'kostenlos',
-  'dauert weniger als10min',
-  'kein langes Daten sammeln',
-  'know each step you take',
-  'kein Spendenaufruf',
-  'für KMUs (< 250 MA)',
+  'Kostenlos',
+  'Dauert weniger als 10 min',
+  'Kein langes Daten sammeln',
+  'Know each step you take',
+  'Kein Spendenaufruf',
+  'Für KMUs (< 250 MA)',
 ];
 
 const Home: NextPage = () => {
   return (
     <div className="bg-cornflower-500">
       <Page>
-        <header>
-          <Heading1>Fussabdruck Rechner für Schweizer Dienstleistungsunternehmen</Heading1>
-          <Copy>Was erwartet dich?</Copy>
-          <ul className="text-white-200 grid grid-cols-3">
-            {allFeaturesOfThePage.map((feature) => (
-              <li className="text-white-200 flex flex-wrap -mb-8" key={feature}>
-                <CheckIcon className="h-8 my-4 lg:my-8 justify-center self-center mr-2" />
-                <Copy>{feature}</Copy>
-              </li>
-            ))}
-          </ul>
-        </header>
-        <main>
-          <div className="px-4 pt-8 md:mx-auto text-center flex transition-all duration-300 ease-in-out transform hover:scale-105 justify-center">
-            <LinkElement href="/rechner/1">
-              <Button size="L" buttonColorGray={true}>
-                <div className="flex flex-wrap flex-grow">
-                  Zum Fussabdruck Quickcheck
-                  <div className="flex justify-end items-center">
-                    <ChevronRightIcon />
+        <div className="mb-8 text-center">
+          <Heading1>
+            CO<sub>2</sub> Fussabdruck-Rechner für Schweizer Dienstleistungs-unternehmen
+          </Heading1>
+
+          <div className="bg-white-200 p-8 sm:p-16 md:m-16 md:p-16 rounded-lg lg:mx-36">
+            <Heading2>Was erwartet Dich?</Heading2>
+            <ul className="text-white-200 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
+              {allFeaturesOfThePage.map((feature) => (
+                <li className="text-black grid grid-cols-[1fr,3fr]" key={feature}>
+                  <div className="flex justify-end">
+                    <CheckIcon className="h-5 h-8" />
                   </div>
-                </div>
-              </Button>
-            </LinkElement>
+                  <div className="font-sans text-xxs sm:text-base md:text-sm text-left">{feature}</div>
+                </li>
+              ))}
+            </ul>
+            <main>
+              <div className="pt-8 md:mx-auto flex transition-all duration-300 ease-in-out transform hover:scale-105 justify-center">
+                <LinkElement href="/rechner/1">
+                  <div className="bg-cornflower-500 hover:bg-cornflower-800 p-4 rounded-lg">
+                    <div className="flex flex-wrap flex-grow text-base text-white-200">Loslegen</div>
+                  </div>
+                </LinkElement>
+              </div>
+            </main>
           </div>
-        </main>
-        <WhatIsHappening title="Berechnungen" content="Erklärung" />
+        </div>
       </Page>
     </div>
   );
