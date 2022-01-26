@@ -31,10 +31,10 @@ export const Question8: FC<Props> = ({
     (parseInt(answer.byFoot) || 0);
 
   return (
-    <div className="w-80">
+    <div className="w-2/3">
       <InputField
         type="number"
-        label="%Auto"
+        label="% Auto"
         name="answer"
         step="5"
         value={answer.car}
@@ -48,7 +48,7 @@ export const Question8: FC<Props> = ({
       />
       <InputField
         type="number"
-        label="%ÖV"
+        label="% ÖV"
         name="answer"
         step="5"
         min="0"
@@ -64,7 +64,7 @@ export const Question8: FC<Props> = ({
       />
       <InputField
         type="number"
-        label="%Fahrrad"
+        label="% Fahrrad"
         name="answer"
         step="5"
         min="0"
@@ -80,7 +80,7 @@ export const Question8: FC<Props> = ({
       />
       <InputField
         type="number"
-        label="%zu Fuss"
+        label="% zu Fuss"
         name="answer"
         step="5"
         min="0"
@@ -94,19 +94,17 @@ export const Question8: FC<Props> = ({
         }}
         validateInput={validateInput}
       />
-      <div className="flex flex-row gap-1">
-        <Copy>Bis jetzt hast du</Copy>
+      <Copy>
+        {`Bis jetzt sind `}
         {totalAmount > 100 || totalAmount < 100 ? (
-          <div className="text-red-600" id="input-error">
-            <Copy> {totalAmount} </Copy>
-          </div>
+          <span className="text-red-600" id="input-error">
+            {totalAmount}
+          </span>
         ) : (
-          <div className="text-green-600">
-            <Copy> {totalAmount} </Copy>
-          </div>
+          <span className="text-green-600">{totalAmount}</span>
         )}
-        <Copy> von 100%</Copy>
-      </div>
+        {` von 100% erreicht.`}
+      </Copy>
     </div>
   );
 };

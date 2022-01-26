@@ -8,10 +8,12 @@ type Props = {
   callback: (value: { [key: string]: string }) => void;
 };
 const validateInput = (answer: string) => {
-  if (parseFloat(answer) > 1000000000000000000000000000) {
+  if (parseFloat(answer) > 1000000) {
     return 'Bist du am Übertreiben? Bitte gib eine kleinere Zahl ein.';
   } else if (answer.length > 100) {
     return 'Bist du am Übertreiben? Bitte gib eine kleinere Zahl ein.';
+  } else if (parseInt(answer) < 0) {
+    return 'Die Kilowattstunden können nicht kleiner als 0 sein.';
   }
   return null;
 };
@@ -45,7 +47,8 @@ export const Question4: FC<Props> = ({ answer, callback }) => {
         />
         {squaremeter && (
           <Copy>
-            Anhand euer Quadratmeteranzahl wären das ungefähr {squaremeter.squaremeter * AVG_KWH_PER_SQM} Kilowattstunden.
+            Der Schätzwert für euer Büro liegt bei ca.
+            {` ${squaremeter.squaremeter * AVG_KWH_PER_SQM} kWh.`}
           </Copy>
         )}
       </div>

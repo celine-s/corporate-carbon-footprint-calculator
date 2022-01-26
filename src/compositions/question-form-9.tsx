@@ -7,7 +7,7 @@ type Props = {
 };
 
 const validateInput = (answer: string) => {
-  if (parseFloat(answer) > 2500) {
+  if (parseFloat(answer) > 1000000) {
     return 'Bitte gib eine kleinere Zahl ein.';
   } else if (answer.length > 10) {
     return 'Bitte gib maximal 10 Ziffern nach dem Komma ein.';
@@ -17,9 +17,9 @@ const validateInput = (answer: string) => {
   return null;
 };
 
-export const Question9: FC<Props> = ({ answer = { hours: '100' }, callback }) => {
+export const Question9: FC<Props> = ({ answer = { hours: '5' }, callback }) => {
   useEffect(() => {
-    callback({ hours: '100' });
+    callback({ hours: '5' });
   }, []);
 
   return (

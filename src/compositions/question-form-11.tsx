@@ -7,10 +7,12 @@ type Props = {
 };
 
 const validateInput = (answer: string) => {
-  if (parseFloat(answer) > 10000) {
+  if (parseFloat(answer) > 100000000) {
     return 'Bist du sicher? das sind sehr viele km.';
   } else if (answer.length > 10) {
     return 'Bitte gib maximal 10 Ziffern nach dem Komma ein.';
+  } else if (parseInt(answer) < 0) {
+    return 'Bitte gib eine positive Zahl ein.';
   }
   return null;
 };
