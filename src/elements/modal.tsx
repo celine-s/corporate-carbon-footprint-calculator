@@ -1,11 +1,30 @@
 import { Transition, Dialog } from '@headlessui/react';
-import React, { FC, Fragment, useRef } from 'react';
+import { CheckIcon, ExclamationIcon } from '@heroicons/react/solid';
+import React, { FC, Fragment, ReactNode, useRef } from 'react';
+import { Button } from './button';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type Props = { title?: string; onClose: (open: boolean) => void; open: boolean; icon: any };
+export enum ModalVariant {
+  Warning = 'Warning',
+  Success = 'Success',
+  Custom = 'Custom',
+}
+type Props = {
+  title?: string;
+  onClose: (open: boolean) => void;
+  open: boolean;
+  icon?: ReactNode;
+  variant: ModalVariant;
+  showCancelButton?: boolean;
+};
 
-export const CalculatorModal: FC<Props> = ({ children, title, onClose, open, icon }) => {
+export const Modal: FC<Props> = ({ children, title, onClose, open, icon: customIcon, variant, showCancelButton = true }) => {
   const cancelButtonRef = useRef(null);
+  const { bgColor, icon } =
+    variant === 'Warning'
+      ? { bgColor: 'bg-red-100', icon: <ExclamationIcon className="h-6 w-6 text-red-600" aria-hidden="true" /> }
+      : variant === 'Success'
+      ? { bgColor: 'bg-green-100', icon: <CheckIcon className="h-6 w-6 text-green-600" aria-hidden="true" /> }
+      : { bgColor: 'bg-cornflower-500', icon: customIcon };
 
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -37,7 +56,7 @@ export const CalculatorModal: FC<Props> = ({ children, title, onClose, open, ico
           >
             <div className="inline-block align-bottom bg-white-200 rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6 min-w-max">
               <div>
-                <div className="mx-auto flex items-center justify-center h-12 w-12 p-8 rounded-full bg-cornflower-500">
+                <div className={`mx-auto flex items-center justify-center h-12 w-12 p-8 rounded-full ${bgColor}`}>
                   <div className="text-white-100">{icon}</div>
                 </div>
                 <div className="mt-3 text-center sm:mt-5">
@@ -45,10 +64,17 @@ export const CalculatorModal: FC<Props> = ({ children, title, onClose, open, ico
                     {title}
                   </Dialog.Title>
                   <div className="mt-2">
-                    <p className="text-xs leading-4 text-gray-600 pb-3">{children}</p>{' '}
+                    <p className="text-xs leading-4 text-gray-600 pb-3">{children}</p>
                   </div>
                 </div>
               </div>
+              {showCancelButton && (
+                <div className="mt-5 sm:mt-6 flex justify-center">
+                  <Button onClick={() => onClose(false)} ref={cancelButtonRef} buttonColorGray={true}>
+                    Zurück
+                  </Button>
+                </div>
+              )}
             </div>
           </Transition.Child>
         </div>

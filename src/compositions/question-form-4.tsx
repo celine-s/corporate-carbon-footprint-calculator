@@ -57,7 +57,7 @@ export const Question4: FC<Props> = ({ answer, callback }) => {
   );
 };
 
-const electricityOptions = [
+export const electricityOptions = [
   { value: 'ecoElectricity', label: 'Erneuerbar' },
   { value: 'notEcoElectricity', label: 'Nicht erneuerbar' },
   { value: 'unavailable', label: 'Unbekannt' },
@@ -75,9 +75,9 @@ const RadioButton: FC<PropsRadioButton> = ({ answerQuestion4, callback }) => (
     </div>
     <div>
       <fieldset className="mt-4">
-        <div className="sm:flex sm:items-center sm:space-x-4">
+        <div className="xl:flex xl:items-center xl:space-x-4 grid">
           {electricityOptions.map(({ label, value }) => (
-            <div key={value} className="flex items-center">
+            <div key={value} className="flex items-center h-12">
               <input
                 id={value}
                 name="electricity-type"
