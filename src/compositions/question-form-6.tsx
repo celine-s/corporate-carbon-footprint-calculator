@@ -1,7 +1,7 @@
 import { FC, useEffect } from 'react';
 import { DropDown } from '../elements/dropdown';
 
-const years = [
+export const constructionPeriods = [
   { label: 'vor 1980', value: 'before1980' },
   { label: '1981-1990', value: '1981-90' },
   { label: '1991-2000', value: '1991-00' },
@@ -19,5 +19,5 @@ export const Question6: FC<Props> = ({ answer, callback }) => {
   useEffect(() => {
     callback({ constructionPeriod: 'today' });
   }, []);
-  return <DropDown options={years} selected={answer} callback={callback} optionKey="constructionPeriod" />;
+  return <DropDown options={constructionPeriods} selected={answer} callback={callback} optionKey="constructionPeriod" />;
 };

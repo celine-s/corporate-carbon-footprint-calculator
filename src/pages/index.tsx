@@ -9,8 +9,8 @@ import { Heading2 } from '../identity/heading-2';
 const allFeaturesOfThePage = [
   'Kostenlos',
   'Dauert weniger als 10 min',
-  'Kein langes Daten sammeln',
-  'Know each step you take',
+  'Zusatzinformationen ermöglichen sinvolle Antworten',
+  'Schritte verständlich erklärt',
   'Kein Spendenaufruf',
   'Für KMUs (< 250 MA)',
 ];
@@ -21,9 +21,9 @@ const Home: NextPage = () => {
       <Page>
         <div className="mb-8 text-center">
           <Heading1>
-            CO<sub>2</sub> Fussabdruck-Rechner für Schweizer Dienstleistungs-unternehmen
+            CO<sub>2</sub> Fussabdruck-Rechner für Schweizer Dienstleistungs{<span className="sm:hidden">-</span>}
+            unternehmen
           </Heading1>
-
           <div className="bg-white-200 p-8 sm:p-16 md:m-16 md:p-16 rounded-lg lg:mx-36">
             <Heading2>Was erwartet Dich?</Heading2>
             <ul className="text-white-200 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3">

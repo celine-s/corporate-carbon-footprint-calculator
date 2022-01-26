@@ -1,5 +1,5 @@
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
-import React, { FC, Fragment, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Copy } from '../../identity/copy';
 import { Heading2 } from '../../identity/heading-2';
 import { getLocalStorage, setLocalStorage } from '../../utils/local-storage';
@@ -21,9 +21,8 @@ import { Question9 } from '../../compositions/question-form-9';
 import { Question10 } from '../../compositions/question-form-10';
 import { Question11 } from '../../compositions/question-form-11';
 import { useRouter } from 'next/dist/client/router';
-import { WhatIsHappening } from '../../components/info-box';
-import { CheckIcon, ExclamationIcon } from '@heroicons/react/solid';
-import { Transition, Dialog } from '@headlessui/react';
+import { InfoBox } from '../../components/info-box';
+import { Modal, ModalVariant } from '../../elements/modal';
 
 type Props = {
   question: Question;
@@ -128,139 +127,40 @@ const Frage: NextPage<Props> = ({
               </LinkElement>
             )}
             {errorMessages.length !== 0 && (
-              <ErrorModal errorMessages={errorMsg(questionIDs)} onClose={() => setErrorMessages([])} open={true} />
+              <Modal
+                title="Fehlende Daten:"
+                onClose={() => setErrorMessages([])}
+                open={errorMessages.length !== 0}
+                variant={ModalVariant.Warning}
+              >
+                <div className="mt-2">
+                  <p className="text-sm text-gray-500">
+                    {errorMsg(questionIDs).map((error) => (
+                      <li key={error}>{error}</li>
+                    ))}
+                  </p>
+                  <p className="text-sm text-center text-black-500">
+                    Drücke jeweils auf {<i>Weiter</i>}, um die Daten zu sichern.
+                  </p>
+                </div>
+              </Modal>
             )}
-            {showSuccess && <SuccessModal setOpen={setShowSuccess} open={showSuccess} />}
+            {showSuccess && (
+              <Modal
+                onClose={setShowSuccess}
+                open={showSuccess}
+                variant={ModalVariant.Success}
+                showCancelButton={false}
+                title="Die Fragen sind beantwortet"
+              >
+                ... und werden gesichert.
+              </Modal>
+            )}
           </div>
         </div>
       </div>
-      <WhatIsHappening title={whatTitle} content={whatText} />
+      <InfoBox title={whatTitle} content={whatText} />
     </CategoriesNavigation>
-  );
-};
-
-type SuccessModalProps = { setOpen: (open: boolean) => void; open: boolean };
-const SuccessModal: FC<SuccessModalProps> = ({ setOpen, open }) => {
-  const cancelButtonRef = useRef(null);
-
-  return (
-    <Transition.Root show={open} as={Fragment}>
-      <Dialog as="div" className="fixed z-10 inset-0 overflow-y-auto" initialFocus={cancelButtonRef} onClose={setOpen}>
-        <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-          <Transition.Child
-            as={Fragment}
-            enter="ease-out duration-300"
-            enterFrom="opacity-0"
-            enterTo="opacity-100"
-            leave="ease-in duration-200"
-            leaveFrom="opacity-100"
-            leaveTo="opacity-0"
-          >
-            <Dialog.Overlay className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
-          </Transition.Child>
-
-          <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">
-            &#8203;
-          </span>
-          <Transition.Child
-            as={Fragment}
-            enter="ease-out duration-300"
-            enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-            enterTo="opacity-100 translate-y-0 sm:scale-100"
-            leave="ease-in duration-200"
-            leaveFrom="opacity-100 translate-y-0 sm:scale-100"
-            leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-          >
-            <div className="inline-block align-bottom bg-white-200 rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
-              <div>
-                <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100">
-                  <CheckIcon className="h-6 w-6 text-green-600" aria-hidden="true" />
-                </div>
-                <div className="mt-3 text-center sm:mt-5">
-                  <Dialog.Title as="h3" className="text-lg leading-6 font-medium text-gray-900">
-                    Die Fragen sind beantwortet
-                  </Dialog.Title>
-                  <div className="mt-2">
-                    <p className="text-sm text-gray-500">... und werden gesichert. </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </Transition.Child>
-        </div>
-      </Dialog>
-    </Transition.Root>
-  );
-};
-
-type ErrorModalProps = { errorMessages: string[]; onClose: () => void; open: boolean };
-const ErrorModal: FC<ErrorModalProps> = ({ errorMessages, onClose, open }) => {
-  const cancelButtonRef = useRef(null);
-
-  return (
-    <Transition.Root show={open} as={Fragment}>
-      <Dialog as="div" className="fixed z-10 inset-0 overflow-y-auto" initialFocus={cancelButtonRef} onClose={onClose}>
-        <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-          <Transition.Child
-            as={Fragment}
-            enter="ease-out duration-300"
-            enterFrom="opacity-0"
-            enterTo="opacity-100"
-            leave="ease-in duration-200"
-            leaveFrom="opacity-100"
-            leaveTo="opacity-0"
-          >
-            <Dialog.Overlay className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
-          </Transition.Child>
-
-          <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">
-            &#8203;
-          </span>
-          <Transition.Child
-            as={Fragment}
-            enter="ease-out duration-300"
-            enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-            enterTo="opacity-100 translate-y-0 sm:scale-100"
-            leave="ease-in duration-200"
-            leaveFrom="opacity-100 translate-y-0 sm:scale-100"
-            leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-          >
-            <div className="inline-block align-bottom bg-white-200 rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
-              <div className="sm:flex sm:items-start">
-                <div className="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
-                  <ExclamationIcon className="h-6 w-6 text-red-600" aria-hidden="true" />
-                </div>
-                <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                  <Dialog.Title as="h3" className="text-lg leading-6 font-medium text-gray-900">
-                    Fehlende Daten:
-                  </Dialog.Title>
-                  <div className="mt-2">
-                    <p className="text-sm text-gray-500">
-                      {errorMessages.map((error) => (
-                        <li key={error}>{error}</li>
-                      ))}
-                    </p>
-                    <p className="text-sm text-center text-black-500">
-                      Drücke jeweils auf {<i>Weiter</i>}, um die Daten zu sichern.
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div className="mt-5 sm:mt-4 sm:ml-10 sm:pl-4 sm:flex">
-                <button
-                  type="button"
-                  className="inline-flex justify-center w-full rounded-md shadow-sm px-4 py-2 border border-gray-300  bg-white-200 text-base font-medium text-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cornflower-500 sm:w-auto sm:text-sm"
-                  onClick={onClose}
-                  ref={cancelButtonRef}
-                >
-                  Zurück
-                </button>
-              </div>
-            </div>
-          </Transition.Child>
-        </div>
-      </Dialog>
-    </Transition.Root>
   );
 };
 

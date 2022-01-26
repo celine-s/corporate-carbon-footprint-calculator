@@ -5,127 +5,74 @@ import { getResponseWithId } from '../../../utils/responses-firestore';
 import { Heading1 } from '../../../identity/heading-1';
 import { HeatingIcon, IconProps, PaperAirplaneIcon, TrainIcon } from '../../../elements/icons';
 import { Copy } from '../../../identity/copy';
-import { CalculatorModal } from '../../../elements/modal';
+import { Modal, ModalVariant } from '../../../elements/modal';
 import { Heading2 } from '../../../identity/heading-2';
 import { InformationCircleIcon } from '@heroicons/react/outline';
+import { Button } from '../../../elements/button';
+import { LinkElement } from '../../../elements/link';
+import { electricityOptions } from '../../../compositions/question-form-4';
+import { constructionPeriods } from '../../../compositions/question-form-6';
 
 type Props = {
   impactInTons: { name: string; impact: number; content: string }[];
-  answersTeam: { [key: string]: number | string };
   answersTravelling: { [key: string]: number | string };
   answersCommuting: { [key: string]: number | string };
   answersEnergy: { [key: string]: number | string };
   year: string;
   fte: number;
+  currentId: string | undefined;
   totalImpact: number;
 };
 
+export enum CategorieNames {
+  Commuting = 'Pendeln',
+  Travelling = 'Reisen',
+  Energy = 'Energie',
+}
+
 export const ICONS: { [key: string]: React.FC<IconProps> } = {
-  Pendeln: TrainIcon,
-  Energie: HeatingIcon,
-  Reisen: PaperAirplaneIcon,
+  [CategorieNames.Commuting]: TrainIcon,
+  [CategorieNames.Energy]: HeatingIcon,
+  [CategorieNames.Travelling]: PaperAirplaneIcon,
 };
 
-const times = (
-  <span className="text-cornflower-500">
-    {<br />}x{<br />}
-  </span>
-);
-const plus = (
-  <span className="text-cornflower-500">
-    {<br />}+{<br />}
-  </span>
-);
-
-const SmallTextInBrackets: FC = ({ children }) => <span className="text-xss">({children})</span>;
-
-const Report: NextPage<Props> = ({ impactInTons, totalImpact, answersCommuting, fte, year }) => {
+const Report: NextPage<Props> = ({
+  impactInTons,
+  totalImpact,
+  fte,
+  year,
+  currentId,
+  answersCommuting,
+  answersTravelling,
+  answersEnergy,
+}) => {
   const [openEnergy, setOpenEnergy] = useState(false);
   const [openCommuting, setOpenCommuting] = useState(false);
   const [openTravelling, setOpenTravelling] = useState(false);
+  const [copied, setCopied] = useState(false);
 
-  //wie chani das nur eimal lade? Useeffect gaht ja nöd...
-  const calculationCommuting = (
-    <div>
-      <div className="grid grid-cols-2 gap-8 mt-8">
-        <div>
-          <p className="text-sm font-bold text-gray-800 pb-1">Homeoffice</p>
-          {fte} <SmallTextInBrackets>Mitarbeitenden</SmallTextInBrackets> {times} {WORKDAYS_PER_YEAR}
-          <SmallTextInBrackets>Arbeitstage im Jahr</SmallTextInBrackets> {times} {`0.5 `}
-          <SmallTextInBrackets>Homeoffice Prozent</SmallTextInBrackets> {times} {HOME_OFFICE_EMISSION} kg CO
-          <sub>2</sub>
-          <SmallTextInBrackets>
-            Homeoffice Emissionsfaktor in kg CO<sub>2</sub>
-          </SmallTextInBrackets>
-          {<br />}
-        </div>
-        <div>
-          <p className="text-sm font-bold text-gray-800 pb-1">Arbeitsweg</p>
-          {fte} <SmallTextInBrackets>Mitarbeitenden</SmallTextInBrackets> {times} {WORKDAYS_PER_YEAR}
-          <SmallTextInBrackets>Arbeitstage im Jahr</SmallTextInBrackets> {times} {`1 - ${0.5}`}
-          <SmallTextInBrackets>100% minus Homeoffice Prozent</SmallTextInBrackets> {times} {`${AVG_COMMUTE_DIST_KM} `}
-          <SmallTextInBrackets>Durchschnittlicher Schweizer Arbeitsweg</SmallTextInBrackets>
-          {times}
-          <div className="text-gray-600">
-            <span className="text-base font-bold">(</span>
-            {CAR_EMISSION}
-            <SmallTextInBrackets>
-              Auto EF in kg CO<sub>2</sub>
-            </SmallTextInBrackets>
-            {'x'}
-            {answersCommuting?.carPercentage}
-            <SmallTextInBrackets>% mit dem Auto</SmallTextInBrackets>
-            {plus} {PUBLIC_TRANSPORT_EMISSION}
-            <SmallTextInBrackets>
-              ÖV EF in kg CO<sub>2</sub>
-            </SmallTextInBrackets>
-            {'x'}
-            {answersCommuting?.publicTransportPercentage}
-            <SmallTextInBrackets>% mit dem ÖV</SmallTextInBrackets>
-            {plus} {BICYCLE_EMISSION}
-            <SmallTextInBrackets>
-              Fahrrad EF in kg CO<sub>2</sub>
-            </SmallTextInBrackets>
-            {'x'}
-            {answersCommuting?.bicyclePercentage}
-            <SmallTextInBrackets>% mit dem Fahrrad</SmallTextInBrackets>
-            <span className="text-base font-bold">)</span>
-            {plus} {'0'}
-            <SmallTextInBrackets>
-              zu Fuss EF in kg CO<sub>2</sub>
-            </SmallTextInBrackets>
-            {'x'}
-            <SmallTextInBrackets>% zu Fuss</SmallTextInBrackets>
-            <span className="text-base font-bold">{`)`}</span>
-          </div>
-        </div>
-      </div>
-      <div className="mb-4">+</div>
-      <br />
-      <span className="text-base text-bold">
-        = {impactInTons.find(({ name }) => name === 'Pendeln')?.impact} t CO<sub>2</sub>
-      </span>
-    </div>
-  );
   return (
     <Page>
       <div className="mb-32">
+        <Heading1>
+          Euer CO<sub>2</sub> Fussabdruck im {year}
+        </Heading1>
         <div className="grid grid-row md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
           {impactInTons.map(({ name, impact, content }) => {
             return (
               <div key={name}>
                 <div className="rounded-lg">
                   <div className="flex items-center justify-center -mb-8">
-                    <div className="text-white-100  rounded-full p-4 bg-cornflower-500">{ICONS[name]({ size: '30' })}</div>
+                    <div className="text-white-100 rounded-full p-4 bg-cornflower-500">{ICONS[name]({ size: '30' })}</div>
                   </div>
 
                   <div className="p-8 bg-white-100 rounded-lg text-center">
-                    <div className="h-4 flex justify-end -mt-2 -mr-1">
+                    <div className="h-5 md:h-7 flex justify-end -mt-2 -mr-1">
                       <InformationCircleIcon
                         onClick={() => {
-                          name === 'Energie' && setOpenEnergy(true);
-                          name === 'Pendeln' && setOpenCommuting(true);
-                          name === 'Reisen' && setOpenTravelling(true);
+                          name === CategorieNames.Energy && setOpenEnergy(true);
+                          name === CategorieNames.Commuting && setOpenCommuting(true);
+                          name === CategorieNames.Travelling && setOpenTravelling(true);
                         }}
                       />
                     </div>
@@ -137,7 +84,9 @@ const Report: NextPage<Props> = ({ impactInTons, totalImpact, answersCommuting, 
                       </span>
                     </div>
                     <span className="text-lg">{name}</span>
-                    <span className="text-xs font-semibold flex justify-center text-center mb-4 h-12">{content}</span>
+                    <span className="text-xs font-semibold flex justify-center text-center mb-4 h-auto lg:h-24 xl:h-12">
+                      {content}
+                    </span>
                     <span className="text-xs">
                       entspricht ca.: {Math.round((impact / fte) * 100) / 100} t CO<sub>2</sub> pro Vollzeitmitarbeiter:in
                     </span>
@@ -172,9 +121,22 @@ const Report: NextPage<Props> = ({ impactInTons, totalImpact, answersCommuting, 
               </span>
             </Copy>
           </div>
+          <div className="mt-12 flex gap-4">
+            <LinkElement href={'/rechner/1'}>
+              <Button>Fragebogen neu starten</Button>
+            </LinkElement>
+            <Button
+              onClick={() => {
+                setCopied(true);
+                navigator.clipboard.writeText(`https://fussabdruck-rechner.vercel.app/rechner/report/${currentId}`);
+              }}
+            >
+              {copied ? 'Kopiert: Der Link ist in deiner Zwischenablage.' : 'Kopiere den Link zu dieser Seite.'}
+            </Button>
+          </div>
         </div>
         <div className="bg-white-100 px-4 rounded-lg pb-4 mt-10 pt-4">
-          <Heading2> Nicht alle Emissionen werden mit dem Fussabdruck-Rechner erfasst.</Heading2>
+          <Heading2> Nicht alle Emissionen werden mit diesem Fussabdruck-Rechner erfasst.</Heading2>
           <div className="text-justify">
             <Copy>
               Die Emissionen für Energie, Pendeln und Reisen werden anhand eurer Antworten ausgerechnet. Emissionen werden
@@ -197,41 +159,57 @@ const Report: NextPage<Props> = ({ impactInTons, totalImpact, answersCommuting, 
         </div>
       </div>
       {/* Modals to explain the calculations */}
-      {openEnergy && (
-        <CalculatorModal
-          title="Berechnungen Energie Emissionen"
-          onClose={setOpenEnergy}
-          open={openEnergy}
-          icon={ICONS.Energie({ size: '30' })}
-        >
-          {'comming soon'}
-        </CalculatorModal>
-      )}
-      {openCommuting && (
-        <CalculatorModal
-          title="Berechnungen Pendeln Emissionen"
-          onClose={setOpenCommuting}
-          open={openCommuting}
-          icon={ICONS.Pendeln({ size: '30' })}
-        >
-          {calculationCommuting}
-        </CalculatorModal>
-      )}
-      {openTravelling && (
-        <CalculatorModal
-          title="Berechnungen Reisen Emissionen"
-          onClose={setOpenTravelling}
-          open={openTravelling}
-          icon={ICONS.Reisen({ size: '30' })}
-        >
-          {'comming soon'}
-        </CalculatorModal>
-      )}
+      <div>
+        {openEnergy && (
+          <Modal
+            title="Berechnungen Energie Emissionen"
+            onClose={setOpenEnergy}
+            open={openEnergy}
+            icon={<HeatingIcon size="30" />}
+            variant={ModalVariant.Custom}
+          >
+            <CalculationEnergy
+              answersEnergy={answersEnergy}
+              energyImpact={impactInTons.find(({ name }) => name === CategorieNames.Energy)?.impact}
+            />
+          </Modal>
+        )}
+        {openCommuting && (
+          <Modal
+            title="Berechnungen Pendeln Emissionen"
+            onClose={setOpenCommuting}
+            open={openCommuting}
+            icon={<TrainIcon size="30" />}
+            variant={ModalVariant.Custom}
+          >
+            <CalculationCommuting
+              fte={fte}
+              answersCommuting={answersCommuting}
+              commutingImpact={impactInTons.find(({ name }) => name === CategorieNames.Commuting)?.impact}
+            />
+          </Modal>
+        )}
+        {openTravelling && (
+          <Modal
+            title="Berechnungen Reisen Emissionen"
+            onClose={setOpenTravelling}
+            open={openTravelling}
+            icon={<PaperAirplaneIcon size="30" />}
+            variant={ModalVariant.Custom}
+          >
+            <CalculationTravelling
+              fte={fte}
+              answersTravelling={answersTravelling}
+              travellingImpact={impactInTons.find(({ name }) => name === CategorieNames.Travelling)?.impact}
+            />
+          </Modal>
+        )}
+      </div>
     </Page>
   );
 };
 
-const EMISSION_NY_AND_BACK = 3; //0.190kgCO2/km*900km/h*9h
+const EMISSION_NY_AND_BACK = 3;
 const EMISSION_PER_LITER_MILK = 0.0016;
 const EMISSION_PER_KG_MEAT = 0.0125;
 const EMISSION_PER_LAPTOP = 0.3;
@@ -246,7 +224,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 const WORKDAYS_PER_YEAR = 240;
 const WEEKS_PER_YEAR = 53;
 const MONTHS_PER_YEAR = 12;
-const CAR_EMISSION = 0.209;
+const CAR_EMISSION = 0.21;
 const BICYCLE_EMISSION = 0.008;
 const PUBLIC_TRANSPORT_EMISSION = 0.025;
 const PLANE_EMISSION = 0.26;
@@ -322,32 +300,38 @@ export const getStaticProps: GetStaticProps<Props> = async ({ params }) => {
   const electricity = answers?.[3].kWh * ELECTRICITY_EMISSION?.[electricityType];
 
   const impactInTons = [
-    { name: 'Energie', impact: Math.round((impactHeating + electricity) / 1000), content: 'Heizung und Strom.' },
+    { name: CategorieNames.Energy, impact: Math.round((impactHeating + electricity) / 1000), content: 'Heizung und Strom.' },
     {
-      name: 'Pendeln',
+      name: CategorieNames.Commuting,
       impact: Math.round((homeOfficeImpact + commute) / 1000),
       content: 'Tage im Homeoffice und Arbeitsweg.',
     },
     {
-      name: 'Reisen',
+      name: CategorieNames.Travelling,
       impact: Math.round((byCar + byPublicTransport + byPlane) / 1000),
       content: 'Kundenbesuche und Firmenausflüge: Flugstunden, Autokilometer und ÖV.',
     },
   ];
   const totalImpact = impactInTons.reduce((prev, curr) => prev + curr.impact, 0);
   const answersTeam = { fte, year, squaremeter };
-  const answersTravelling = { byCar, byPlane, byPublicTransport };
+  const answersTravelling = {
+    byCar: answers?.[9].autokm,
+    byPlane: answers?.[8].hours,
+    byPublicTransport: answers?.[10].km,
+  };
   const answersCommuting = { homeOfficePercentage, carPercentage, publicTransportPercentage, bicyclePercentage };
   const answersEnergy = {
-    electricity,
-    electricityEmission: ELECTRICITY_EMISSION?.[electricityType],
     electricityType,
     constructionPeriod,
     heatingType,
+    squaremeter,
+    kWh: answers?.[3].kWh,
+    electricityEmission: ELECTRICITY_EMISSION?.[electricityType],
   };
   return {
     props: {
       response,
+      currentId,
       impactInTons,
       totalImpact,
       fte,
@@ -359,5 +343,179 @@ export const getStaticProps: GetStaticProps<Props> = async ({ params }) => {
     },
   };
 };
-
 export default Report;
+
+const MULTIPLICATION_SIGN = <div className="text-cornflower-500 my-1">x</div>;
+const PLUS_SIGN = <div className="text-cornflower-500 my-1">+</div>;
+
+const SmallTextInBrackets: FC = ({ children }) => <span className="text-xss">({children})</span>;
+type CalculationTravellingProps = {
+  fte: number;
+  answersTravelling: { [key: string]: string | number };
+  travellingImpact?: number;
+};
+const SubtitleCalculations: FC = ({ children }) => <p className="text-sm font-bold text-gray-800 pb-1">{children}</p>;
+
+const CalculationTravelling: FC<CalculationTravellingProps> = ({ fte, answersTravelling, travellingImpact }) => (
+  <div>
+    <div className="grid grid-cols-3 gap-8 mt-8">
+      <div>
+        <SubtitleCalculations>Flugzeug:</SubtitleCalculations>
+        {fte} <SmallTextInBrackets>Mitarbeitenden</SmallTextInBrackets> {MULTIPLICATION_SIGN} {`${MONTHS_PER_YEAR} `}
+        <SmallTextInBrackets>Monate im Jahr</SmallTextInBrackets> {MULTIPLICATION_SIGN}
+        {`${answersTravelling.byPlane} `}
+        <SmallTextInBrackets>Anzahl Flugstunden / Mitarbeiter:in / Monat</SmallTextInBrackets>
+        {MULTIPLICATION_SIGN}
+        {`${PLANE_EMISSION} `}
+        <SmallTextInBrackets>
+          Emissionsfaktor pro Flugstunde in kg CO<sub>2</sub>
+        </SmallTextInBrackets>
+      </div>
+      <div>
+        <SubtitleCalculations>Auto:</SubtitleCalculations>
+        {fte} <SmallTextInBrackets>Mitarbeitenden</SmallTextInBrackets> {MULTIPLICATION_SIGN} {`${WEEKS_PER_YEAR} `}
+        <SmallTextInBrackets>Arbeitswochen im Jahr</SmallTextInBrackets> {MULTIPLICATION_SIGN}
+        {`${answersTravelling.byCar} `}
+        <SmallTextInBrackets>Anzahl Autokilometer / Mitarbeiter:in / Monat</SmallTextInBrackets>
+        {MULTIPLICATION_SIGN}
+        {`${CAR_EMISSION} `}
+        <SmallTextInBrackets>
+          Emissionsfaktor pro Autokilometer in kg CO<sub>2</sub>
+        </SmallTextInBrackets>
+      </div>
+      <div>
+        <SubtitleCalculations>ÖV:</SubtitleCalculations>
+        {fte} <SmallTextInBrackets>Mitarbeitenden</SmallTextInBrackets> {MULTIPLICATION_SIGN} {`${WEEKS_PER_YEAR} `}
+        <SmallTextInBrackets>Arbeitswochen im Jahr</SmallTextInBrackets> {MULTIPLICATION_SIGN}
+        {`${answersTravelling.byPublicTransport} `}
+        <SmallTextInBrackets>Anzahl ÖVKilometer /Mitarbeiter:in / Monat</SmallTextInBrackets>
+        {MULTIPLICATION_SIGN}
+        {`${PUBLIC_TRANSPORT_EMISSION} `}
+        <SmallTextInBrackets>
+          Emissionsfaktor pro ÖVKilometer in kg CO<sub>2</sub>
+        </SmallTextInBrackets>
+      </div>
+    </div>
+    <div className="mt-12">Die Summe aller drei ergibt:</div>
+    <span className="text-base text-bold">
+      = {travellingImpact} t CO<sub>2</sub>
+    </span>
+  </div>
+);
+
+type CalculationEnergyProps = {
+  answersEnergy: { [key: string]: string | number };
+  energyImpact?: number;
+};
+
+const CalculationEnergy: FC<CalculationEnergyProps> = ({
+  answersEnergy: { kWh, electricityEmission, electricityType, squaremeter, constructionPeriod, heatingType },
+  energyImpact,
+}) => (
+  <div>
+    <div className="grid grid-cols-2 gap-8 mt-8">
+      <div>
+        <SubtitleCalculations>Heizung</SubtitleCalculations>
+        {`${squaremeter} `}
+        <SmallTextInBrackets>
+          m<sup>2</sup>
+        </SmallTextInBrackets>
+        {MULTIPLICATION_SIGN} {`${USAGE_PER_CONSTRUCTION_YEAR?.[constructionPeriod]} `}
+        <SmallTextInBrackets>
+          {`Verbrauch in kWh in der Bauperiode ${
+            constructionPeriods.find((period) => period.value === constructionPeriod)?.label
+          } pro m`}
+          <sup>2</sup>
+        </SmallTextInBrackets>
+        {MULTIPLICATION_SIGN}
+        {`${HEATING_TYPE_EMISSION?.[heatingType]} `}
+        <SmallTextInBrackets>Emissionsfaktor pro kWh für den Energieträger {heatingType}</SmallTextInBrackets>
+      </div>
+      <div>
+        <SubtitleCalculations>Strom</SubtitleCalculations>
+        {kWh} <SmallTextInBrackets>kWh</SmallTextInBrackets> {MULTIPLICATION_SIGN}
+        {`${electricityEmission} `}
+        <SmallTextInBrackets>
+          Emissionsfaktor pro kWh für
+          {` ${electricityOptions.find((option) => option.value === electricityType)?.label} `}
+          Energietype in kg CO
+          <sub>2</sub>
+        </SmallTextInBrackets>
+      </div>
+    </div>
+    <div className="mt-12">Die Summe ergibt:</div>
+    <span className="text-base text-bold">
+      = {energyImpact} t CO<sub>2</sub>
+    </span>
+  </div>
+);
+
+type CalculationCommutingProps = {
+  fte: number;
+  answersCommuting: { [key: string]: string | number };
+  commutingImpact?: number;
+};
+
+const CalculationCommuting: FC<CalculationCommutingProps> = ({
+  fte,
+  answersCommuting: { homeOfficePercentage, carPercentage, publicTransportPercentage, bicyclePercentage },
+  commutingImpact,
+}) => (
+  <div>
+    <div className="grid grid-cols-2 gap-8 mt-8">
+      <div>
+        <SubtitleCalculations>Homeoffice</SubtitleCalculations>
+        {fte} <SmallTextInBrackets>Mitarbeitenden</SmallTextInBrackets> {MULTIPLICATION_SIGN} {WORKDAYS_PER_YEAR}
+        <SmallTextInBrackets>Arbeitstage im Jahr</SmallTextInBrackets> {MULTIPLICATION_SIGN}
+        {` ${homeOfficePercentage} `}
+        <SmallTextInBrackets>Homeoffice Prozent</SmallTextInBrackets> {MULTIPLICATION_SIGN} {HOME_OFFICE_EMISSION} kg CO
+        <sub>2</sub>
+        <SmallTextInBrackets>
+          Homeoffice Emissionsfaktor in kg CO<sub>2</sub>
+        </SmallTextInBrackets>
+        <br />
+      </div>
+      <div>
+        <SubtitleCalculations>Arbeitsweg</SubtitleCalculations>
+        {fte} <SmallTextInBrackets>Mitarbeitenden</SmallTextInBrackets> {MULTIPLICATION_SIGN} {`${WORKDAYS_PER_YEAR} `}
+        <SmallTextInBrackets>Arbeitstage im Jahr</SmallTextInBrackets> {MULTIPLICATION_SIGN}
+        {` 1 - ${homeOfficePercentage} `}
+        <SmallTextInBrackets>100% minus Homeoffice Prozent</SmallTextInBrackets> {MULTIPLICATION_SIGN}
+        {` ${AVG_COMMUTE_DIST_KM} `}
+        <SmallTextInBrackets>Durchschnittlicher Schweizer Arbeitsweg</SmallTextInBrackets>
+        {MULTIPLICATION_SIGN}
+        <div className="text-gray-600">
+          <span className="text-base font-bold">(</span>
+          {`${CAR_EMISSION} `}
+          <SmallTextInBrackets>
+            Auto EF in kg CO<sub>2</sub>
+          </SmallTextInBrackets>
+          {' x '}
+          {`${carPercentage} `}
+          <SmallTextInBrackets>% mit dem Auto</SmallTextInBrackets>
+          {PLUS_SIGN} {`${PUBLIC_TRANSPORT_EMISSION} `}
+          <SmallTextInBrackets>
+            ÖV EF in kg CO<sub>2</sub>
+          </SmallTextInBrackets>
+          {' x '}
+          {`${publicTransportPercentage} `}
+          <SmallTextInBrackets>% mit dem ÖV</SmallTextInBrackets>
+          {PLUS_SIGN} {`${BICYCLE_EMISSION} `}
+          <SmallTextInBrackets>
+            Fahrrad EF in kg CO<sub>2</sub>
+          </SmallTextInBrackets>
+          {' x '}
+          {`${bicyclePercentage} `}
+          <SmallTextInBrackets>% mit dem Fahrrad</SmallTextInBrackets>
+          {PLUS_SIGN} {'0 '}
+          <SmallTextInBrackets>Zu Fuss.</SmallTextInBrackets>
+          <span className="text-base font-bold">{`)`}</span>
+        </div>
+      </div>
+    </div>
+    <div className="mt-12">Die Summe ergibt:</div>
+    <span className="text-base text-bold">
+      = {commutingImpact} t CO<sub>2</sub>
+    </span>
+  </div>
+);

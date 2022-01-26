@@ -4,9 +4,10 @@ export type ButtonProps = {
   size?: 'S' | 'L';
   onClick?: () => void;
   buttonColorGray?: boolean;
+  ref?: React.LegacyRef<HTMLButtonElement>;
 };
 
-export const Button: FC<ButtonProps> = ({ children, size = 'S', onClick, buttonColorGray }) => {
+export const Button: FC<ButtonProps> = ({ children, size = 'S', onClick, buttonColorGray, ref }) => {
   const fontSize = size === 'S' ? 'text-xs lg:text-sm' : 'text-base';
   const padding = size === 'S' ? 'md:px-16 px-8 py-3' : 'px-24 py-4';
   const buttonColor = buttonColorGray
@@ -15,7 +16,7 @@ export const Button: FC<ButtonProps> = ({ children, size = 'S', onClick, buttonC
   const defaultStyle = `rounded-sm focus:outline-none focus:ring-2 focus:ring-offset-2 ${buttonColor} font-sans font-normal ${fontSize} ${padding}`;
 
   return (
-    <button type="button" className={`text-white-200 ${defaultStyle}`} onClick={onClick}>
+    <button type="button" className={`text-white-200 ${defaultStyle}`} onClick={onClick} ref={ref}>
       {children}
     </button>
   );
