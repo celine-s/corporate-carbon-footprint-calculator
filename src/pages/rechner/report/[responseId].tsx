@@ -7,22 +7,12 @@ import { HeatingIcon, IconProps, PaperAirplaneIcon, TrainIcon } from '../../../e
 import { Copy } from '../../../identity/copy';
 import { Modal, ModalVariant } from '../../../elements/modal';
 import { Heading2 } from '../../../identity/heading-2';
-import { InformationCircleIcon } from '@heroicons/react/outline';
+import { CheckIcon, ExclamationIcon, InformationCircleIcon } from '@heroicons/react/outline';
 import { Button } from '../../../elements/button';
 import { LinkElement } from '../../../elements/link';
 import { electricityOptions } from '../../../compositions/question-form-4';
 import { constructionPeriods } from '../../../compositions/question-form-6';
-
-type Props = {
-  impactInTons: { name: string; impact: number; content: string }[];
-  answersTravelling: { [key: string]: number | string };
-  answersCommuting: { [key: string]: number | string };
-  answersEnergy: { [key: string]: number | string };
-  year: string;
-  fte: number;
-  currentId: string | undefined;
-  totalImpact: number;
-};
+import { heatingTypes } from '../../../compositions/question-form-5';
 
 export enum CategorieNames {
   Commuting = 'Pendeln',
@@ -36,12 +26,25 @@ export const ICONS: { [key: string]: React.FC<IconProps> } = {
   [CategorieNames.Travelling]: PaperAirplaneIcon,
 };
 
+type Props = {
+  impactInTons: { name: string; impact: number; content: string }[];
+  answersTravelling: { [key: string]: number | string };
+  answersCommuting: { [key: string]: number | string };
+  answersEnergy: { [key: string]: number | string };
+  year: string;
+  fte: number;
+  currentId: string | undefined;
+  standOutData: { title: string; content: string; evaluation: Evaluation }[];
+  totalImpact: number;
+};
+
 const Report: NextPage<Props> = ({
   impactInTons,
   totalImpact,
   fte,
   year,
   currentId,
+  standOutData,
   answersCommuting,
   answersTravelling,
   answersEnergy,
@@ -67,7 +70,7 @@ const Report: NextPage<Props> = ({
                   </div>
 
                   <div className="p-8 bg-white-100 rounded-lg text-center">
-                    <div className="h-5 md:h-7 flex justify-end -mt-2 -mr-1">
+                    <div className="h-5 md:h-7 flex justify-end -mt-2 -mr-1 hover:cursor-pointer">
                       <InformationCircleIcon
                         onClick={() => {
                           name === CategorieNames.Energy && setOpenEnergy(true);
@@ -106,26 +109,28 @@ const Report: NextPage<Props> = ({
           </Heading1>
           <div className="-mb-8">
             <Copy>
-              {`Das ist gleichviel, wie `}
+              {`Das ist gleich viel, wie `}
               <span className="bg-white-200 p-1 rounded-md font-bold">
                 🗽 {Math.round((totalImpact / EMISSION_NY_AND_BACK) * 100) / 100} mal nach New York hin und zurück zu fliegen
                 (economy class)
               </span>
               {` oder `}
-              <span className="bg-white-200 p-1 rounded-md font-bold ">
+              <span className="bg-white-200 p-1 rounded-md font-bold">
                 🥛 {Math.round((totalImpact / EMISSION_PER_LITER_MILK) * 100) / 100} Liter Schweizer Vollmilch
               </span>
               {` oder `}
               <span className="bg-white-200 p-1 rounded-md font-bold">
-                🐂 {Math.round((totalImpact / EMISSION_PER_KG_MEAT) * 100) / 100} Kilogramm Schweizer Rindfleisch.
+                🐂 {Math.round((totalImpact / EMISSION_PER_KG_MEAT) * 100) / 100}
+                {` Kilogramm Schweizer Rindfleisch (Weidebeef).`}
               </span>
             </Copy>
           </div>
           <div className="mt-12 flex gap-4">
             <LinkElement href={'/rechner/1'}>
-              <Button>Fragebogen neu starten</Button>
+              <Button size="M">Fragebogen neu starten</Button>
             </LinkElement>
             <Button
+              size="M"
               onClick={() => {
                 setCopied(true);
                 navigator.clipboard.writeText(`https://fussabdruck-rechner.vercel.app/rechner/report/${currentId}`);
@@ -135,6 +140,7 @@ const Report: NextPage<Props> = ({
             </Button>
           </div>
         </div>
+        <StandOut standouts={standOutData} />
         <div className="bg-white-100 px-4 rounded-lg pb-4 mt-10 pt-4">
           <Heading2> Nicht alle Emissionen werden mit diesem Fussabdruck-Rechner erfasst.</Heading2>
           <div className="text-justify">
@@ -211,7 +217,7 @@ const Report: NextPage<Props> = ({
 
 const EMISSION_NY_AND_BACK = 3;
 const EMISSION_PER_LITER_MILK = 0.0016;
-const EMISSION_PER_KG_MEAT = 0.0125;
+const EMISSION_PER_KG_MEAT = 0.013;
 const EMISSION_PER_LAPTOP = 0.3;
 
 export const getStaticPaths: GetStaticPaths = async () => {
@@ -231,20 +237,20 @@ const PLANE_EMISSION = 0.26;
 const AVG_COMMUTE_DIST_KM = 29;
 const HOME_OFFICE_EMISSION = 0.264;
 const ELECTRICITY_EMISSION: { [key: string]: number } = {
-  notEcoElectricity: 0.128,
+  notEcoElectricity: 0.13,
   ecoElectricity: 0.016,
-  unavailable: 0.042,
+  unavailable: 0.13,
 };
 
 const HEATING_TYPE_EMISSION: { [key: string]: number } = {
   oil: 0.31,
   gas: 0.23,
   wood: 0.025,
-  electricity: 0.042,
-  heatPump: 0.03, //anpassen
-  districtHeat: 0.161,
+  electricity: 0.13,
+  heatPump: 0.029,
+  districtHeat: 0.16,
   solarEnergy: 0.016,
-  unavailable: 0.19, //anpassen
+  unavailable: 0.19,
 };
 const USAGE_PER_CONSTRUCTION_YEAR: { [key: string]: number } = {
   before1980: 220,
@@ -252,7 +258,7 @@ const USAGE_PER_CONSTRUCTION_YEAR: { [key: string]: number } = {
   '1991-00': 135,
   '2001-10': 104,
   today: 52,
-  unavailable: 135,
+  unavailable: 200,
 };
 
 export const getStaticProps: GetStaticProps<Props> = async ({ params }) => {
@@ -328,6 +334,81 @@ export const getStaticProps: GetStaticProps<Props> = async ({ params }) => {
     kWh: answers?.[3].kWh,
     electricityEmission: ELECTRICITY_EMISSION?.[electricityType],
   };
+  const checkStandOutData = () => {
+    const standOutData = [];
+    electricityType === 'ecoElectricity' &&
+      standOutData.push({
+        title: 'Erneuerbarer Strom',
+        content: 'supi.',
+        evaluation: Evaluation.Positive,
+      });
+
+    answers?.[3].kWh / squaremeter <= 40 &&
+      standOutData.push({
+        title: 'Stromverbrauch',
+        content: 'Ihr verbraucht im Verhältnis zu eurer Bürogrösse wenig Strom.',
+        evaluation: Evaluation.Positive,
+      });
+
+    bicyclePercentage + publicTransportPercentage > 0.7 &&
+      standOutData.push({
+        title: 'Pendeln',
+        content:
+          'Mit ÖV, zu Fuss oder Fahrrad können die Pendelemissionen stark gesenkt werden. Das macht ihr bereits sehr gut.',
+        evaluation: Evaluation.Positive,
+      });
+
+    homeOfficePercentage > 0.5 &&
+      standOutData.push({
+        title: 'Pendeln – Homeoffice',
+        content: 'Mit eurem grossen Homeoffice Anteil spart ihr einige Pendelemissionen ein.',
+        evaluation: Evaluation.Positive,
+      });
+
+    //negative
+    answers?.[3].kWh / squaremeter >= 70 &&
+      standOutData.push({
+        title: 'Stromverbrauch',
+        content: 'Sehr viel Strom im Verhältnis zu eurem Büro.',
+        evaluation: Evaluation.Negative,
+      });
+    electricityType != 'ecoElectricity' &&
+      standOutData.push({
+        title: 'Stromart',
+        content: 'Erneuerbare Energie kann euren Stromausstoss um einen Faktor von 10 mindern.',
+        evaluation: Evaluation.Positive,
+      });
+    answers?.[8].hours > 1 &&
+      standOutData.push({
+        title: 'Flugstunden',
+        content: 'Für jede Stunde weniger fliegen würdet ihr eine viertel Tonne CO₂ einsparen.',
+        evaluation: Evaluation.Negative,
+      });
+
+    carPercentage > 0.7 &&
+      standOutData.push({
+        title: 'Pendeln mit dem Auto',
+        content: 'Der Umstieg von Auto auf ÖV würde euch pro Mitarbeiter:in über 1 Tonne CO₂ einsparen.', //(0.21*29-0.025*29)*240
+        evaluation: Evaluation.Negative,
+      });
+
+    squaremeter / fte > 25 &&
+      standOutData.push({
+        title: 'Bürogrösse',
+        content:
+          'Euer Büro ist grösser als der Durchschnitt. Mit einem kleineren Büro könnt ihr Heiz- und Stromverbrauch reduzieren.',
+        evaluation: Evaluation.Negative,
+      });
+
+    standOutData.length === 0 &&
+      standOutData.push({
+        title: 'Durchschnittlich',
+        content: 'Eure Daten liegen im Durschnitt. ',
+        evaluation: Evaluation.Neutral,
+      });
+    return standOutData;
+  };
+
   return {
     props: {
       response,
@@ -338,12 +419,18 @@ export const getStaticProps: GetStaticProps<Props> = async ({ params }) => {
       year,
       answersTeam,
       answersTravelling,
+      standOutData: checkStandOutData(),
       answersEnergy,
       answersCommuting,
     },
   };
 };
 export default Report;
+enum Evaluation {
+  Positive = 'Positive',
+  Negative = 'Negative',
+  Neutral = 'Neutral',
+}
 
 const MULTIPLICATION_SIGN = <div className="text-cornflower-500 my-1">x</div>;
 const PLUS_SIGN = <div className="text-cornflower-500 my-1">+</div>;
@@ -429,16 +516,19 @@ const CalculationEnergy: FC<CalculationEnergyProps> = ({
         </SmallTextInBrackets>
         {MULTIPLICATION_SIGN}
         {`${HEATING_TYPE_EMISSION?.[heatingType]} `}
-        <SmallTextInBrackets>Emissionsfaktor pro kWh für den Energieträger {heatingType}</SmallTextInBrackets>
+        <SmallTextInBrackets>
+          Emissionsfaktor pro kWh für den Energieträger
+          {` ${heatingTypes.find((option) => option.value === heatingType)?.label}`}
+        </SmallTextInBrackets>
       </div>
       <div>
         <SubtitleCalculations>Strom</SubtitleCalculations>
         {kWh} <SmallTextInBrackets>kWh</SmallTextInBrackets> {MULTIPLICATION_SIGN}
         {`${electricityEmission} `}
         <SmallTextInBrackets>
-          Emissionsfaktor pro kWh für
-          {` ${electricityOptions.find((option) => option.value === electricityType)?.label} `}
-          Energietype in kg CO
+          Emissionsfaktor pro kWh für die Energieart
+          {` "${electricityOptions.find((option) => option.value === electricityType)?.label}" `}
+          in kg CO
           <sub>2</sub>
         </SmallTextInBrackets>
       </div>
@@ -517,5 +607,35 @@ const CalculationCommuting: FC<CalculationCommutingProps> = ({
     <span className="text-base text-bold">
       = {commutingImpact} t CO<sub>2</sub>
     </span>
+  </div>
+);
+
+type StandOutProps = { standouts: { title: string; content: string; evaluation: Evaluation }[] };
+
+const StandOut: FC<StandOutProps> = ({ standouts }) => (
+  <div className="bg-white-100 rounded-lg my-12 p-8">
+    <div className="max-w-7xl">
+      <Heading2>
+        So könnt ihr euren CO<sub>2</sub> Ausstoss senken.
+      </Heading2>
+
+      <dl className="space-y-10 sm:space-y-0 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:gap-y-12 lg:grid-cols-4 lg:gap-x-8">
+        {standouts.map(({ title, content, evaluation }) => (
+          <div key={title} className="relative">
+            <dt className="flex items-center">
+              {evaluation === Evaluation.Positive ? (
+                <CheckIcon className="absolute h-6 w-6 text-green-500" aria-hidden="true" />
+              ) : evaluation === Evaluation.Negative ? (
+                <ExclamationIcon className="absolute h-6 w-6 text-yellow-400" aria-hidden="true" />
+              ) : (
+                <InformationCircleIcon className="absolute h-6 w-6 " aria-hidden="true" />
+              )}
+              <p className="ml-9 text-sm md:text-base leading-6 font-medium text-gray-900">{title}</p>
+            </dt>
+            <dd className="mt-2 ml-9 text-xs text-gray-500">{content}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
   </div>
 );

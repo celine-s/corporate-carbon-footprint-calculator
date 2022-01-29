@@ -1,4 +1,5 @@
 import type { NextPage } from 'next';
+import Link from 'next/link';
 import { LinkElement } from '../elements/link';
 import { Heading1 } from '../identity/heading-1';
 import { Page } from '../layouts/page';
@@ -8,11 +9,11 @@ import { Heading2 } from '../identity/heading-2';
 
 const allFeaturesOfThePage = [
   'Kostenlos',
-  'Dauert weniger als 10 min',
-  'Zusatzinformationen ermöglichen sinvolle Antworten',
-  'Schritte verständlich erklärt',
   'Kein Spendenaufruf',
   'Für KMUs (< 250 MA)',
+  'Dauert weniger als 10 min',
+  'Schritte verständlich erklärt',
+  'Hilfreiche Zusatzinformationen', //Zusatzinformationen ermöglichen sinnvolle Antworten
 ];
 
 const Home: NextPage = () => {
@@ -45,6 +46,27 @@ const Home: NextPage = () => {
                 </LinkElement>
               </div>
             </main>
+          </div>
+          <div className="bg-white-200 p-8 sm:p-16 md:m-16 md:p-16 rounded-lg lg:mx-36">
+            <div className="text-justify">
+              <Heading2>Berechne für dich und deine Firma eure Umwelteinwirkung</Heading2>
+              <span className="font-sans text-xs md:text-sm">
+                Anhand von elf Fragen wird eurer Fussabdruck in den Themen Reisen, Pendeln und Energie abgeschätzt. Du kannst
+                den Fragebogen für jedes Betriebsjahr ausfüllen oder auch nur einmal um einen groben Überblick über euren
+                Verbrauch zu erhalten.
+                <br />
+                Am Ende des Fragebogens, werden anhand deiner Eingaben, die Emissionen berechnet und dargestellt. Über einen
+                Infobutton gelangst du zur genauen Berechnung und kannst dir einen Überblick erschaffen, wie ein solcher
+                Fussabdruck entsteht. Den Link zum Endresultat kannst du kopieren und somit das Resultat immer wieder
+                anschauen. Die Angaben werden anonym gespeichert.
+                <br />
+                Der Rechner basiert auf dem Greenhousegas Protocol. Und analysiert ca. ein Viertel der Kategorien aus dem
+                Protokoll (= möglist alle relevanten Kategorien für ein Dienstleistungsunternehmen).
+                <br />
+                Dieser Fussabdruck Rechner wurde im Rahmen meiner Bachelorarbeit erstellt. Mit technischer Unterstützung von
+                <Link href="https://smartive.ch"> smartive™</Link>.
+              </span>
+            </div>
           </div>
         </div>
       </Page>

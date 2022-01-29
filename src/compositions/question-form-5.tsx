@@ -1,7 +1,7 @@
 import { FC, useEffect } from 'react';
 import { DropDown } from '../elements/dropdown';
 
-const heatingTypes = [
+export const heatingTypes = [
   { label: 'Heizöl', value: 'oil' },
   { label: 'Erdgas', value: 'gas' },
   { label: 'Strom', value: 'electricity' },
