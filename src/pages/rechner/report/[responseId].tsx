@@ -376,7 +376,7 @@ export const getStaticProps: GetStaticProps<Props> = async ({ params }) => {
       standOutData.push({
         title: 'Stromart',
         content: 'Erneuerbare Energie kann euren Stromausstoss um einen Faktor von 10 mindern.',
-        evaluation: Evaluation.Positive,
+        evaluation: Evaluation.Negative,
       });
     answers?.[8].hours > 1 &&
       standOutData.push({
