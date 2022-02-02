@@ -339,7 +339,7 @@ export const getStaticProps: GetStaticProps<Props> = async ({ params }) => {
     electricityType === 'ecoElectricity' &&
       standOutData.push({
         title: 'Erneuerbarer Strom',
-        content: 'supi.',
+        content: 'Dank dem erneuerbaren Strom, könnt ihr die Strom Emissionen um 9/10 reduzieren.',
         evaluation: Evaluation.Positive,
       });
 
@@ -378,7 +378,7 @@ export const getStaticProps: GetStaticProps<Props> = async ({ params }) => {
         content: 'Erneuerbare Energie kann euren Stromausstoss um einen Faktor von 10 mindern.',
         evaluation: Evaluation.Negative,
       });
-    answers?.[8].hours > 1 &&
+    answers?.[8].hours >= 1 &&
       standOutData.push({
         title: 'Flugstunden',
         content: 'Für jede Stunde weniger fliegen würdet ihr eine viertel Tonne CO₂ einsparen.',
@@ -399,7 +399,12 @@ export const getStaticProps: GetStaticProps<Props> = async ({ params }) => {
           'Euer Büro ist grösser als der Durchschnitt. Mit einem kleineren Büro könnt ihr Heiz- und Stromverbrauch reduzieren.',
         evaluation: Evaluation.Negative,
       });
-
+    standOutData.push({
+      title: 'Durchschnittlich',
+      content:
+        'Zugfahrten sind besser für Ihre CO2- Bilanz als Flug- oder Autoreisen. Vor Allem in der Schweiz wird der grösste Teil der Züge bereits mit Öko-Strom betrieben.',
+      evaluation: Evaluation.Neutral,
+    });
     standOutData.length === 0 &&
       standOutData.push({
         title: 'Durchschnittlich',
