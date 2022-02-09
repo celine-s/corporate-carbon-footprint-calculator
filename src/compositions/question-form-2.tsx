@@ -8,7 +8,7 @@ type Props = {
 
 const validateInput = (answer: string) => {
   if (parseFloat(answer) > 249) {
-    return 'Dieser Fussabdruck-Rechner ist für KMUs gedacht (max 249 Mitarbeitenden). Gib eine Zahl unter 250 ein.';
+    return 'Dieser Fussabdruck-Rechner ist für KMUs gedacht (max. 249 Mitarbeitende). Gib eine Zahl unter 250 ein.';
   } else if (answer.length > 10) {
     return 'Bitte gib maximal 10 Ziffern nach dem Komma ein.';
   } else if (parseInt(answer) < 1) {

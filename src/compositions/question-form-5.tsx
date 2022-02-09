@@ -9,7 +9,7 @@ export const heatingTypes = [
   { label: 'Wärmepumpe', value: 'heatPump' },
   { label: 'Fernwärme', value: 'districtHeat' },
   { label: 'Solarenergie', value: 'solarEnergy' },
-  { label: 'Unbekannt', value: 'unavailable' },
+  { label: 'unbekannt', value: 'unavailable' },
 ];
 
 type Props = {

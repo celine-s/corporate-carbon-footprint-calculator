@@ -101,7 +101,7 @@ const Report: NextPage<Props> = ({
         </div>
         <div className="bg-white-100 p-8 rounded-lg">
           <Heading1>
-            {`Total im ${year} habt ihr ca. `}
+            {`Insgesamt habt ihr im ${year} ca. `}
             <span className="text-cornflower-500">
               {totalImpact} t CO<sub>2</sub>
             </span>
@@ -147,13 +147,13 @@ const Report: NextPage<Props> = ({
             <Copy>
               Die Emissionen für Energie, Pendeln und Reisen werden anhand eurer Antworten ausgerechnet. Emissionen werden
               auch in anderen Bereichen aussgestossen. Beispielsweise gehören Firmenevents, Möbel, Hardware, Entsorgungen,
-              etc. ebenfalls in den euren Firmen-Fussabdruck. Um einigermassen aussagekräftige Daten zu erhalten bräuchte es
-              zu jeder dieser Kategorie mehrere Fragen. Da dieser Fussabdruck-Rechner darauf zielt innerhalb von weniger
-              Zeit, eine grobe Abschätzung des Firmen-Fussabdrucks zu erhalten, wurden diese weiteren Kategorien hier nicht
+              usw. ebenfalls in den euren Firmen-Fussabdruck. Um einigermassen aussagekräftige Daten zu erhalten bräuchte es
+              zu jeder dieser Kategorie mehrere Fragen. Da dieser Fussabdruck-Rechner darauf zielt innerhalb von kurzer Zeit,
+              eine grobe Abschätzung des Firmen-Fussabdrucks zu erhalten, wurden diese weiteren Kategorien hier nicht
               erfasst.
               {<br />}
               Bei der Herstellung eines neuen Laptops werden beispielsweise ca. 300 kg CO<sub>2</sub> äquivalent
-              ausgestossen. Würden also alle Mitarbeitenden eurer Firma einen neuen Laptop in diesem Jahr kaufen, wären das
+              ausgestossen. Würden also alle Mitarbeitenden eurer Firma in diesem Jahr einen neuen Laptop kaufen, wären das
               zusätzlich
               <span className="font-bold py-2 bg-white-200 rounded-lg">
                 {` ${fte * EMISSION_PER_LAPTOP} Tonnen CO`}
@@ -354,14 +354,15 @@ export const getStaticProps: GetStaticProps<Props> = async ({ params }) => {
       standOutData.push({
         title: 'Pendeln',
         content:
-          'Mit ÖV, zu Fuss oder Fahrrad können die Pendelemissionen stark gesenkt werden. Das macht ihr bereits sehr gut.',
+          'Mit ÖV, zu Fuss oder mit dem Fahrrad können die Pendelemissionen stark gesenkt werden. Das macht ihr bereits sehr gut.',
         evaluation: Evaluation.Positive,
       });
 
     homeOfficePercentage > 0.5 &&
       standOutData.push({
-        title: 'Pendeln – Homeoffice',
-        content: 'Mit eurem grossen Homeoffice Anteil spart ihr einige Pendelemissionen ein.',
+        title: 'Pendeln; Homeoffice',
+        content:
+          'Mit dem grossen Anteil der im Homeoffice arbeitenden Mitarbeitenden spart ihr einige Pendelemissionen ein.',
         evaluation: Evaluation.Positive,
       });
 
@@ -369,26 +370,26 @@ export const getStaticProps: GetStaticProps<Props> = async ({ params }) => {
     answers?.[3].kWh / squaremeter >= 70 &&
       standOutData.push({
         title: 'Stromverbrauch',
-        content: 'Sehr viel Strom im Verhältnis zu eurem Büro.',
+        content: 'Ihr verbraucht viel Strom im Verhältnis zu der grösse eures Büros.',
         evaluation: Evaluation.Negative,
       });
     electricityType != 'ecoElectricity' &&
       standOutData.push({
         title: 'Stromart',
-        content: 'Erneuerbare Energie kann euren Stromausstoss um einen Faktor von 10 mindern.',
+        content: 'Erneuerbare Energie könnte euren Stromausstoss um einen Faktor von 10 mindern.',
         evaluation: Evaluation.Negative,
       });
     answers?.[8].hours >= 1 &&
       standOutData.push({
         title: 'Flugstunden',
-        content: 'Für jede Stunde weniger fliegen würdet ihr eine viertel Tonne CO₂ einsparen.',
+        content: 'Für jede Stunde weniger fliegen würdet ihr 230 kg CO₂ einsparen.', //stimmt 230?
         evaluation: Evaluation.Negative,
       });
 
     carPercentage > 0.7 &&
       standOutData.push({
         title: 'Pendeln mit dem Auto',
-        content: 'Der Umstieg von Auto auf ÖV würde euch pro Mitarbeiter:in über 1 Tonne CO₂ einsparen.', //(0.21*29-0.025*29)*240
+        content: 'Beim Umstieg von Auto auf ÖV würdet ihr pro Mitarbeiter:in und Jahr über 1 Tonne CO₂ einsparen.', //(0.21*29-0.025*29)*240
         evaluation: Evaluation.Negative,
       });
 
@@ -396,19 +397,19 @@ export const getStaticProps: GetStaticProps<Props> = async ({ params }) => {
       standOutData.push({
         title: 'Bürogrösse',
         content:
-          'Euer Büro ist grösser als der Durchschnitt. Mit einem kleineren Büro könnt ihr Heiz- und Stromverbrauch reduzieren.',
+          'Euer Büro ist grösser als das durchschnittliche Büro. Mit einem kleineren Büro könntet ihr Heiz- und Stromverbrauch reduzieren.',
         evaluation: Evaluation.Negative,
       });
     standOutData.push({
       title: 'Durchschnittlich',
       content:
-        'Zugfahrten sind besser für Ihre CO2- Bilanz als Flug- oder Autoreisen. Vor Allem in der Schweiz wird der grösste Teil der Züge bereits mit Öko-Strom betrieben.',
+        'Zugfahrten sind besser für eure CO₂-Bilanz als Flug- oder Autoreisen. Vor allem in der Schweiz wird der grösste Teil der Züge bereits mit Öko-Strom betrieben.',
       evaluation: Evaluation.Neutral,
     });
-    standOutData.length === 0 &&
+    standOutData.length === 1 && //wird aktuell nie ausgeführt, da immer mindestens 2 aktiv sind...
       standOutData.push({
         title: 'Durchschnittlich',
-        content: 'Eure Daten liegen im Durschnitt. ',
+        content: 'Eure Daten entsprechen dem Durschnitt.',
         evaluation: Evaluation.Neutral,
       });
     return standOutData;
