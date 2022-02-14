@@ -7,7 +7,7 @@ export const constructionPeriods = [
   { label: '1991-2000', value: '1991-00' },
   { label: '2001-2010', value: '2001-10' },
   { label: '2011-heute', value: 'today' },
-  { label: 'Weiss nicht', value: 'unavailable' },
+  { label: 'unbekannt', value: 'unavailable' },
 ];
 
 type Props = {

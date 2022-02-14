@@ -1,10 +1,7 @@
 import { SVGProps } from 'react';
 
 export const footerNavigation = {
-  main: [
-    { name: 'Abschlussarbeit', href: '/#', newTab: false },
-    { name: 'smartive™', href: 'https://smartive.ch', newTab: true },
-  ],
+  main: [{ name: 'Abschlussarbeit', href: '/#', newTab: false }],
   social: [
     {
       name: 'Facebook',

@@ -1,7 +1,7 @@
 import { FC, useEffect } from 'react';
 import { DropDown } from '../elements/dropdown';
 
-const heatingTypes = [
+export const heatingTypes = [
   { label: 'Heizöl', value: 'oil' },
   { label: 'Erdgas', value: 'gas' },
   { label: 'Strom', value: 'electricity' },
@@ -9,7 +9,7 @@ const heatingTypes = [
   { label: 'Wärmepumpe', value: 'heatPump' },
   { label: 'Fernwärme', value: 'districtHeat' },
   { label: 'Solarenergie', value: 'solarEnergy' },
-  { label: 'Unbekannt', value: 'unavailable' },
+  { label: 'unbekannt', value: 'unavailable' },
 ];
 
 type Props = {

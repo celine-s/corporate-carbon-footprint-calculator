@@ -17,9 +17,9 @@ const validateInput = (answer: string) => {
   return null;
 };
 
-export const Question9: FC<Props> = ({ answer = { hours: '5' }, callback }) => {
+export const Question9: FC<Props> = ({ answer = { hours: '1' }, callback }) => {
   useEffect(() => {
-    callback({ hours: '5' });
+    callback({ hours: '1' });
   }, []);
 
   return (

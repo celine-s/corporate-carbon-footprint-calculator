@@ -6,7 +6,7 @@ import { Question } from '../data/question';
 
 const categoryNavigation = [
   { name: 'Team', icon: UsersIcon },
-  { name: 'Energie', icon: HeatingIcon },
+  { name: 'Büro', icon: HeatingIcon },
   { name: 'Pendeln', icon: TrainIcon },
   { name: 'Reisen', icon: PaperAirplaneIcon },
 ];

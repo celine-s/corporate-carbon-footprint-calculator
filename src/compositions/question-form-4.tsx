@@ -58,9 +58,9 @@ export const Question4: FC<Props> = ({ answer, callback }) => {
 };
 
 export const electricityOptions = [
-  { value: 'ecoElectricity', label: 'Erneuerbar' },
-  { value: 'notEcoElectricity', label: 'Nicht erneuerbar' },
-  { value: 'unavailable', label: 'Unbekannt' },
+  { value: 'ecoElectricity', label: 'erneuerbar' },
+  { value: 'notEcoElectricity', label: 'nicht erneuerbar' },
+  { value: 'unavailable', label: 'unbekannt' },
 ];
 
 type PropsRadioButton = {
