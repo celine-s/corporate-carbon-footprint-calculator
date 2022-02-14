@@ -17,7 +17,7 @@ import { heatingTypes } from '../../../compositions/question-form-5';
 export enum CategorieNames {
   Commuting = 'Pendeln',
   Travelling = 'Reisen',
-  Energy = 'Energie',
+  Energy = 'Büro',
 }
 
 export const ICONS: { [key: string]: React.FC<IconProps> } = {
@@ -58,7 +58,7 @@ const Report: NextPage<Props> = ({
     <Page>
       <div className="mb-32">
         <Heading1>
-          Euer CO<sub>2</sub> Fussabdruck im {year}
+          Euer CO<sub>2</sub> Fussabdruck im Jahr {year}
         </Heading1>
         <div className="grid grid-row md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
           {impactInTons.map(({ name, impact, content }) => {
@@ -136,7 +136,7 @@ const Report: NextPage<Props> = ({
                 navigator.clipboard.writeText(`https://fussabdruck-rechner.vercel.app/rechner/report/${currentId}`);
               }}
             >
-              {copied ? 'Kopiert: Der Link ist in deiner Zwischenablage.' : 'Kopiere den Link zu dieser Seite.'}
+              {copied ? 'Kopiert: Der Link ist in deiner Zwischenablage.' : 'Kopiere den Link zu deinem Resultat.'}
             </Button>
           </div>
         </div>
@@ -145,12 +145,12 @@ const Report: NextPage<Props> = ({
           <Heading2> Nicht alle Emissionen werden mit diesem Fussabdruck-Rechner erfasst.</Heading2>
           <div className="text-justify">
             <Copy>
-              Die Emissionen für Energie, Pendeln und Reisen werden anhand eurer Antworten ausgerechnet. Emissionen werden
-              auch in anderen Bereichen aussgestossen. Beispielsweise gehören Firmenevents, Möbel, Hardware, Entsorgungen,
-              usw. ebenfalls in den euren Firmen-Fussabdruck. Um einigermassen aussagekräftige Daten zu erhalten bräuchte es
-              zu jeder dieser Kategorie mehrere Fragen. Da dieser Fussabdruck-Rechner darauf zielt innerhalb von kurzer Zeit,
-              eine grobe Abschätzung des Firmen-Fussabdrucks zu erhalten, wurden diese weiteren Kategorien hier nicht
-              erfasst.
+              Die Emissionen für Büro, Pendeln und Reisen werden anhand eurer Antworten ausgerechnet. Emissionen werden auch
+              in anderen Bereichen aussgestossen. Beispielsweise gehören Firmenevents, Möbel, Hardware, Entsorgungen, usw.
+              ebenfalls in euren Firmen-Fussabdruck. Um einigermassen aussagekräftige Daten zu erhalten bräuchte es zu jeder
+              dieser Kategorie mehrere Fragen. Da dieser Fussabdruck-Rechner darauf zielt innerhalb von kurzer Zeit, eine
+              grobe Abschätzung des Firmen-Fussabdrucks zu erhalten, wurden darauf verzichtet weitere Kategorien hier zu
+              erfassen.
               {<br />}
               Bei der Herstellung eines neuen Laptops werden beispielsweise ca. 300 kg CO<sub>2</sub> äquivalent
               ausgestossen. Würden also alle Mitarbeitenden eurer Firma in diesem Jahr einen neuen Laptop kaufen, wären das
@@ -168,7 +168,7 @@ const Report: NextPage<Props> = ({
       <div>
         {openEnergy && (
           <Modal
-            title="Berechnungen Energie Emissionen"
+            title="Berechnungen Büro Emissionen"
             onClose={setOpenEnergy}
             open={openEnergy}
             icon={<HeatingIcon size="30" />}
@@ -234,7 +234,9 @@ const CAR_EMISSION = 0.21;
 const BICYCLE_EMISSION = 0.008;
 const PUBLIC_TRANSPORT_EMISSION = 0.025;
 const PLANE_EMISSION = 0.26;
-const AVG_COMMUTE_DIST_KM = 29;
+const AVG_COMMUTE_DIST_KM_CAR = 19;
+const AVG_COMMUTE_DIST_KM_PUBLICTRANSPORT = 29;
+const AVG_COMMUTE_DIST_KM_BICYCLE_AND_FOOT = 2;
 const HOME_OFFICE_EMISSION = 0.264;
 const ELECTRICITY_EMISSION: { [key: string]: number } = {
   notEcoElectricity: 0.13,
@@ -281,16 +283,16 @@ export const getStaticProps: GetStaticProps<Props> = async ({ params }) => {
 
   const carPercentage = parseInt(answers?.[7].car) / 100;
   const publicTransportPercentage = parseInt(answers?.[7].publicTransport) / 100;
+  const byFootPercentage = parseInt(answers?.[7].byFootPercentage) / 100;
   const bicyclePercentage = parseInt(answers?.[7].bicycle) / 100;
 
   const commute =
-    AVG_COMMUTE_DIST_KM *
     WORKDAYS_PER_YEAR *
     (1 - homeOfficePercentage) *
     fte *
-    (carPercentage * CAR_EMISSION +
-      publicTransportPercentage * PUBLIC_TRANSPORT_EMISSION +
-      bicyclePercentage * BICYCLE_EMISSION);
+    (carPercentage * CAR_EMISSION * AVG_COMMUTE_DIST_KM_CAR +
+      publicTransportPercentage * PUBLIC_TRANSPORT_EMISSION * AVG_COMMUTE_DIST_KM_PUBLICTRANSPORT +
+      bicyclePercentage * BICYCLE_EMISSION * AVG_COMMUTE_DIST_KM_BICYCLE_AND_FOOT);
 
   //travelling
   const byCar = parseInt(answers?.[9].autokm) * fte * CAR_EMISSION * WEEKS_PER_YEAR;
@@ -350,7 +352,7 @@ export const getStaticProps: GetStaticProps<Props> = async ({ params }) => {
         evaluation: Evaluation.Positive,
       });
 
-    bicyclePercentage + publicTransportPercentage > 0.7 &&
+    bicyclePercentage + publicTransportPercentage + byFootPercentage >= 0.7 &&
       standOutData.push({
         title: 'Pendeln',
         content:
@@ -376,13 +378,14 @@ export const getStaticProps: GetStaticProps<Props> = async ({ params }) => {
     electricityType != 'ecoElectricity' &&
       standOutData.push({
         title: 'Stromart',
-        content: 'Erneuerbare Energie könnte euren Stromausstoss um einen Faktor von 10 mindern.',
+        content:
+          'Mit einem Umstieg auf erneuerbare Energie könnt ihr euren Stromausstoss um einen Faktor von 10 verringern.',
         evaluation: Evaluation.Negative,
       });
     answers?.[8].hours >= 1 &&
       standOutData.push({
         title: 'Flugstunden',
-        content: 'Für jede Stunde weniger fliegen würdet ihr 230 kg CO₂ einsparen.', //stimmt 230?
+        content: 'Für jede Stunde weniger fliegen würdet ihr 260 kg CO₂ einsparen.',
         evaluation: Evaluation.Negative,
       });
 
@@ -406,10 +409,10 @@ export const getStaticProps: GetStaticProps<Props> = async ({ params }) => {
         'Zugfahrten sind besser für eure CO₂-Bilanz als Flug- oder Autoreisen. Vor allem in der Schweiz wird der grösste Teil der Züge bereits mit Öko-Strom betrieben.',
       evaluation: Evaluation.Neutral,
     });
-    standOutData.length === 1 && //wird aktuell nie ausgeführt, da immer mindestens 2 aktiv sind...
+    standOutData.length === 2 &&
       standOutData.push({
         title: 'Durchschnittlich',
-        content: 'Eure Daten entsprechen dem Durschnitt.',
+        content: 'Eure Daten entsprechen überwiegend dem Durschnitt.',
         evaluation: Evaluation.Neutral,
       });
     return standOutData;
@@ -523,7 +526,7 @@ const CalculationEnergy: FC<CalculationEnergyProps> = ({
         {MULTIPLICATION_SIGN}
         {`${HEATING_TYPE_EMISSION?.[heatingType]} `}
         <SmallTextInBrackets>
-          Emissionsfaktor pro kWh für den Energieträger
+          Emissionsfaktor pro kWh für den Büroträger
           {` ${heatingTypes.find((option) => option.value === heatingType)?.label}`}
         </SmallTextInBrackets>
       </div>
@@ -561,13 +564,13 @@ const CalculationCommuting: FC<CalculationCommutingProps> = ({
     <div className="grid grid-cols-2 gap-8 mt-8">
       <div>
         <SubtitleCalculations>Homeoffice</SubtitleCalculations>
-        {fte} <SmallTextInBrackets>Mitarbeitenden</SmallTextInBrackets> {MULTIPLICATION_SIGN} {WORKDAYS_PER_YEAR}
+        {fte} <SmallTextInBrackets>Mitarbeitenden</SmallTextInBrackets> {MULTIPLICATION_SIGN} {`${WORKDAYS_PER_YEAR} `}
         <SmallTextInBrackets>Arbeitstage im Jahr</SmallTextInBrackets> {MULTIPLICATION_SIGN}
         {` ${homeOfficePercentage} `}
-        <SmallTextInBrackets>Homeoffice Prozent</SmallTextInBrackets> {MULTIPLICATION_SIGN} {HOME_OFFICE_EMISSION} kg CO
-        <sub>2</sub>
+        <SmallTextInBrackets>% Homeoffice</SmallTextInBrackets> {MULTIPLICATION_SIGN} {HOME_OFFICE_EMISSION}{' '}
         <SmallTextInBrackets>
-          Homeoffice Emissionsfaktor in kg CO<sub>2</sub>
+          Homeoffice Emissionsfaktor in kg CO
+          <sub>2</sub>
         </SmallTextInBrackets>
         <br />
       </div>
@@ -576,9 +579,7 @@ const CalculationCommuting: FC<CalculationCommutingProps> = ({
         {fte} <SmallTextInBrackets>Mitarbeitenden</SmallTextInBrackets> {MULTIPLICATION_SIGN} {`${WORKDAYS_PER_YEAR} `}
         <SmallTextInBrackets>Arbeitstage im Jahr</SmallTextInBrackets> {MULTIPLICATION_SIGN}
         {` 1 - ${homeOfficePercentage} `}
-        <SmallTextInBrackets>100% minus Homeoffice Prozent</SmallTextInBrackets> {MULTIPLICATION_SIGN}
-        {` ${AVG_COMMUTE_DIST_KM} `}
-        <SmallTextInBrackets>Durchschnittlicher Schweizer Arbeitsweg</SmallTextInBrackets>
+        <SmallTextInBrackets>100% minus Homeoffice Prozent</SmallTextInBrackets>
         {MULTIPLICATION_SIGN}
         <div className="text-gray-600">
           <span className="text-base font-bold">(</span>
@@ -588,21 +589,27 @@ const CalculationCommuting: FC<CalculationCommutingProps> = ({
           </SmallTextInBrackets>
           {' x '}
           {`${carPercentage} `}
-          <SmallTextInBrackets>% mit dem Auto</SmallTextInBrackets>
+          <SmallTextInBrackets>% mit dem Auto</SmallTextInBrackets> {' x '}
+          {` ${AVG_COMMUTE_DIST_KM_CAR} `}
+          <SmallTextInBrackets>km ø Arbeitsweg Auto</SmallTextInBrackets>
           {PLUS_SIGN} {`${PUBLIC_TRANSPORT_EMISSION} `}
           <SmallTextInBrackets>
             ÖV EF in kg CO<sub>2</sub>
           </SmallTextInBrackets>
           {' x '}
           {`${publicTransportPercentage} `}
-          <SmallTextInBrackets>% mit dem ÖV</SmallTextInBrackets>
+          <SmallTextInBrackets>% mit dem ÖV</SmallTextInBrackets> {' x '}
+          {` ${AVG_COMMUTE_DIST_KM_PUBLICTRANSPORT} `}
+          <SmallTextInBrackets>km ø Arbeitsweg ÖV</SmallTextInBrackets>
           {PLUS_SIGN} {`${BICYCLE_EMISSION} `}
           <SmallTextInBrackets>
             Fahrrad EF in kg CO<sub>2</sub>
           </SmallTextInBrackets>
           {' x '}
           {`${bicyclePercentage} `}
-          <SmallTextInBrackets>% mit dem Fahrrad</SmallTextInBrackets>
+          <SmallTextInBrackets>% mit dem Fahrrad</SmallTextInBrackets> {' x '}
+          {` ${AVG_COMMUTE_DIST_KM_BICYCLE_AND_FOOT} `}
+          <SmallTextInBrackets>km ø Arbeitsweg Fahrrad</SmallTextInBrackets>
           {PLUS_SIGN} {'0 '}
           <SmallTextInBrackets>Zu Fuss.</SmallTextInBrackets>
           <span className="text-base font-bold">{`)`}</span>

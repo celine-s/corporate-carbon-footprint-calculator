@@ -1,4 +1,8 @@
-# corporate-carbon-footprint-calculator
+# CO2-Fussabdruck-Rechner für Schweizer Dienstleistungsunternehmen 👣
+
+<div>
+  <h1 align="center"><a href="https://fussabdruck-rechner.vercel.app/"> </a>Berechne für dich und deine Firma eure Umwelteinwirkung.</h1>
+</div>
 
 ## Setup
 
@@ -7,15 +11,11 @@
 
 ### Code Quality
 
-#### Automated Tools
-
 We use a set of tools for a reasonably high code quality.
 
 1. [Prettier](https://prettier.io/) for Code Formatting `npm run prettier`
 2. [ESLint](https://eslint.org/) for Code Guidelines `npm run lint`
-<!-- 3. [TypeScript](https://www.typescriptlang.org/) for Static Type Checking (done by Next)
-
-These checks are also run on every merge request, and each of these must pass for the MR to be mergable. -->
+3. [TypeScript](https://www.typescriptlang.org/) for Static Type Checking (done by Next)
 
 ## Running locally with Storybook
 

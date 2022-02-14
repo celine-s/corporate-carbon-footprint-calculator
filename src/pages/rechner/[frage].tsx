@@ -179,16 +179,16 @@ const errorMsg = (questionIDs: string[]) => {
     errorMsg.push('Kategorie Team, Frage 3/3.');
   }
   if (!answers?.[3]?.kWh) {
-    errorMsg.push('Kategorie Energie, Frage 1/3.');
+    errorMsg.push('Kategorie Büro, Frage 1/3.');
   }
   if (!answers?.[3]?.electricityType) {
-    errorMsg.push('Kategorie Energie, Frage 1/3.');
+    errorMsg.push('Kategorie Büro, Frage 1/3.');
   }
   if (!answers?.[4]?.heatingType) {
-    errorMsg.push('Kategorie Energie, Frage 2/3.');
+    errorMsg.push('Kategorie Büro, Frage 2/3.');
   }
   if (!answers?.[5]?.constructionPeriod) {
-    errorMsg.push('Kategorie Energie, Frage 3/3.');
+    errorMsg.push('Kategorie Büro, Frage 3/3.');
   }
   if (!answers?.[6]?.percentage) {
     errorMsg.push('Kategorie Pendeln, Frage 1/2.');

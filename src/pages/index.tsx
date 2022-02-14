@@ -51,8 +51,8 @@ const Home: NextPage = () => {
             <div className="text-justify">
               <Heading2>Berechne für dich und deine Firma eure Umwelteinwirkung</Heading2>
               <span className="font-sans text-xs md:text-sm">
-                Anhand von elf Fragen wird eurer Fussabdruck in den Themen Reisen, Pendeln und Energie abgeschätzt. Du kannst
-                den Fragebogen für jedes Betriebsjahr ausfüllen oder auch nur einmal um einen groben Überblick über euren
+                Anhand von elf Fragen wird eurer Fussabdruck in den Themen Reisen, Pendeln und Büro abgeschätzt. Du kannst
+                den Fragebogen für jedes Betriebsjahr ausfüllen oder auch nur einmal, um einen groben Überblick über euren
                 Verbrauch zu erhalten.
                 <br />
                 Am Ende des Fragebogens, werden anhand deiner Eingaben, die Emissionen berechnet und dargestellt. Über einen
@@ -63,7 +63,7 @@ const Home: NextPage = () => {
                 Der Rechner basiert auf dem Greenhousegas Protocol und analysiert ca. einen Viertel der Kategorien aus dem
                 Protokoll (= möglist alle relevanten Kategorien für ein Dienstleistungsunternehmen).
                 <br />
-                Dieser Fussabdruck Rechner wurde im Rahmen meiner Bachelorarbeit mit technischer Unterstützung von
+                Dieser Fussabdruck-Rechner wurde im Rahmen meiner Bachelorarbeit mit technischer Unterstützung von
                 <Link href="https://smartive.ch"> smartive™</Link> erstellt.
               </span>
             </div>
