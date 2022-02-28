@@ -9,7 +9,7 @@ type Props = {
   optionKey: string;
   callback: (value: { [key: string]: string }) => void;
 };
-export const DropDown: FC<Props> = ({ options: options, selected, callback, optionKey }) => {
+export const DropDown: FC<Props> = ({ options, selected, callback, optionKey }) => {
   return (
     <Menu as="div" className="relative inline-block text-left mb-8">
       <div>
