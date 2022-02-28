@@ -1,18 +1,18 @@
-import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
-import { Page } from '../../../layouts/page';
-import React, { FC, useState } from 'react';
-import { getResponseWithId } from '../../../utils/responses-firestore';
-import { Heading1 } from '../../../identity/heading-1';
-import { HeatingIcon, IconProps, PaperAirplaneIcon, TrainIcon } from '../../../elements/icons';
-import { Copy } from '../../../identity/copy';
-import { Modal, ModalVariant } from '../../../elements/modal';
-import { Heading2 } from '../../../identity/heading-2';
 import { CheckIcon, ExclamationIcon, InformationCircleIcon } from '@heroicons/react/outline';
-import { Button } from '../../../elements/button';
-import { LinkElement } from '../../../elements/link';
+import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
+import React, { FC, useState } from 'react';
 import { electricityOptions } from '../../../compositions/question-form-4';
-import { constructionPeriods } from '../../../compositions/question-form-6';
 import { heatingTypes } from '../../../compositions/question-form-5';
+import { constructionPeriods } from '../../../compositions/question-form-6';
+import { Button } from '../../../elements/button';
+import { HeatingIcon, IconProps, PaperAirplaneIcon, TrainIcon } from '../../../elements/icons';
+import { LinkElement } from '../../../elements/link';
+import { Modal, ModalVariant } from '../../../elements/modal';
+import { Copy } from '../../../identity/copy';
+import { Heading1 } from '../../../identity/heading-1';
+import { Heading2 } from '../../../identity/heading-2';
+import { Page } from '../../../layouts/page';
+import { getResponseWithId } from '../../../utils/responses-firestore';
 
 export enum CategorieNames {
   Commuting = 'Pendeln',
@@ -441,20 +441,22 @@ enum Evaluation {
   Neutral = 'Neutral',
 }
 
-const MULTIPLICATION_SIGN = <div className="text-cornflower-500 my-1">x</div>;
-const PLUS_SIGN = <div className="text-cornflower-500 my-1">+</div>;
+const MULTIPLICATION_SIGN = <div className="text-cornflower-500">x</div>;
+const PLUS_SIGN = <div className="text-cornflower-500">+</div>;
 
-const SmallTextInBrackets: FC = ({ children }) => <span className="text-xss">({children})</span>;
+const SmallTextInBrackets: FC = ({ children }) => <span className="text-xxs sm:text-xs">({children})</span>;
 type CalculationTravellingProps = {
   fte: number;
   answersTravelling: { [key: string]: string | number };
   travellingImpact?: number;
 };
-const SubtitleCalculations: FC = ({ children }) => <p className="text-sm font-bold text-gray-800 pb-1">{children}</p>;
+const SubtitleCalculations: FC = ({ children }) => (
+  <p className="text-xs sm:text-sm font-bold text-gray-800 pb-1">{children}</p>
+);
 
 const CalculationTravelling: FC<CalculationTravellingProps> = ({ fte, answersTravelling, travellingImpact }) => (
   <div>
-    <div className="grid grid-cols-3 gap-8 mt-8">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-4 md:mt-8">
       <div>
         <SubtitleCalculations>Flugzeug:</SubtitleCalculations>
         {fte} <SmallTextInBrackets>Mitarbeitenden</SmallTextInBrackets> {MULTIPLICATION_SIGN} {`${MONTHS_PER_YEAR} `}
@@ -492,7 +494,7 @@ const CalculationTravelling: FC<CalculationTravellingProps> = ({ fte, answersTra
         </SmallTextInBrackets>
       </div>
     </div>
-    <div className="mt-12">Die Summe aller drei ergibt:</div>
+    <div className="mt-8 md:mt-12">Die Summe aller drei ergibt:</div>
     <span className="text-base text-bold">
       = {travellingImpact} t CO<sub>2</sub>
     </span>
@@ -509,7 +511,7 @@ const CalculationEnergy: FC<CalculationEnergyProps> = ({
   energyImpact,
 }) => (
   <div>
-    <div className="grid grid-cols-2 gap-8 mt-8">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 mt-4 md:mt-8">
       <div>
         <SubtitleCalculations>Heizung</SubtitleCalculations>
         {`${squaremeter} `}
@@ -518,16 +520,13 @@ const CalculationEnergy: FC<CalculationEnergyProps> = ({
         </SmallTextInBrackets>
         {MULTIPLICATION_SIGN} {`${USAGE_PER_CONSTRUCTION_YEAR?.[constructionPeriod]} `}
         <SmallTextInBrackets>
-          {`Verbrauch in kWh in der Bauperiode ${
-            constructionPeriods.find((period) => period.value === constructionPeriod)?.label
-          } pro m`}
-          <sup>2</sup>
+          kWh Verbrauch pro m<sup>2</sup>
+          {` (Bauperiode ${constructionPeriods.find((period) => period.value === constructionPeriod)?.label} `}
         </SmallTextInBrackets>
         {MULTIPLICATION_SIGN}
         {`${HEATING_TYPE_EMISSION?.[heatingType]} `}
         <SmallTextInBrackets>
-          Emissionsfaktor pro kWh für den Büroträger
-          {` ${heatingTypes.find((option) => option.value === heatingType)?.label}`}
+          {`Emissionsfaktor pro kWh (für ${heatingTypes.find((option) => option.value === heatingType)?.label})`}
         </SmallTextInBrackets>
       </div>
       <div>
@@ -535,14 +534,15 @@ const CalculationEnergy: FC<CalculationEnergyProps> = ({
         {kWh} <SmallTextInBrackets>kWh</SmallTextInBrackets> {MULTIPLICATION_SIGN}
         {`${electricityEmission} `}
         <SmallTextInBrackets>
-          Emissionsfaktor pro kWh für die Energieart
-          {` "${electricityOptions.find((option) => option.value === electricityType)?.label}" `}
+          Emissionsfaktor pro kWh
+          <br className="lg:hidden" />
+          {` (für ${electricityOptions.find((option) => option.value === electricityType)?.label}en Strom) `}
           in kg CO
           <sub>2</sub>
         </SmallTextInBrackets>
       </div>
     </div>
-    <div className="mt-12">Die Summe ergibt:</div>
+    <div className="mt-8 md:mt-12">Die Summe dieser zwei ergibt:</div>
     <span className="text-base text-bold">
       = {energyImpact} t CO<sub>2</sub>
     </span>
@@ -561,7 +561,7 @@ const CalculationCommuting: FC<CalculationCommutingProps> = ({
   commutingImpact,
 }) => (
   <div>
-    <div className="grid grid-cols-2 gap-8 mt-8">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-8">
       <div>
         <SubtitleCalculations>Homeoffice</SubtitleCalculations>
         {fte} <SmallTextInBrackets>Mitarbeitenden</SmallTextInBrackets> {MULTIPLICATION_SIGN} {`${WORKDAYS_PER_YEAR} `}
@@ -569,7 +569,7 @@ const CalculationCommuting: FC<CalculationCommutingProps> = ({
         {` ${homeOfficePercentage} `}
         <SmallTextInBrackets>% Homeoffice</SmallTextInBrackets> {MULTIPLICATION_SIGN} {HOME_OFFICE_EMISSION}{' '}
         <SmallTextInBrackets>
-          Homeoffice Emissionsfaktor in kg CO
+          Homeoffice Emissionsfaktor (EF) in kg CO
           <sub>2</sub>
         </SmallTextInBrackets>
         <br />
@@ -587,27 +587,33 @@ const CalculationCommuting: FC<CalculationCommutingProps> = ({
           <SmallTextInBrackets>
             Auto EF in kg CO<sub>2</sub>
           </SmallTextInBrackets>
+          <br className="lg:hidden" />
           {' x '}
           {`${carPercentage} `}
-          <SmallTextInBrackets>% mit dem Auto</SmallTextInBrackets> {' x '}
+          <SmallTextInBrackets>% mit dem Auto</SmallTextInBrackets> <br className="lg:hidden" />
+          {' x '}
           {` ${AVG_COMMUTE_DIST_KM_CAR} `}
           <SmallTextInBrackets>km ø Arbeitsweg Auto</SmallTextInBrackets>
           {PLUS_SIGN} {`${PUBLIC_TRANSPORT_EMISSION} `}
           <SmallTextInBrackets>
             ÖV EF in kg CO<sub>2</sub>
           </SmallTextInBrackets>
+          <br className="lg:hidden" />
           {' x '}
           {`${publicTransportPercentage} `}
-          <SmallTextInBrackets>% mit dem ÖV</SmallTextInBrackets> {' x '}
+          <SmallTextInBrackets>% mit dem ÖV</SmallTextInBrackets> <br className="lg:hidden" />
+          {' x '}
           {` ${AVG_COMMUTE_DIST_KM_PUBLICTRANSPORT} `}
           <SmallTextInBrackets>km ø Arbeitsweg ÖV</SmallTextInBrackets>
           {PLUS_SIGN} {`${BICYCLE_EMISSION} `}
           <SmallTextInBrackets>
             Fahrrad EF in kg CO<sub>2</sub>
           </SmallTextInBrackets>
+          <br className="lg:hidden" />
           {' x '}
           {`${bicyclePercentage} `}
-          <SmallTextInBrackets>% mit dem Fahrrad</SmallTextInBrackets> {' x '}
+          <SmallTextInBrackets>% mit dem Fahrrad</SmallTextInBrackets> <br className="lg:hidden" />
+          {' x '}
           {` ${AVG_COMMUTE_DIST_KM_BICYCLE_AND_FOOT} `}
           <SmallTextInBrackets>km ø Arbeitsweg Fahrrad</SmallTextInBrackets>
           {PLUS_SIGN} {'0 '}

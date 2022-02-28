@@ -1,11 +1,11 @@
+import { CheckIcon } from '@heroicons/react/solid';
 import type { NextPage } from 'next';
 import Link from 'next/link';
+import React from 'react';
 import { LinkElement } from '../elements/link';
 import { Heading1 } from '../identity/heading-1';
-import { Page } from '../layouts/page';
-import React from 'react';
-import { CheckIcon } from '@heroicons/react/solid';
 import { Heading2 } from '../identity/heading-2';
+import { Page } from '../layouts/page';
 
 const allFeaturesOfThePage = [
   'Kostenlos',
@@ -31,7 +31,7 @@ const Home: NextPage = () => {
               {allFeaturesOfThePage.map((feature) => (
                 <li className="text-black grid grid-cols-[1fr,3fr]" key={feature}>
                   <div className="flex justify-end">
-                    <CheckIcon className="h-8" />
+                    <CheckIcon className="h-5 sm:h-8" />
                   </div>
                   <div className="font-sans text-xxs sm:text-base md:text-sm text-left">{feature}</div>
                 </li>
@@ -47,7 +47,7 @@ const Home: NextPage = () => {
               </div>
             </main>
           </div>
-          <div className="bg-white-100 p-8 sm:p-16 md:m-16 md:p-16 rounded-lg lg:mx-36">
+          <div className="bg-white-100 p-8 sm:p-16 mt-8 md:m-16 md:p-16 rounded-lg lg:mx-36">
             <div className="text-justify">
               <Heading2>Berechne für dich und deine Firma eure Umwelteinwirkung</Heading2>
               <span className="font-sans text-xs md:text-sm">
@@ -64,7 +64,8 @@ const Home: NextPage = () => {
                 Protokoll (= möglist alle relevanten Kategorien für ein Dienstleistungsunternehmen).
                 <br />
                 Dieser Fussabdruck-Rechner wurde im Rahmen meiner Bachelorarbeit mit technischer Unterstützung von
-                <Link href="https://smartive.ch"> smartive™</Link> erstellt.
+                <Link href="https://smartive.ch"> smartive™</Link> erstellt. Den Link zur vollständigen Bachelorarbeit
+                findest du im Footer.
               </span>
             </div>
           </div>

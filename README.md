@@ -1,8 +1,6 @@
 # CO2-Fussabdruck-Rechner für Schweizer Dienstleistungsunternehmen 👣
 
-<div>
-  <h1 align="center"><a href="https://fussabdruck-rechner.vercel.app/"> </a>Berechne für dich und deine Firma eure Umwelteinwirkung.</h1>
-</div>
+<button><a href="https://fussabdruck-rechner.vercel.app/"> </a>Zum Fussabdruck Rechner (fussabdruck-rechner.vercel.app).</button>
 
 ## Setup
 

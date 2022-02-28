@@ -1,4 +1,4 @@
-import { Transition, Dialog } from '@headlessui/react';
+import { Dialog, Transition } from '@headlessui/react';
 import { CheckIcon, ExclamationIcon } from '@heroicons/react/solid';
 import React, { FC, Fragment, ReactNode, useRef } from 'react';
 import { Button } from './button';
@@ -60,11 +60,11 @@ export const Modal: FC<Props> = ({ children, title, onClose, open, icon: customI
                   <div className="text-white-100">{icon}</div>
                 </div>
                 <div className="mt-3 text-center sm:mt-5">
-                  <Dialog.Title as="h3" className="text-lg leading-6 font-medium text-gray-900">
+                  <Dialog.Title as="h3" className="text-sm sm:text-base md:text-lg leading-6 font-bold text-gray-900">
                     {title}
                   </Dialog.Title>
                   <div className="mt-2">
-                    <p className="text-xs leading-4 text-gray-600 pb-3">{children}</p>
+                    <p className="text-xxs sm:text-xs leading-4 text-gray-600 pb-3">{children}</p>
                   </div>
                 </div>
               </div>
