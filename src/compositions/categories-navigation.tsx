@@ -1,12 +1,12 @@
-import React, { FC } from 'react';
-import { HeatingIcon, UsersIcon, PaperAirplaneIcon, TrainIcon } from '../elements/icons';
-import { Page } from '../layouts/page';
 import Link from 'next/link';
+import React, { FC } from 'react';
 import { Question } from '../data/question';
+import { OfficeIcon, PaperAirplaneIcon, TrainIcon, UsersIcon } from '../elements/icons';
+import { Page } from '../layouts/page';
 
 const categoryNavigation = [
   { name: 'Team', icon: UsersIcon },
-  { name: 'Büro', icon: HeatingIcon },
+  { name: 'Büro', icon: OfficeIcon },
   { name: 'Pendeln', icon: TrainIcon },
   { name: 'Reisen', icon: PaperAirplaneIcon },
 ];

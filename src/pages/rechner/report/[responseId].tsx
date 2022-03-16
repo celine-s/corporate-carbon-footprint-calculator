@@ -5,7 +5,7 @@ import { electricityOptions } from '../../../compositions/question-form-4';
 import { heatingTypes } from '../../../compositions/question-form-5';
 import { constructionPeriods } from '../../../compositions/question-form-6';
 import { Button } from '../../../elements/button';
-import { HeatingIcon, IconProps, PaperAirplaneIcon, TrainIcon } from '../../../elements/icons';
+import { IconProps, OfficeIcon, PaperAirplaneIcon, TrainIcon } from '../../../elements/icons';
 import { LinkElement } from '../../../elements/link';
 import { Modal, ModalVariant } from '../../../elements/modal';
 import { Copy } from '../../../identity/copy';
@@ -22,7 +22,7 @@ export enum CategorieNames {
 
 export const ICONS: { [key: string]: React.FC<IconProps> } = {
   [CategorieNames.Commuting]: TrainIcon,
-  [CategorieNames.Energy]: HeatingIcon,
+  [CategorieNames.Energy]: OfficeIcon,
   [CategorieNames.Travelling]: PaperAirplaneIcon,
 };
 
@@ -171,7 +171,7 @@ const Report: NextPage<Props> = ({
             title="Berechnungen Büro Emissionen"
             onClose={setOpenEnergy}
             open={openEnergy}
-            icon={<HeatingIcon size="30" />}
+            icon={<OfficeIcon size="30" />}
             variant={ModalVariant.Custom}
           >
             <CalculationEnergy
