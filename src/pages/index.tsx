@@ -9,11 +9,11 @@ import { Page } from '../layouts/page';
 
 const allFeaturesOfThePage = [
   'Kostenlos',
-  'Kein Spendenaufruf',
+  'Ohne Spendenaufruf',
   'Für KMUs (< 250 MA)',
   'Dauert weniger als 10 min',
-  'Schritte verständlich erklärt',
-  'Zusatzinformationen', //Zusatzinformationen ermöglichen sinnvolle Antworten
+  'Schritte einzeln erklärt',
+  'Mit Zusatzinformationen',
 ];
 
 const Home: NextPage = () => {
@@ -51,12 +51,12 @@ const Home: NextPage = () => {
             <div className="text-justify">
               <Heading2>Berechne für dich und deine Firma eure Umwelteinwirkung</Heading2>
               <span className="font-sans text-xs md:text-sm">
-                Anhand von elf Fragen wird eurer Fussabdruck in den Themen Reisen, Pendeln und Büro abgeschätzt. Du kannst
+                Anhand von elf Fragen wird euer Fussabdruck in den Bereichen Reisen, Pendeln und Büro abgeschätzt. Du kannst
                 den Fragebogen für jedes Betriebsjahr ausfüllen oder auch nur einmal, um einen groben Überblick über euren
                 Verbrauch zu erhalten.
                 <br />
-                Am Ende des Fragebogens, werden anhand deiner Eingaben, die Emissionen berechnet und dargestellt. Über einen
-                Infobutton gelangst du zur genauen Berechnung und kannst dir einen Überblick erschaffen, wie ein solcher
+                Am Ende des Fragebogens werden anhand deiner Eingaben die Emissionen berechnet und dargestellt. Über einen
+                Infobutton gelangst du zur genauen Berechnung und kannst dir einen Überblick verschaffen, wie ein solcher
                 Fussabdruck entsteht. Den Link zum Endresultat kannst du kopieren und somit das Resultat immer wieder
                 anschauen. Die Angaben werden anonym gespeichert.
                 <br />
@@ -64,7 +64,7 @@ const Home: NextPage = () => {
                 Protokoll (= möglist alle relevanten Kategorien für ein Dienstleistungsunternehmen).
                 <br />
                 Dieser Fussabdruck-Rechner wurde im Rahmen meiner Bachelorarbeit mit technischer Unterstützung von
-                <Link href="https://smartive.ch"> smartive™</Link> erstellt. Den Link zur vollständigen Bachelorarbeit
+                <Link href="https://smartive.ch"> smartive™</Link> entwickelt. Den Link zur vollständigen Bachelorarbeit
                 findest du im Footer.
               </span>
             </div>
