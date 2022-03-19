@@ -109,7 +109,7 @@ const Report: NextPage<Props> = ({
           </Heading1>
           <div className="-mb-8">
             <Copy>
-              {`Das ist gleich viel, wie `}
+              {`Das ist gleichviel wie `}
               <span className="bg-white-200 p-1 rounded-md font-bold">
                 🗽 {Math.round((totalImpact / EMISSION_NY_AND_BACK) * 100) / 100} mal nach New York hin und zurück zu fliegen
                 (economy class)
@@ -133,7 +133,7 @@ const Report: NextPage<Props> = ({
               size="M"
               onClick={() => {
                 setCopied(true);
-                navigator.clipboard.writeText(`https://fussabdruck-rechner.vercel.app/rechner/report/${currentId}`);
+                navigator.clipboard.writeText(`https://smart-rechner.vercel.app/rechner/report/${currentId}`);
               }}
             >
               {copied ? 'Kopiert: Der Link ist in deiner Zwischenablage.' : 'Kopiere den Link zu deinem Resultat.'}
@@ -146,15 +146,14 @@ const Report: NextPage<Props> = ({
           <div className="text-justify">
             <Copy>
               Die Emissionen für Büro, Pendeln und Reisen werden anhand eurer Antworten ausgerechnet. Emissionen werden auch
-              in anderen Bereichen aussgestossen. Beispielsweise gehören Firmenevents, Möbel, Hardware, Entsorgungen, usw.
-              ebenfalls in euren Firmen-Fussabdruck. Um einigermassen aussagekräftige Daten zu erhalten bräuchte es zu jeder
-              dieser Kategorie mehrere Fragen. Da dieser Fussabdruck-Rechner darauf zielt innerhalb von kurzer Zeit, eine
+              in anderen Bereichen ausgestossen. Beispielsweise gehören Firmenevents, Möbel, Hardware, Entsorgungen, usw.
+              ebenfalls in euren Firmen-Fussabdruck. Um einigermassen aussagekräftige Daten zu erhalten, bräuchte es zu jeder
+              dieser Kategorie mehrere Fragen. Da dieser Fussabdruck-Rechner darauf zielt innerhalb von kurzer Zeit eine
               grobe Abschätzung des Firmen-Fussabdrucks zu erhalten, wurden darauf verzichtet weitere Kategorien hier zu
               erfassen.
               {<br />}
-              Bei der Herstellung eines neuen Laptops werden beispielsweise ca. 300 kg CO<sub>2</sub> äquivalent
-              ausgestossen. Würden also alle Mitarbeitenden eurer Firma in diesem Jahr einen neuen Laptop kaufen, wären das
-              zusätzlich
+              Bei der Herstellung eines neuen Laptops werden beispielsweise ca. 300 kg CO<sub>2</sub> äquivalent emittieren.
+              Würden also alle Mitarbeitenden eurer Firma in diesem Jahr einen neuen Laptop kaufen, wären das zusätzlich
               <span className="font-bold py-2 bg-white-200 rounded-lg">
                 {` ${fte * EMISSION_PER_LAPTOP} Tonnen CO`}
                 {<sub>2</sub>}
