@@ -7,10 +7,7 @@ export const Footer: FC = () => {
     <footer className="p-8">
       <nav className="flex flex-col md:flex-row justify-center items-center" aria-label="Footer">
         <div className="p-2">
-          <LinkElement
-            href="https://drive.google.com/file/d/1RJk4a7xZMVpZUtZ_bM23QiGZJRY5Bmii/view?usp=sharing"
-            newTab={true}
-          >
+          <LinkElement href="https://smr.tv/bachelorarbeit-celine-salzmann" newTab={true}>
             Abschlussarbeit
           </LinkElement>
         </div>
